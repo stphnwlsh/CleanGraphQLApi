@@ -1,0 +1,60 @@
+name: Build
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Prepare
+      id: prepare
+      run: |
+        echo "::set-output name=name::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')"
+        echo "::set-output name=prefix::$(date +'%Y.%m.%d').$GITHUB_RUN_NUMBER-"
+        echo "::set-output name=suffix::${GITHUB_REF#refs/*/}"
+
+    - id: branch
+      run: |
+        if [[ "${{ github.ref }}" != "refs/tags/"* ]]; then
+          BASE_REF=$(printf "%q" "${{ github.base_ref }}")
+          HEAD_REF=$(printf "%q" "${{ github.head_ref }}")
+          REF=$(printf "%q" "${{ github.ref }}")
+          BASE_REF=${BASE_REF/refs\/heads\//}
+          HEAD_REF=${HEAD_REF/refs\/heads\//}
+          echo "::set-output name=base_ref_branch::$(eval printf "%s" "$BASE_REF")"
+          echo "::set-output name=head_ref_branch::$(eval printf "%s" "$HEAD_REF")"
+          REF_BRANCH=${REF/refs\/pull\//}
+          REF_BRANCH=${REF_BRANCH/refs\/heads\//}
+          echo "::set-output name=ref_branch::$(eval printf "%s" "$REF_BRANCH")"
+        fi
+      shell: bash
+    - id: current_branch
+      run: |
+        if [[ "${{ github.ref }}" != "refs/tags/"* ]]; then
+          if [[ ${{ github.event_name }} == 'pull_request' ]]; then
+            echo "::set-output name=current_branch::${{ steps.branch.outputs.head_ref_branch }}"
+          else
+            echo "::set-output name=current_branch::${{ steps.branch.outputs.ref_branch }}"
+          fi
+        else
+          REF=$(printf "%q" "${{ github.ref }}")
+          REF_BRANCH=${REF/refs\/tags\/${{ inputs.strip_tag_prefix }}/}
+          echo "::set-output name=current_branch::$(eval printf "%s" "$REF_BRANCH")"
+        fi
+      shell: bash
+
+    - name: Debug
+      run: echo ${{ steps.prepare.outputs.name }} - ${{ steps.prepare.outputs.prefix }} - ${{ steps.prepare.outputs.suffix }}
+
+    - name: DebugTwo
+      run: echo ${{ steps.branch.outputs.base_ref_branch }} - ${{ steps.branch.outputs.head_ref_branch }} - ${{ steps.branch.outputs.ref_branch }}
+
+    - name: DebugThree
+      run: echo ${{ steps.current_branch.outputs.current_branch }}
