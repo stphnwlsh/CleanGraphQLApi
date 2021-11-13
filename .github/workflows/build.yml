@@ -20,16 +20,7 @@ jobs:
       run: |
         echo "::set-output name=name::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')"
         echo "::set-output name=prefix::$(date +'%Y.%m.%d').$GITHUB_RUN_NUMBER"
-        
-    - name: Get branch name (merge)
-      if: github.event_name != 'pull_request'
-      shell: bash
-      run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
-
-    - name: Get branch name (pull request)
-      if: github.event_name == 'pull_request'
-      shell: bash
-      run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
+        echo "::set-output name=suffix::${GITHUB_REF#refs/*/}""
 
     - name: Debug
-      run: echo ${{ env.BRANCH_NAME }}
+      run: echo ${{ steps.prepare.outputs.name }} - ${{ steps.prepare.outputs.prefix }} - ${{ steps.prepare.outputs.suffix }}
