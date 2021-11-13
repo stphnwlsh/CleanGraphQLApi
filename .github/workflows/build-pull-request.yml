@@ -1,4 +1,4 @@
-name: Build
+name: Build - Pull Request
 
 on:
   pull_request:
@@ -31,7 +31,7 @@ jobs:
           echo "::set-output name=base_ref_branch::$(eval printf "%s" "$BASE_REF")"
           echo "::set-output name=head_ref_branch::$(eval printf "%s" "$HEAD_REF")"
           REF_BRANCH=${REF/refs\/pull\//}
-          REF_BRANCH=${REF_BRANCH/refs\/heads\//}
+          REF_BRANCH=${REF_BRANCH/refs\/heads\//} | tr / -
           echo "::set-output name=ref_branch::$(eval printf "%s" "$REF_BRANCH")"
         fi
       shell: bash
@@ -54,7 +54,7 @@ jobs:
       run: echo ${{ steps.prepare.outputs.name }} - ${{ steps.prepare.outputs.prefix }} - ${{ steps.prepare.outputs.suffix }}
 
     - name: DebugTwo
-      run: echo ${{ steps.branch.outputs.base_ref_branch }} - ${{ steps.branch.outputs.head_ref_branch }} - ${{ steps.branch.outputs.ref_branch }}
+      run: echo merge-${{ steps.branch.outputs.base_ref_branch }}-${{ steps.branch.outputs.head_ref_branch }}
 
     - name: DebugThree
-      run: echo ${{ steps.current_branch.outputs.current_branch }}
+      run: echo ${{ steps.current_branch.outputs.current_branch }} - ${{ steps.branch.outputs.ref_branch }}
