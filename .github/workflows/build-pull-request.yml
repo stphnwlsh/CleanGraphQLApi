@@ -27,11 +27,14 @@ jobs:
           HEAD_REF=$(printf "%q" "${{ github.head_ref }}")
           REF=$(printf "%q" "${{ github.ref }}")
           BASE_REF=${BASE_REF/refs\/heads\//}
+          BASE_REF=${BASE_REF//\/\/-}
           HEAD_REF=${HEAD_REF/refs\/heads\//}
+          HEAD_REF=${HEAD_REF//\/\/-}
           echo "::set-output name=base_ref_branch::$(eval printf "%s" "$BASE_REF")"
           echo "::set-output name=head_ref_branch::$(eval printf "%s" "$HEAD_REF")"
           REF_BRANCH=${REF/refs\/pull\//}
-          REF_BRANCH=${REF_BRANCH/refs\/heads\//} | tr / -
+          REF_BRANCH=${REF_BRANCH/refs\/heads\//}
+          REF_BRANCH=${REF_BRANCH//\/\/-}
           echo "::set-output name=ref_branch::$(eval printf "%s" "$REF_BRANCH")"
         fi
       shell: bash
