@@ -20,7 +20,7 @@ jobs:
       run: |
         echo "::set-output name=name::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')"
         echo "::set-output name=prefix::$(date +'%Y.%m.%d').$GITHUB_RUN_NUMBER"
-        echo "::set-output name=suffix::${GITHUB_REF#refs/*/}""
+        echo "::set-output name=suffix::${GITHUB_REF#refs/*/}"
 
     - name: Debug
       run: echo ${{ steps.prepare.outputs.name }} - ${{ steps.prepare.outputs.prefix }} - ${{ steps.prepare.outputs.suffix }}
