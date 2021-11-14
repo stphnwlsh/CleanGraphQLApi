@@ -1,6 +1,8 @@
-name: Build - Pull Request
+name: Build
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -18,7 +20,6 @@ jobs:
       run: |
         BRANCH_CURRENT=${GITHUB_REF#refs/*/}
         BRANCH_CURRENT=${BRANCH_CURRENT//\//-}
-
 
         if [[ ${GITHUB_EVENT_NAME} == 'pull_request' ]]; then
           BRANCH_BASE=${GITHUB_BASE_REF#refs/*/}
@@ -43,8 +44,32 @@ jobs:
         echo ${{ steps.prepare.outputs.version_suffix }}
 
     - name: Branches
-      if: ${{ steps.perpare.outputs.branch == github.event.repository.default_branch }}
       run: |
         echo Base:${{ steps.prepare.outputs.branch_base }}
         echo Compare:${{ steps.prepare.outputs.branch_compare }}
         echo Current:${{ steps.prepare.outputs.branch_current }}
+
+    - name: Docker Build
+      id: build
+      run: docker build .
+        --tag $IMAGE_NAME:$IMAGE_VERSION
+        --tag $IMAGE_NAME:latest
+        --build-arg VERSION_PREFIX=$IMAGE_VERSION
+      env:
+        IMAGE_NAME: ${{ steps.prepare.outputs.name }}
+        IMAGE_VERSION: ${{ steps.prepare.outputs.prefix }}${{ steps.prepare.outputs.suffix }}
+
+    - name: Docker Login
+      id: login
+      if: ${{ steps.perpare.outputs.branch == github.event.repository.default_branch }}
+      uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+      with:
+        username: ${{ secrets.DOCKER_LOGIN }}
+        password: ${{ secrets.DOCKER_TOKEN }}
+
+    - name: Publish Docker Image
+      id: publish
+      if: ${{ steps.perpare.outputs.branch == github.event.repository.default_branch }}
+      run: docker push $IMAGE_NAME --all-tags
+      env:
+        IMAGE_NAME: ${{ steps.prepare.outputs.name }}
