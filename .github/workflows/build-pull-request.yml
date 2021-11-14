@@ -18,38 +18,36 @@ jobs:
       run: |
         echo "::set-output name=name::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')"
         echo "::set-output name=prefix::$(date +'%Y.%m.%d').$GITHUB_RUN_NUMBER-"
-        echo "::set-output name=suffix::${GITHUB_REF#refs/*/}"
 
-    - id: branch
-      run: |
-        if [[ "${{ github.ref }}" != "refs/tags/"* ]]; then
-          BRANCH_BASE=$(printf "%q" "${{ github.base_ref }}")
-          BRANCH_BASE=${BRANCH_BASE/refs\/heads\//}
-          BRANCH_BASE=${BRANCH_BASE//\/\/-}
+        BRANCH_BASE=$(printf "%q" "${{ github.base_ref }}")
+        BRANCH_BASE=${BRANCH_BASE/refs\/heads\//}
+        BRANCH_BASE=${BRANCH_BASE//\/\/-}
 
-          BRANCH_COMPARE=$(printf "%q" "${{ github.head_ref }}")
-          BRANCH_COMPARE=${BRANCH_COMPARE/refs\/heads\//}
-          BRANCH_COMPARE=${BRANCH_COMPARE//\/\/-}
+        BRANCH_COMPARE=$(printf "%q" "${{ github.head_ref }}")
+        BRANCH_COMPARE=${BRANCH_COMPARE/refs\/heads\//}
+        BRANCH_COMPARE=${BRANCH_COMPARE//\/\/-}
 
-          BRANCH_REF=$(printf "%q" "${{ github.ref }}")
-          BRANCH_PULL_REQUEST=${BRANCH_REF/refs\/pull\//}
-          BRANCH_PULL_REQUEST=${BRANCH_PULL_REQUEST/refs\/heads\//}
+        BRANCH_REF=$(printf "%q" "${{ github.ref }}")
+        BRANCH_PULL_REQUEST=${BRANCH_REF/refs\/pull\//}
+        BRANCH_PULL_REQUEST=${BRANCH_PULL_REQUEST/refs\/heads\//}
 
-          VERSION_SUFFIX=merge-${BRANCH_BASE}-${BRANCH_COMPARE}
+        VERSION_SUFFIX=merge-${BRANCH_BASE}-${BRANCH_COMPARE}
 
-          echo "::set-output name=branch_base::$(eval printf "%s" "$BRANCH_BASE")"
-          echo "::set-output name=branch_compare::$(eval printf "%s" "$BRANCH_COMPARE")"
-          echo "::set-output name=branch_pull_request::$(eval printf "%s" "$BRANCH_PULL_REQUEST")"
-          echo "::set-output name=version_suffix::$(eval printf "%s" "$VERSION_SUFFIX")"
-        fi
+        echo "::set-output name=branch_base::$(eval printf "%s" "$BRANCH_BASE")"
+        echo "::set-output name=branch_compare::$(eval printf "%s" "$BRANCH_COMPARE")"
+        echo "::set-output name=branch_pull_request::$(eval printf "%s" "$BRANCH_PULL_REQUEST")"
+        echo "::set-output name=version_suffix::$(eval printf "%s" "$VERSION_SUFFIX")"
       shell: bash
 
 
-    - name: Debug
-      run: echo ${{ steps.prepare.outputs.name }} - ${{ steps.prepare.outputs.prefix }} - ${{ steps.prepare.outputs.suffix }}
+    - name: Name
+      run: echo ${{ steps.prepare.outputs.name }}
 
-    - name: DebugTwo
-      run: echo merge-${{ steps.branch.outputs.branch_base }}-${{ steps.branch.outputs.branch_compare }} vs ${{ steps.branch.outputs.version_suffix }}
+    - name: Prefix
+      run: echo ${{ steps.prepare.outputs.prefix }}
 
-    - name: DebugTwoOne
-      run: echo ${{ steps.branch.outputs.branch_pull_request }}
+    - name: Suffix
+      run: echo merge-${{ steps.prepare.outputs.branch_base }}-${{ steps.prepare.outputs.branch_compare }} vs ${{ steps.branch.outputs.version_suffix }}
+
+    - name: Pull-Request
+      run: echo ${{ steps.prepare.outputs.branch_pull_request }}
