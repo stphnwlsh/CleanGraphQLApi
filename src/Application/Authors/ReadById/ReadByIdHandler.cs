@@ -1,9 +1,9 @@
-namespace CleanGraphQL.Application.Authors.ReadById;
+namespace CleanGraphQLApi.Application.Authors.ReadById;
 
 using System.Threading;
 using System.Threading.Tasks;
-using CleanGraphQL.Application.Common.Interfaces;
-using CleanGraphQL.Domain.Authors.Entities;
+using CleanGraphQLApi.Application.Common.Interfaces;
+using CleanGraphQLApi.Domain.Authors.Entities;
 using MediatR;
 
 public class ReadByIdHandler : IRequestHandler<ReadByIdQuery, Author?>

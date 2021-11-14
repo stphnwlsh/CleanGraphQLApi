@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Application.Reviews.Delete;
+namespace CleanGraphQLApi.Application.Reviews.Delete;
 
 using MediatR;
 

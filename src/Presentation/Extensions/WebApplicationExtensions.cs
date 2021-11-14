@@ -1,7 +1,7 @@
-namespace CleanGraphQL.Presentation.Extensions;
+namespace CleanGraphQLApi.Presentation.Extensions;
 
 using System.Diagnostics.CodeAnalysis;
-using CleanGraphQL.Presentation.MovieReviews;
+using CleanGraphQLApi.Presentation.MovieReviews;
 using Microsoft.AspNetCore.Builder;
 using Serilog;
 

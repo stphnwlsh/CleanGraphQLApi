@@ -1,11 +1,11 @@
-namespace CleanGraphQL.Presentation.MovieReviews;
+namespace CleanGraphQLApi.Presentation.MovieReviews;
 
 using System;
-using CleanGraphQL.Application.Reviews.Create;
-using CleanGraphQL.Application.Reviews.Delete;
-using CleanGraphQL.Domain.Reviews.Entities;
-using CleanGraphQL.Presentation.MovieReviews.Types.InputObjects;
-using CleanGraphQL.Presentation.MovieReviews.Types.Objects;
+using CleanGraphQLApi.Application.Reviews.Create;
+using CleanGraphQLApi.Application.Reviews.Delete;
+using CleanGraphQLApi.Domain.Reviews.Entities;
+using CleanGraphQLApi.Presentation.MovieReviews.Types.InputObjects;
+using CleanGraphQLApi.Presentation.MovieReviews.Types.Objects;
 using GraphQL;
 using GraphQL.Types;
 using MediatR;

@@ -1,6 +1,6 @@
-namespace CleanGraphQL.Application.Tests.Unit.Authors.ReadById;
+namespace CleanGraphQLApi.Application.Tests.Unit.Authors.ReadById;
 
-using CleanGraphQL.Application.Authors.ReadById;
+using CleanGraphQLApi.Application.Authors.ReadById;
 using FluentValidation.TestHelper;
 using Xunit;
 

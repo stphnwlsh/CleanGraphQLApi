@@ -1,6 +1,6 @@
-namespace CleanGraphQL.Application.Tests.Unit.Movies.ReadById;
+namespace CleanGraphQLApi.Application.Tests.Unit.Movies.ReadById;
 
-using CleanGraphQL.Application.Movies.ReadById;
+using CleanGraphQLApi.Application.Movies.ReadById;
 using FluentValidation.TestHelper;
 using Xunit;
 

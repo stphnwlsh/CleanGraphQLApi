@@ -1,6 +1,6 @@
-namespace CleanGraphQL.Infrastructure.Tests.Integration.Persistance.InMemory.MovieReviews;
+namespace CleanGraphQLApi.Infrastructure.Tests.Integration.Persistance.InMemory.MovieReviews;
 
-using CleanGraphQL.Application.Reviews.Create;
+using CleanGraphQLApi.Application.Reviews.Create;
 using Shouldly;
 using Xunit;
 

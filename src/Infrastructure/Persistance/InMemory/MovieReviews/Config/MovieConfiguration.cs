@@ -1,7 +1,7 @@
-namespace CleanGraphQL.Infrastructure.Persistance.InMemory.MovieReviews.Config;
+namespace CleanGraphQLApi.Infrastructure.Persistance.InMemory.MovieReviews.Config;
 
-using CleanGraphQL.Domain.Movies.Entities;
-using CleanGraphQL.Infrastructure.Persistance.InMemory.Common.Config;
+using CleanGraphQLApi.Domain.Movies.Entities;
+using CleanGraphQLApi.Infrastructure.Persistance.InMemory.Common.Config;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 public class MovieConfiguration : EntityConfiguration<Movie>

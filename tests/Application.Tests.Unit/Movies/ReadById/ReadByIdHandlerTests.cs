@@ -1,9 +1,9 @@
-namespace CleanGraphQL.Application.Tests.Unit.Movies.ReadById;
+namespace CleanGraphQLApi.Application.Tests.Unit.Movies.ReadById;
 
 using System.Threading;
 using System.Threading.Tasks;
-using CleanGraphQL.Application.Common.Interfaces;
-using CleanGraphQL.Application.Movies.ReadById;
+using CleanGraphQLApi.Application.Common.Interfaces;
+using CleanGraphQLApi.Application.Movies.ReadById;
 using NSubstitute;
 using Xunit;
 

@@ -1,4 +1,4 @@
-﻿namespace CleanGraphQL.Application.Common.Behaviours;
+﻿namespace CleanGraphQLApi.Application.Common.Behaviours;
 
 using System.Collections.Generic;
 using System.Linq;

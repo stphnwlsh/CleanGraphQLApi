@@ -1,9 +1,9 @@
-namespace CleanGraphQL.Application.Reviews.ReadAll;
+namespace CleanGraphQLApi.Application.Reviews.ReadAll;
 
 using System.Threading;
 using System.Threading.Tasks;
-using CleanGraphQL.Application.Common.Interfaces;
-using CleanGraphQL.Domain.Reviews.Entities;
+using CleanGraphQLApi.Application.Common.Interfaces;
+using CleanGraphQLApi.Domain.Reviews.Entities;
 using MediatR;
 
 public class ReadAllHandler : IRequestHandler<ReadAllQuery, List<Review>>

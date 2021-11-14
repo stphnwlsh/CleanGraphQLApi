@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Presentation.Errors;
+namespace CleanGraphQLApi.Presentation.Errors;
 
 using System.Diagnostics.CodeAnalysis;
 

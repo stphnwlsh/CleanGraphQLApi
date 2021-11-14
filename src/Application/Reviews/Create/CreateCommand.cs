@@ -1,6 +1,6 @@
-namespace CleanGraphQL.Application.Reviews.Create;
+namespace CleanGraphQLApi.Application.Reviews.Create;
 
-using CleanGraphQL.Domain.Reviews.Entities;
+using CleanGraphQLApi.Domain.Reviews.Entities;
 using MediatR;
 
 public class CreateCommand : IRequest<Review>

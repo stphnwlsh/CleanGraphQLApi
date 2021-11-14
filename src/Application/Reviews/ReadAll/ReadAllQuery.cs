@@ -1,6 +1,6 @@
-namespace CleanGraphQL.Application.Reviews.ReadAll;
+namespace CleanGraphQLApi.Application.Reviews.ReadAll;
 
-using CleanGraphQL.Domain.Reviews.Entities;
+using CleanGraphQLApi.Domain.Reviews.Entities;
 using MediatR;
 
 public class ReadAllQuery : IRequest<List<Review>>

@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Domain.Common.Entity;
+namespace CleanGraphQLApi.Domain.Common.Entity;
 
 public abstract class Entity
 {

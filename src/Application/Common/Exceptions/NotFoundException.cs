@@ -1,9 +1,9 @@
-namespace CleanGraphQL.Application.Common.Exceptions;
+namespace CleanGraphQLApi.Application.Common.Exceptions;
 
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
-using CleanGraphQL.Application.Common.Enums;
+using CleanGraphQLApi.Application.Common.Enums;
 
 [Serializable]
 [ExcludeFromCodeCoverage]

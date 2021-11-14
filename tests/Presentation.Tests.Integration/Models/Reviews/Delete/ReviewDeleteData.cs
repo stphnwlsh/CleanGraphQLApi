@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Presentation.Tests.Integration.Models.Reviews.Delete;
+namespace CleanGraphQLApi.Presentation.Tests.Integration.Models.Reviews.Delete;
 
 using System;
 using System.Text.Json.Serialization;

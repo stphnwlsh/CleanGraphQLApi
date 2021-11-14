@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Presentation.Tests.Integration;
+namespace CleanGraphQLApi.Presentation.Tests.Integration;
 
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Hosting;

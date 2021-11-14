@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Application.Movies.ReadById;
+namespace CleanGraphQLApi.Application.Movies.ReadById;
 
 using FluentValidation;
 

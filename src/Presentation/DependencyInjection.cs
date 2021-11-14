@@ -1,7 +1,7 @@
-namespace CleanGraphQL.Presentation;
+namespace CleanGraphQLApi.Presentation;
 
 using System.Diagnostics.CodeAnalysis;
-using CleanGraphQL.Presentation.MovieReviews;
+using CleanGraphQLApi.Presentation.MovieReviews;
 using GraphQL;
 using GraphQL.SystemTextJson;
 using Microsoft.Extensions.DependencyInjection;

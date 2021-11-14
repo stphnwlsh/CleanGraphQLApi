@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Presentation.Tests.Integration.Models.Movies;
+namespace CleanGraphQLApi.Presentation.Tests.Integration.Models.Movies;
 
 using System;
 using System.Text.Json.Serialization;

@@ -1,6 +1,6 @@
-namespace CleanGraphQL.Application.Movies.ReadAll;
+namespace CleanGraphQLApi.Application.Movies.ReadAll;
 
-using CleanGraphQL.Domain.Movies.Entities;
+using CleanGraphQLApi.Domain.Movies.Entities;
 using MediatR;
 
 public class ReadAllQuery : IRequest<List<Movie>>

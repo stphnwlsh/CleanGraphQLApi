@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Presentation.Tests.Integration.Models.Common;
+namespace CleanGraphQLApi.Presentation.Tests.Integration.Models.Common;
 
 using System.Text.Json.Serialization;
 

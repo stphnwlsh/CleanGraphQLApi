@@ -1,10 +1,10 @@
-namespace CleanGraphQL.Application.Reviews.Create;
+namespace CleanGraphQLApi.Application.Reviews.Create;
 
 using System.Threading;
 using System.Threading.Tasks;
-using CleanGraphQL.Application.Common.Exceptions;
-using CleanGraphQL.Application.Common.Interfaces;
-using CleanGraphQL.Domain.Reviews.Entities;
+using CleanGraphQLApi.Application.Common.Exceptions;
+using CleanGraphQLApi.Application.Common.Interfaces;
+using CleanGraphQLApi.Domain.Reviews.Entities;
 using MediatR;
 
 public class CreateHandler : IRequestHandler<CreateCommand, Review>
