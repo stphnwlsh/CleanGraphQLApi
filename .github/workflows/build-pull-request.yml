@@ -31,7 +31,6 @@ jobs:
           BRANCH_COMPARE=${BRANCH_COMPARE/refs\/heads\//}
           BRANCH_COMPARE=${BRANCH_COMPARE//\/\/-}
 
-
           BRANCH_REF=$(printf "%q" "${{ github.ref }}")
           BRANCH_PULL_REQUEST=${BRANCH_REF/refs\/pull\//}
           BRANCH_PULL_REQUEST=${BRANCH_PULL_REQUEST/refs\/heads\//}
@@ -54,4 +53,4 @@ jobs:
       run: echo merge-${{ steps.branch.outputs.branch_base }}-${{ steps.branch.outputs.branch_compare }} vs ${{ steps.branch.outputs.version_suffix }}
 
     - name: DebugTwoOne
-      run: echo ${{ steps.branch.outputs.version_suffix }}
+      run: echo ${{ steps.branch.outputs.branch_pull_request }}
