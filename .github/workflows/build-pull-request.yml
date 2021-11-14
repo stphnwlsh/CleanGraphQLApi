@@ -13,11 +13,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Prepare
-      id: prepare
+    - id: prepare
       run: |
         echo "::set-output name=name::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')"
-        echo "::set-output name=prefix::$(date +'%Y.%m.%d').$GITHUB_RUN_NUMBER-"
+        echo "::set-output name=version_prefix::$(date +'%Y.%m.%d').$GITHUB_RUN_NUMBER-"
 
         BRANCH_BASE=$(printf "%q" "${{ github.base_ref }}")
         BRANCH_BASE=${BRANCH_BASE/refs\/heads\//}
@@ -27,9 +26,8 @@ jobs:
         BRANCH_COMPARE=${BRANCH_COMPARE/refs\/heads\//}
         BRANCH_COMPARE=${BRANCH_COMPARE//\/\/-}
 
-        BRANCH_REF=$(printf "%q" "${{ github.ref }}")
-        BRANCH_PULL_REQUEST=${BRANCH_REF/refs\/pull\//}
-        BRANCH_PULL_REQUEST=${BRANCH_PULL_REQUEST/refs\/heads\//}
+        BRANCH_PULL_REQUEST=${GITHUB_REF#refs/*/}
+        BRANCH_PULL_REQUEST=${BRANCH_PULL_REQUEST//\/\/-}
 
         VERSION_SUFFIX=merge-${BRANCH_BASE}-${BRANCH_COMPARE}
 
@@ -40,14 +38,11 @@ jobs:
       shell: bash
 
 
-    - name: Name
-      run: echo ${{ steps.prepare.outputs.name }}
+    - name: Debug
+      run: echo ${{ steps.prepare.outputs.name }} - ${{ steps.prepare.outputs.version_prefix }}
 
-    - name: Prefix
-      run: echo ${{ steps.prepare.outputs.prefix }}
-
-    - name: Suffix
+    - name: DebugTwo
       run: echo merge-${{ steps.prepare.outputs.branch_base }}-${{ steps.prepare.outputs.branch_compare }} vs ${{ steps.branch.outputs.version_suffix }}
 
-    - name: Pull-Request
+    - name: DebugTwoOne
       run: echo ${{ steps.prepare.outputs.branch_pull_request }}
