@@ -10,6 +10,12 @@ jobs:
 
   prepare:
     runs-on: ubuntu-latest
+    outputs:
+      name: ${{ steps.prepare.outputs.name }}
+      version_prefix: ${{ steps.prepare.outputs.version_prefix }}
+      version_suffix: ${{ steps.prepare.outputs.version_suffix }}
+      docker_tag: ${{ steps.prepare.outputs.docker_tag }}
+      branch: ${{ steps.prepare.outputs.branch }}
     steps:
     - uses: actions/checkout@v2
     - name: Prepare
@@ -64,10 +70,10 @@ jobs:
         --build-arg VERSION_PREFIX=$VERSION_PREFIX
         --build-arg VERSION_SUFFIX=$VERSION_SUFFIX
       env:
-        NAME: ${{ steps.prepare.outputs.name }}
-        VERSION_PREFIX: ${{ steps.prepare.outputs.version_prefix }}
-        VERSION_SUFFIX: ${{ steps.prepare.outputs.version_suffix }}
-        DOCKER_TAG: ${{ steps.prepare.outputs.docker_tag }}
+        NAME: ${{ needs.prepare.outputs.name }}
+        VERSION_PREFIX: ${{ needs.prepare.outputs.version_prefix }}
+        VERSION_SUFFIX: ${{ needs.prepare.outputs.version_suffix }}
+        DOCKER_TAG: ${{ needs.prepare.outputs.docker_tag }}
 
   Publish:
     needs: build
@@ -75,14 +81,14 @@ jobs:
     steps:
     - name: Docker Login
       id: login
-      if: ${{ steps.perpare.outputs.branch == github.event.repository.default_branch }}
+      if: ${{ needs.perpare.outputs.branch == github.event.repository.default_branch }}
       uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
       with:
         username: ${{ secrets.DOCKER_LOGIN }}
         password: ${{ secrets.DOCKER_TOKEN }}
     - name: Publish Docker Image
       id: publish
-      if: ${{ steps.perpare.outputs.branch == github.event.repository.default_branch }}
+      if: ${{ needs.perpare.outputs.branch == github.event.repository.default_branch }}
       run: docker push $NAME --all-tags
       env:
-        NAME: ${{ steps.prepare.outputs.name }}
+        NAME: ${{ needs.prepare.outputs.name }}
