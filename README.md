@@ -1,11 +1,6 @@
 # Clean GraphQL API 
 This is a sample application to be an example of using [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) alongside a .net implementation of [GraphQL](https://github.com/graphql-dotnet/graphql-dotnet).
 
-## Support
-I'm sharing some of my work here and if it helps you, I'd love it if you'd consider supporting me.
-
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/guidelines/download-assets-sm-1.svg)](https://www.buymeacoffee.com/stphnwlsh)
-
 ## Features
 - Logging using [Serilog](https://github.com/serilog/serilog)
 - Mediator Pattern using [Mediatr](https://github.com/jbogard/MediatR)
@@ -36,3 +31,8 @@ This solution contains a few projects to follow the Clean Architecture patterns,
 This sample would not have been possible without gaining inspiration from the following resources.  If you are on your own learning adventure please read the following blogs and documentation.
 - [GraphQL.NET - Docs](https://graphql-dotnet.github.io/docs/getting-started/introduction)
 - [Fiyaz Hasan - GraphQL Series](https://fiyazhasan.me/tag/graphql/)
+
+## Support
+I'm sharing some of my work here and if it helps you, I'd love it if you'd consider supporting me.
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/guidelines/download-assets-sm-1.svg)](https://www.buymeacoffee.com/stphnwlsh)
