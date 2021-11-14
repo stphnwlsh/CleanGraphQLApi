@@ -24,9 +24,9 @@ jobs:
           BRANCH_BASE=${BRANCH_BASE//\//-}
           BRANCH_COMPARE=${GITHUB_HEAD_REF#refs/*/}
           BRANCH_COMPARE=${BRANCH_COMPARE//\//-}
-          BRANCH_PULL_REQUEST=${GITHUB_REF#refs/*/}
-          BRANCH_PULL_REQUEST=${BRANCH_PULL_REQUEST//\//-}
-          VERSION_SUFFIX=merge-${BRANCH_BASE}-${BRANCH_COMPARE}
+          BRANCH_CURRENT=${GITHUB_REF#refs/*/}
+          BRANCH_CURRENT=${BRANCH_PULL_REQUEST//\//-}
+          VERSION_SUFFIX="merge-${BRANCH_BASE}-${BRANCH_COMPARE}"
 
           echo "::set-output name=version_suffix::$(eval printf "%s" "$VERSION_SUFFIX")"
           echo "::set-output name=branch_base::$(eval printf "%s" "$BRANCH_BASE")"
@@ -42,7 +42,7 @@ jobs:
       run: echo ${{ steps.prepare.outputs.version_prefix }}
 
     - name: Suffix
-      run: echo ${{ steps.perpare.outputs.version_suffix }}
+      run: echo ${{ steps.prepare.outputs.version_suffix }}
 
     - name: Branches
       if: ${{ steps.perpare.outputs.version_suffix == '' }}
