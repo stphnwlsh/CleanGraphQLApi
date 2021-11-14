@@ -19,13 +19,13 @@ jobs:
         echo "::set-output name=version_prefix::$(date +'%Y.%m.%d').$GITHUB_RUN_NUMBER"
 
         BRANCH_BASE=${GITHUB_BASE_REF#refs/*/}
-        BRANCH_BASE=${BRANCH_BASE/\/\/-}
+        BRANCH_BASE=${BRANCH_BASE//\//-}
 
         BRANCH_COMPARE=${GITHUB_HEAD_REF#refs/*/}
-        BRANCH_COMPARE=${BRANCH_COMPARE/\/\/-}
+        BRANCH_COMPARE=${BRANCH_COMPARE//\//-}
 
         BRANCH_PULL_REQUEST=${GITHUB_REF#refs/*/}
-        BRANCH_PULL_REQUEST=${BRANCH_PULL_REQUEST/\/\/-}
+        BRANCH_PULL_REQUEST=${BRANCH_PULL_REQUEST//\//-}
 
         VERSION_SUFFIX=merge-${BRANCH_BASE}-${BRANCH_COMPARE}
 
@@ -34,7 +34,6 @@ jobs:
         echo "::set-output name=branch_pull_request::$(eval printf "%s" "$BRANCH_PULL_REQUEST")"
         echo "::set-output name=version_suffix::$(eval printf "%s" "$VERSION_SUFFIX")"
       shell: bash
-
 
     - name: Debug
       run: echo ${{ steps.prepare.outputs.name }} - ${{ steps.prepare.outputs.version_prefix }}
