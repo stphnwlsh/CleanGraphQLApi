@@ -18,6 +18,8 @@ jobs:
     - name: Prepare
       id: prepare
       run: |
+        NAME=$(echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]')
+        VERSION_PREFIX=$(date +'%Y.%m.%d').${GITHUB_RUN_NUMBER}
         BRANCH_CURRENT=${GITHUB_REF#refs/*/}
         BRANCH_CURRENT=${BRANCH_CURRENT//[^a-zA-Z0-9]/-}
 
@@ -31,9 +33,16 @@ jobs:
           VERSION_SUFFIX="${BRANCH_CURRENT}"
         fi
 
-        echo "::set-output name=name::$(echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]')"
-        echo "::set-output name=version_prefix::$(date +'%Y.%m.%d').${GITHUB_RUN_NUMBER}"
+        if [[ $VERSION_SUFFIX == '' ]]; then
+          DOCKER_TAG=$VERSION_PREFIX
+        else
+          DOCKER_TAG=$VERSION_PREFIX-$VERSION_SUFFIX
+        fi
+
+        echo "::set-output name=name::$(eval printf "%s" "$NAME")"
+        echo "::set-output name=version_prefix::$(eval printf "%s" "$VERSION_PREFIX")"
         echo "::set-output name=version_suffix::$(eval printf "%s" "$VERSION_SUFFIX")"
+        echo "::set-output name=docker_tag::$(eval printf "%s" "$DOCKER_TAG")"
         echo "::set-output name=branch::$(eval printf "%s" "$BRANCH_CURRENT")"
       shell: bash
 
@@ -42,6 +51,7 @@ jobs:
         echo Name: ${{ steps.prepare.outputs.name }}
         echo Prefix: ${{ steps.prepare.outputs.version_prefix }}
         echo Suffix: ${{ steps.prepare.outputs.version_suffix }}
+        echo Tag: ${{ steps.prepare.outputs.docker_tag }}
         echo Base:${{ steps.prepare.outputs.branch_base }}
         echo Compare:${{ steps.prepare.outputs.branch_compare }}
         echo Current:${{ steps.prepare.outputs.branch_current }}
@@ -49,7 +59,7 @@ jobs:
     - name: Docker Build
       id: build
       run: docker build .
-        --tag $NAME:$VERSION_PREFIX
+        --tag $NAME:$DOCKER_TAG
         --tag $NAME:latest
         --build-arg VERSION_PREFIX=$VERSION_PREFIX
         --build-arg VERSION_SUFFIX=$VERSION_SUFFIX
@@ -57,6 +67,7 @@ jobs:
         NAME: ${{ steps.prepare.outputs.name }}
         VERSION_PREFIX: ${{ steps.prepare.outputs.version_prefix }}
         VERSION_SUFFIX: ${{ steps.prepare.outputs.version_suffix }}
+        DOCKER_TAG: ${{ steps.prepare.outputs.docker_tag }}
 
     - name: Docker Login
       id: login
