@@ -16,24 +16,28 @@ jobs:
     - name: Prepare
       id: prepare
       run: |
+        BRANCH_CURRENT=${GITHUB_REF#refs/*/}
+        BRANCH_CURRENT=${BRANCH_CURRENT//\//-}
+
         echo "::set-output name=name::$(echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]')"
         echo "::set-output name=version_prefix::$(date +'%Y.%m.%d').${GITHUB_RUN_NUMBER}"
+        echo "::set-output name=branch_current::$(eval printf "%s" "$BRANCH_CURRENT")"
 
         if [[ ${GITHUB_EVENT_NAME} == 'pull_request' ]]; then
           BRANCH_BASE=${GITHUB_BASE_REF#refs/*/}
           BRANCH_BASE=${BRANCH_BASE//\//-}
           BRANCH_COMPARE=${GITHUB_HEAD_REF#refs/*/}
           BRANCH_COMPARE=${BRANCH_COMPARE//\//-}
-          BRANCH_CURRENT=${GITHUB_REF#refs/*/}
-          BRANCH_CURRENT=${BRANCH_PULL_REQUEST//\//-}
           VERSION_SUFFIX="merge-${BRANCH_BASE}-${BRANCH_COMPARE}"
 
           echo "::set-output name=version_suffix::$(eval printf "%s" "$VERSION_SUFFIX")"
           echo "::set-output name=branch_base::$(eval printf "%s" "$BRANCH_BASE")"
           echo "::set-output name=branch_compare::$(eval printf "%s" "$BRANCH_COMPARE")"
-          echo "::set-output name=branch_pull_request::$(eval printf "%s" "$BRANCH_PULL_REQUEST")"
         fi
       shell: bash
+
+    - name: TEST
+      run: echo ${{ github.event.repository.default_branch }}
 
     - name: Name
       run: echo ${{ steps.prepare.outputs.name }}
