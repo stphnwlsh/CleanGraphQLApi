@@ -8,7 +8,7 @@ on:
 
 jobs:
 
-  setup:
+  pipeline:
     runs-on: ubuntu-latest
     steps:
 
@@ -52,8 +52,6 @@ jobs:
         echo Suffix: ${{ steps.prepare.outputs.version_suffix }}
         echo Tag: ${{ steps.prepare.outputs.docker_tag }}
         echo Branch:${{ steps.prepare.outputs.branch }}
-        echo Base:${{ steps.prepare.outputs.branch_base }}
-        echo Compare:${{ steps.prepare.outputs.branch_compare }}
 
     - name: Docker Build
       id: build
