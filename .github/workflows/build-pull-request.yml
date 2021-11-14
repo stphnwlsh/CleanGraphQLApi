@@ -23,19 +23,21 @@ jobs:
     - id: branch
       run: |
         if [[ "${{ github.ref }}" != "refs/tags/"* ]]; then
-          BASE_REF=$(printf "%q" "${{ github.base_ref }}")
-          HEAD_REF=$(printf "%q" "${{ github.head_ref }}")
-          REF=$(printf "%q" "${{ github.ref }}")
-          BASE_REF=${BASE_REF/refs\/heads\//}
-          BASE_REF=${BASE_REF//\/\/-}
-          HEAD_REF=${HEAD_REF/refs\/heads\//}
-          HEAD_REF=${HEAD_REF//\/\/-}
-          echo "::set-output name=base_ref_branch::$(eval printf "%s" "$BASE_REF")"
-          echo "::set-output name=head_ref_branch::$(eval printf "%s" "$HEAD_REF")"
-          REF_BRANCH=${REF/refs\/pull\//}
-          REF_BRANCH=${REF_BRANCH/refs\/heads\//}
-          REF_BRANCH=${REF_BRANCH//\/\/-}
-          echo "::set-output name=ref_branch::$(eval printf "%s" "$REF_BRANCH")"
+          BRANCH_BASE=$(printf "%q" "${{ github.base_ref }}")
+          BRANCH_BASE=${BRANCH_BASE/refs\/heads\//}
+          BRANCH_BASE=${BRANCH_BASE//\/\/-}
+          BRANCH_COMPARE=$(printf "%q" "${{ github.head_ref }}")
+          BRANCH_COMPARE=${BRANCH_COMPARE/refs\/heads\//}
+          BRANCH_COMPARE=${BRANCH_COMPARE//\/\/-}
+          BRANCH_REF=$(printf "%q" "${{ github.ref }}")
+          BRANCH_PULL_REQUEST=${BRANCH_REF/refs\/pull\//}
+          BRANCH_PULL_REQUEST=${BRANCH_PULL_REQUEST/refs\/heads\//}
+          BRANCH_PULL_REQUEST=${BRANCH_PULL_REQUEST//\/\/-}
+          VERSION_SUFFIX=merge-${BRANCH_BASE}-${BRANCH_COMPARE}
+          echo "::set-output name=branch_base::$(eval printf "%s" "$BRANCH_BASE")"
+          echo "::set-output name=branch_compare::$(eval printf "%s" "$BRANCH_COMPARE")"
+          echo "::set-output name=branch_pull_request::$(eval printf "%s" "$BRANCH_PULL_REQUEST")"
+          echo "::set-output name=version_suffix::$(eval printf "%s" "$VERSION_SUFFIX")"
         fi
       shell: bash
     - id: current_branch
@@ -57,7 +59,10 @@ jobs:
       run: echo ${{ steps.prepare.outputs.name }} - ${{ steps.prepare.outputs.prefix }} - ${{ steps.prepare.outputs.suffix }}
 
     - name: DebugTwo
-      run: echo merge-${{ steps.branch.outputs.base_ref_branch }}-${{ steps.branch.outputs.head_ref_branch }}
+      run: echo merge-${{ steps.branch.outputs.branch_base }}-${{ steps.branch.outputs.branch_pull_request }}
+
+    - name: DebugTwoOne
+      run: echo ${{ steps.branch.outputs.version_suffix }} ${{ steps.branch.outputs.version_suffix }}
 
     - name: DebugThree
       run: echo ${{ steps.current_branch.outputs.current_branch }} - ${{ steps.branch.outputs.ref_branch }}
