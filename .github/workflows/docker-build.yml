@@ -1,4 +1,4 @@
-name: Build
+name: Build, Test and Publish
 
 on:
   push:
@@ -8,11 +8,11 @@ on:
 
 jobs:
 
-  build:
-
+  pipeline:
+    name: Build, Test and Publish Pipeline
     runs-on: ubuntu-latest
-
     steps:
+
     - uses: actions/checkout@v2
 
     - name: Prepare
@@ -52,9 +52,7 @@ jobs:
         echo Prefix: ${{ steps.prepare.outputs.version_prefix }}
         echo Suffix: ${{ steps.prepare.outputs.version_suffix }}
         echo Tag: ${{ steps.prepare.outputs.docker_tag }}
-        echo Base:${{ steps.prepare.outputs.branch_base }}
-        echo Compare:${{ steps.prepare.outputs.branch_compare }}
-        echo Current:${{ steps.prepare.outputs.branch_current }}
+        echo Branch:${{ steps.prepare.outputs.branch }}
 
     - name: Docker Build
       id: build
