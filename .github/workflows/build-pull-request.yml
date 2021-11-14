@@ -13,33 +13,40 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - id: prepare
+    - name: Prepare
+      id: prepare
       run: |
-        echo "::set-output name=name::$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')"
-        echo "::set-output name=version_prefix::$(date +'%Y.%m.%d').$GITHUB_RUN_NUMBER"
+        echo "::set-output name=name::$(echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]')"
+        echo "::set-output name=version_prefix::$(date +'%Y.%m.%d').${GITHUB_RUN_NUMBER}"
 
-        BRANCH_BASE=${GITHUB_BASE_REF#refs/*/}
-        BRANCH_BASE=${BRANCH_BASE//\//-}
+        if [[ ${GITHUB_EVENT_NAME} == 'pull_request' ]]; then
+          BRANCH_BASE=${GITHUB_BASE_REF#refs/*/}
+          BRANCH_BASE=${BRANCH_BASE//\//-}
+          BRANCH_COMPARE=${GITHUB_HEAD_REF#refs/*/}
+          BRANCH_COMPARE=${BRANCH_COMPARE//\//-}
+          BRANCH_PULL_REQUEST=${GITHUB_REF#refs/*/}
+          BRANCH_PULL_REQUEST=${BRANCH_PULL_REQUEST//\//-}
+          VERSION_SUFFIX=merge-${BRANCH_BASE}-${BRANCH_COMPARE}
 
-        BRANCH_COMPARE=${GITHUB_HEAD_REF#refs/*/}
-        BRANCH_COMPARE=${BRANCH_COMPARE//\//-}
-
-        BRANCH_PULL_REQUEST=${GITHUB_REF#refs/*/}
-        BRANCH_PULL_REQUEST=${BRANCH_PULL_REQUEST//\//-}
-
-        VERSION_SUFFIX=merge-${BRANCH_BASE}-${BRANCH_COMPARE}
-
-        echo "::set-output name=branch_base::$(eval printf "%s" "$BRANCH_BASE")"
-        echo "::set-output name=branch_compare::$(eval printf "%s" "$BRANCH_COMPARE")"
-        echo "::set-output name=branch_pull_request::$(eval printf "%s" "$BRANCH_PULL_REQUEST")"
-        echo "::set-output name=version_suffix::$(eval printf "%s" "$VERSION_SUFFIX")"
+          echo "::set-output name=version_suffix::$(eval printf "%s" "$VERSION_SUFFIX")"
+          echo "::set-output name=branch_base::$(eval printf "%s" "$BRANCH_BASE")"
+          echo "::set-output name=branch_compare::$(eval printf "%s" "$BRANCH_COMPARE")"
+          echo "::set-output name=branch_pull_request::$(eval printf "%s" "$BRANCH_PULL_REQUEST")"
+        fi
       shell: bash
 
-    - name: Debug
-      run: echo ${{ steps.prepare.outputs.name }} - ${{ steps.prepare.outputs.version_prefix }}
+    - name: Name
+      run: echo ${{ steps.prepare.outputs.name }}
 
-    - name: DebugTwo
-      run: echo merge-${{ steps.prepare.outputs.branch_base }}-${{ steps.prepare.outputs.branch_compare }} vs ${{ steps.branch.outputs.version_suffix }}
+    - name: Prefix
+      run: echo ${{ steps.prepare.outputs.version_prefix }}
 
-    - name: DebugTwoOne
-      run: echo ${{ steps.prepare.outputs.branch_pull_request }}
+    - name: Suffix
+      run: echo ${{ steps.perpare.outputs.version_suffix }}
+
+    - name: Branches
+      if: ${{ steps.perpare.outputs.version_suffix == '' }}
+      run: |
+        echo Base:${{ steps.prepare.outputs.branch_base }}
+        echo Compare:${{ steps.prepare.outputs.branch_compare }}
+        echo Pull Request:${{ steps.prepare.outputs.branch_pull_request }}
