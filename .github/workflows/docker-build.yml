@@ -1,4 +1,4 @@
-name: Build
+name: Build, Test and Publish
 
 on:
   push:
@@ -8,13 +8,10 @@ on:
 
 jobs:
 
-  build:
-
+  prepare:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
-
     - name: Prepare
       id: prepare
       run: |
@@ -45,7 +42,6 @@ jobs:
         echo "::set-output name=docker_tag::$(eval printf "%s" "$DOCKER_TAG")"
         echo "::set-output name=branch::$(eval printf "%s" "$BRANCH_CURRENT")"
       shell: bash
-
     - name: Outputs
       run: |
         echo Name: ${{ steps.prepare.outputs.name }}
@@ -56,6 +52,10 @@ jobs:
         echo Base:${{ steps.prepare.outputs.branch_base }}
         echo Compare:${{ steps.prepare.outputs.branch_compare }}
 
+  Build:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
     - name: Docker Build
       id: build
       run: docker build .
@@ -69,6 +69,10 @@ jobs:
         VERSION_SUFFIX: ${{ steps.prepare.outputs.version_suffix }}
         DOCKER_TAG: ${{ steps.prepare.outputs.docker_tag }}
 
+  Publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
     - name: Docker Login
       id: login
       if: ${{ steps.perpare.outputs.branch == github.event.repository.default_branch }}
@@ -76,7 +80,6 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_LOGIN }}
         password: ${{ secrets.DOCKER_TOKEN }}
-
     - name: Publish Docker Image
       id: publish
       if: ${{ steps.perpare.outputs.branch == github.event.repository.default_branch }}
