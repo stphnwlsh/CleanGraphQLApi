@@ -9,6 +9,7 @@ on:
 jobs:
 
   pipeline:
+    name: Build, Test and Publish Pipeline
     runs-on: ubuntu-latest
     steps:
 
