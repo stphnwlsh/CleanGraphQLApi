@@ -1,8 +1,8 @@
-namespace CleanGraphQL.Infrastructure;
+namespace CleanGraphQLApi.Infrastructure;
 
 using System.Diagnostics.CodeAnalysis;
-using CleanGraphQL.Application.Common.Interfaces;
-using CleanGraphQL.Infrastructure.Persistance.InMemory.MovieReviews;
+using CleanGraphQLApi.Application.Common.Interfaces;
+using CleanGraphQLApi.Infrastructure.Persistance.InMemory.MovieReviews;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

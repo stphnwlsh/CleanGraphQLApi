@@ -1,8 +1,8 @@
-namespace CleanGraphQL.Presentation.Tests.Integration;
+namespace CleanGraphQLApi.Presentation.Tests.Integration;
 
 using System.Net;
 using System.Threading.Tasks;
-using CleanGraphQL.Presentation.Tests.Integration.Models.Common;
+using CleanGraphQLApi.Presentation.Tests.Integration.Models.Common;
 using Shouldly;
 using Xunit;
 

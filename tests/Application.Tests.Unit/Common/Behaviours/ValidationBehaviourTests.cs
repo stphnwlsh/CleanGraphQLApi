@@ -1,11 +1,11 @@
-namespace CleanGraphQL.Application.Tests.Unit.Common.Behaviours;
+namespace CleanGraphQLApi.Application.Tests.Unit.Common.Behaviours;
 
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using CleanGraphQL.Application.Authors.ReadById;
-using CleanGraphQL.Application.Common.Behaviours;
-using CleanGraphQL.Domain.Authors.Entities;
+using CleanGraphQLApi.Application.Authors.ReadById;
+using CleanGraphQLApi.Application.Common.Behaviours;
+using CleanGraphQLApi.Domain.Authors.Entities;
 using FluentValidation;
 using MediatR;
 using NSubstitute;

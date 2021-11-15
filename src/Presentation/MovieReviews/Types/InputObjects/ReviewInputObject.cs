@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Presentation.MovieReviews.Types.InputObjects;
+namespace CleanGraphQLApi.Presentation.MovieReviews.Types.InputObjects;
 
 using GraphQL.Types;
 

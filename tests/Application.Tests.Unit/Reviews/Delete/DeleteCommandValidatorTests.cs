@@ -1,6 +1,6 @@
-namespace CleanGraphQL.Application.Tests.Unit.Reviews.Delete;
+namespace CleanGraphQLApi.Application.Tests.Unit.Reviews.Delete;
 
-using CleanGraphQL.Application.Reviews.Delete;
+using CleanGraphQLApi.Application.Reviews.Delete;
 using FluentValidation.TestHelper;
 using Xunit;
 

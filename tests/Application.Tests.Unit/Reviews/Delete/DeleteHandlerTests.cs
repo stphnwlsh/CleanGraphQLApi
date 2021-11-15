@@ -1,10 +1,10 @@
-namespace CleanGraphQL.Application.Tests.Unit.Reviews.Delete;
+namespace CleanGraphQLApi.Application.Tests.Unit.Reviews.Delete;
 
 using System.Threading;
 using System.Threading.Tasks;
-using CleanGraphQL.Application.Common.Exceptions;
-using CleanGraphQL.Application.Common.Interfaces;
-using CleanGraphQL.Application.Reviews.Delete;
+using CleanGraphQLApi.Application.Common.Exceptions;
+using CleanGraphQLApi.Application.Common.Interfaces;
+using CleanGraphQLApi.Application.Reviews.Delete;
 using NSubstitute;
 using Shouldly;
 using Xunit;

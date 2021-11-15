@@ -1,7 +1,7 @@
-namespace CleanGraphQL.Presentation.Tests.Integration.Models.Common;
+namespace CleanGraphQLApi.Presentation.Tests.Integration.Models.Common;
 
 using System.Text.Json.Serialization;
-using CleanGraphQL.Presentation.Tests.Integration.Models.Reviews.Query;
+using CleanGraphQLApi.Presentation.Tests.Integration.Models.Reviews.Query;
 
 public partial class Data
 {

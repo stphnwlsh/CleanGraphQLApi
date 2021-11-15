@@ -1,7 +1,7 @@
-namespace CleanGraphQL.Application.Tests.Unit.Reviews.Create;
+namespace CleanGraphQLApi.Application.Tests.Unit.Reviews.Create;
 
-using CleanGraphQL.Application.Reviews.Create;
-using CleanGraphQL.Domain.Reviews.Entities;
+using CleanGraphQLApi.Application.Reviews.Create;
+using CleanGraphQLApi.Domain.Reviews.Entities;
 using FluentValidation.TestHelper;
 using Xunit;
 

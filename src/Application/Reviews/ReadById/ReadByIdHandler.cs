@@ -1,9 +1,9 @@
-namespace CleanGraphQL.Application.Reviews.ReadById;
+namespace CleanGraphQLApi.Application.Reviews.ReadById;
 
 using System.Threading;
 using System.Threading.Tasks;
-using CleanGraphQL.Application.Common.Interfaces;
-using CleanGraphQL.Domain.Reviews.Entities;
+using CleanGraphQLApi.Application.Common.Interfaces;
+using CleanGraphQLApi.Domain.Reviews.Entities;
 using MediatR;
 
 public class ReadByIdHandler : IRequestHandler<ReadByIdQuery, Review?>

@@ -1,9 +1,9 @@
-namespace CleanGraphQL.Application.Tests.Unit.Authors.ReadAll;
+namespace CleanGraphQLApi.Application.Tests.Unit.Authors.ReadAll;
 
 using System.Threading;
 using System.Threading.Tasks;
-using CleanGraphQL.Application.Authors.ReadAll;
-using CleanGraphQL.Application.Common.Interfaces;
+using CleanGraphQLApi.Application.Authors.ReadAll;
+using CleanGraphQLApi.Application.Common.Interfaces;
 using NSubstitute;
 using Xunit;
 

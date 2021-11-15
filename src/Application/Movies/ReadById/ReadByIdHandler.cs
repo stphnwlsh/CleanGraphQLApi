@@ -1,9 +1,9 @@
-namespace CleanGraphQL.Application.Movies.ReadById;
+namespace CleanGraphQLApi.Application.Movies.ReadById;
 
 using System.Threading;
 using System.Threading.Tasks;
-using CleanGraphQL.Application.Common.Interfaces;
-using CleanGraphQL.Domain.Movies.Entities;
+using CleanGraphQLApi.Application.Common.Interfaces;
+using CleanGraphQLApi.Domain.Movies.Entities;
 using MediatR;
 
 public class ReadByIdHandler : IRequestHandler<ReadByIdQuery, Movie?>

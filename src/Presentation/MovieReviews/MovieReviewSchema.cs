@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Presentation.MovieReviews;
+namespace CleanGraphQLApi.Presentation.MovieReviews;
 
 using System;
 using GraphQL.Types;

@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Presentation.Tests.Integration.Models.Reviews.Create;
+namespace CleanGraphQLApi.Presentation.Tests.Integration.Models.Reviews.Create;
 
 using System;
 using System.Text.Json.Serialization;

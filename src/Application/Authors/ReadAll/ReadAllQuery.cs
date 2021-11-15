@@ -1,6 +1,6 @@
-namespace CleanGraphQL.Application.Authors.ReadAll;
+namespace CleanGraphQLApi.Application.Authors.ReadAll;
 
-using CleanGraphQL.Domain.Authors.Entities;
+using CleanGraphQLApi.Domain.Authors.Entities;
 using MediatR;
 
 public class ReadAllQuery : IRequest<List<Author>>

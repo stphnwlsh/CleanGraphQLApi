@@ -1,7 +1,7 @@
-namespace CleanGraphQL.Application.Common.Interfaces;
+namespace CleanGraphQLApi.Application.Common.Interfaces;
 
 using System.Threading.Tasks;
-using CleanGraphQL.Domain.Authors.Entities;
+using CleanGraphQLApi.Domain.Authors.Entities;
 
 public interface IAuthorsRepository
 {

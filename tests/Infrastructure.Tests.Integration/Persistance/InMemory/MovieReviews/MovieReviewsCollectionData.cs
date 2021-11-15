@@ -1,10 +1,10 @@
-namespace CleanGraphQL.Infrastructure.Tests.Integration.Persistance.InMemory.MovieReviews;
+namespace CleanGraphQLApi.Infrastructure.Tests.Integration.Persistance.InMemory.MovieReviews;
 
 using System;
-using CleanGraphQL.Domain.Authors.Entities;
-using CleanGraphQL.Domain.Movies.Entities;
-using CleanGraphQL.Domain.Reviews.Entities;
-using CleanGraphQL.Infrastructure.Persistance.InMemory.MovieReviews;
+using CleanGraphQLApi.Domain.Authors.Entities;
+using CleanGraphQLApi.Domain.Movies.Entities;
+using CleanGraphQLApi.Domain.Reviews.Entities;
+using CleanGraphQLApi.Infrastructure.Persistance.InMemory.MovieReviews;
 
 internal static class MovieReviewsCollectionData
 {

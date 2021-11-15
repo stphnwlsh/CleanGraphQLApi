@@ -1,6 +1,6 @@
-namespace CleanGraphQL.Application.Reviews.ReadById;
+namespace CleanGraphQLApi.Application.Reviews.ReadById;
 
-using CleanGraphQL.Domain.Reviews.Entities;
+using CleanGraphQLApi.Domain.Reviews.Entities;
 using MediatR;
 
 public class ReadByIdQuery : IRequest<Review>

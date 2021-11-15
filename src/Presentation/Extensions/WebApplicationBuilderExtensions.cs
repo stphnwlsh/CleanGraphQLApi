@@ -1,10 +1,10 @@
-namespace CleanGraphQL.Presentation.Extensions;
+namespace CleanGraphQLApi.Presentation.Extensions;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using CleanGraphQL.Application;
-using CleanGraphQL.Infrastructure;
-using CleanGraphQL.Presentation.MovieReviews;
+using CleanGraphQLApi.Application;
+using CleanGraphQLApi.Infrastructure;
+using CleanGraphQLApi.Presentation.MovieReviews;
 using GraphQL;
 using GraphQL.Server;
 using Microsoft.AspNetCore.Builder;

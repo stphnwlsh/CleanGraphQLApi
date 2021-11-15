@@ -1,16 +1,16 @@
-namespace CleanGraphQL.Presentation.MovieReviews;
+namespace CleanGraphQLApi.Presentation.MovieReviews;
 
 using System;
-using Authors = Application.Authors;
-using Movies = Application.Movies;
-using Reviews = Application.Reviews;
-using CleanGraphQL.Domain.Authors.Entities;
-using CleanGraphQL.Domain.Movies.Entities;
-using CleanGraphQL.Domain.Reviews.Entities;
-using CleanGraphQL.Presentation.MovieReviews.Types.Objects;
+using CleanGraphQLApi.Domain.Authors.Entities;
+using CleanGraphQLApi.Domain.Movies.Entities;
+using CleanGraphQLApi.Domain.Reviews.Entities;
+using CleanGraphQLApi.Presentation.MovieReviews.Types.Objects;
 using GraphQL;
 using GraphQL.Types;
 using MediatR;
+using Authors = Application.Authors;
+using Movies = Application.Movies;
+using Reviews = Application.Reviews;
 
 public class MovieReviewQueries : ObjectGraphType<object>
 {

@@ -1,9 +1,9 @@
-namespace CleanGraphQL.Application.Movies.ReadAll;
+namespace CleanGraphQLApi.Application.Movies.ReadAll;
 
 using System.Threading;
 using System.Threading.Tasks;
-using CleanGraphQL.Application.Common.Interfaces;
-using CleanGraphQL.Domain.Movies.Entities;
+using CleanGraphQLApi.Application.Common.Interfaces;
+using CleanGraphQLApi.Domain.Movies.Entities;
 using MediatR;
 
 public class ReadAllHandler : IRequestHandler<ReadAllQuery, List<Movie>>

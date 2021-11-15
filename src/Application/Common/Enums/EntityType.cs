@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Application.Common.Enums;
+namespace CleanGraphQLApi.Application.Common.Enums;
 
 public enum EntityType
 {

@@ -1,8 +1,8 @@
-namespace CleanGraphQL.Domain.Movies.Entities;
+namespace CleanGraphQLApi.Domain.Movies.Entities;
 
 using System.ComponentModel.DataAnnotations.Schema;
-using CleanGraphQL.Domain.Common.Entity;
-using CleanGraphQL.Domain.Reviews.Entities;
+using CleanGraphQLApi.Domain.Common.Entity;
+using CleanGraphQLApi.Domain.Reviews.Entities;
 
 public class Movie : Entity
 {

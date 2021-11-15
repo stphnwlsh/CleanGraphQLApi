@@ -1,9 +1,9 @@
-namespace CleanGraphQL.Application.Reviews.Delete;
+namespace CleanGraphQLApi.Application.Reviews.Delete;
 
 using System.Threading;
 using System.Threading.Tasks;
-using CleanGraphQL.Application.Common.Exceptions;
-using CleanGraphQL.Application.Common.Interfaces;
+using CleanGraphQLApi.Application.Common.Exceptions;
+using CleanGraphQLApi.Application.Common.Interfaces;
 using MediatR;
 
 public class DeleteHandler : IRequestHandler<DeleteCommand, bool>

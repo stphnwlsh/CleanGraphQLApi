@@ -1,8 +1,8 @@
-namespace CleanGraphQL.Application;
+namespace CleanGraphQLApi.Application;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using CleanGraphQL.Application.Common.Behaviours;
+using CleanGraphQLApi.Application.Common.Behaviours;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;

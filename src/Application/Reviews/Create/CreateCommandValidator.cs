@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Application.Reviews.Create;
+namespace CleanGraphQLApi.Application.Reviews.Create;
 
 using FluentValidation;
 

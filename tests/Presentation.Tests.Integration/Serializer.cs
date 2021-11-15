@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Presentation.Tests.Integration;
+namespace CleanGraphQLApi.Presentation.Tests.Integration;
 
 using System.Text;
 using System.Text.Json;

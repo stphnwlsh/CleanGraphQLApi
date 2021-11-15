@@ -1,9 +1,9 @@
-namespace CleanGraphQL.Infrastructure.Persistance.InMemory.MovieReviews;
+namespace CleanGraphQLApi.Infrastructure.Persistance.InMemory.MovieReviews;
 
-using CleanGraphQL.Application.Common.Interfaces;
-using CleanGraphQL.Domain.Authors.Entities;
-using CleanGraphQL.Domain.Movies.Entities;
-using CleanGraphQL.Domain.Reviews.Entities;
+using CleanGraphQLApi.Application.Common.Interfaces;
+using CleanGraphQLApi.Domain.Authors.Entities;
+using CleanGraphQLApi.Domain.Movies.Entities;
+using CleanGraphQLApi.Domain.Reviews.Entities;
 using Microsoft.EntityFrameworkCore;
 
 internal class MovieReviewsRepository : IAuthorsRepository, IMoviesRepository, IReviewsRepository

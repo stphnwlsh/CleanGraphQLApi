@@ -1,7 +1,7 @@
-namespace CleanGraphQL.Application.Common.Interfaces;
+namespace CleanGraphQLApi.Application.Common.Interfaces;
 
 using System.Threading.Tasks;
-using CleanGraphQL.Domain.Movies.Entities;
+using CleanGraphQLApi.Domain.Movies.Entities;
 
 public interface IMoviesRepository
 {

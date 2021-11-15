@@ -1,6 +1,6 @@
-namespace CleanGraphQL.Application.Movies.ReadById;
+namespace CleanGraphQLApi.Application.Movies.ReadById;
 
-using CleanGraphQL.Domain.Movies.Entities;
+using CleanGraphQLApi.Domain.Movies.Entities;
 using MediatR;
 
 public class ReadByIdQuery : IRequest<Movie>

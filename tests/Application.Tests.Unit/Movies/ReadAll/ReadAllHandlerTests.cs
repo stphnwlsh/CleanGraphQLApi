@@ -1,9 +1,9 @@
-namespace CleanGraphQL.Application.Tests.Unit.Movies.ReadAll;
+namespace CleanGraphQLApi.Application.Tests.Unit.Movies.ReadAll;
 
 using System.Threading;
 using System.Threading.Tasks;
-using CleanGraphQL.Application.Common.Interfaces;
-using CleanGraphQL.Application.Movies.ReadAll;
+using CleanGraphQLApi.Application.Common.Interfaces;
+using CleanGraphQLApi.Application.Movies.ReadAll;
 using NSubstitute;
 using Xunit;
 

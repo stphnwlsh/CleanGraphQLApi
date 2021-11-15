@@ -1,6 +1,6 @@
-namespace CleanGraphQL.Infrastructure.Persistance.InMemory.Common.Config;
+namespace CleanGraphQLApi.Infrastructure.Persistance.InMemory.Common.Config;
 
-using CleanGraphQL.Domain.Common.Entity;
+using CleanGraphQLApi.Domain.Common.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -1,9 +1,9 @@
-namespace CleanGraphQL.Domain.Reviews.Entities;
+namespace CleanGraphQLApi.Domain.Reviews.Entities;
 
 using System.ComponentModel.DataAnnotations.Schema;
-using CleanGraphQL.Domain.Authors.Entities;
-using CleanGraphQL.Domain.Common.Entity;
-using CleanGraphQL.Domain.Movies.Entities;
+using CleanGraphQLApi.Domain.Authors.Entities;
+using CleanGraphQLApi.Domain.Common.Entity;
+using CleanGraphQLApi.Domain.Movies.Entities;
 
 public class Review : Entity
 {

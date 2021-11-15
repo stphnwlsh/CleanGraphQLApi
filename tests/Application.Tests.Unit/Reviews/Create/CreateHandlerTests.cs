@@ -1,11 +1,11 @@
-namespace CleanGraphQL.Application.Tests.Unit.Reviews.Create;
+namespace CleanGraphQLApi.Application.Tests.Unit.Reviews.Create;
 
 using System.Threading;
 using System.Threading.Tasks;
-using CleanGraphQL.Application.Common.Exceptions;
-using CleanGraphQL.Application.Common.Interfaces;
-using CleanGraphQL.Application.Reviews.Create;
-using CleanGraphQL.Domain.Reviews.Entities;
+using CleanGraphQLApi.Application.Common.Exceptions;
+using CleanGraphQLApi.Application.Common.Interfaces;
+using CleanGraphQLApi.Application.Reviews.Create;
+using CleanGraphQLApi.Domain.Reviews.Entities;
 using NSubstitute;
 using Shouldly;
 using Xunit;

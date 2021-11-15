@@ -1,4 +1,4 @@
-using CleanGraphQL.Presentation.Extensions;
+using CleanGraphQLApi.Presentation.Extensions;
 using Serilog;
 
 var app = WebApplication.CreateBuilder(args).ConfigureBuilder().Build().ConfigureApp();

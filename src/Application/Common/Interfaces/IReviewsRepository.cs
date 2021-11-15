@@ -1,7 +1,7 @@
-namespace CleanGraphQL.Application.Common.Interfaces;
+namespace CleanGraphQLApi.Application.Common.Interfaces;
 
 using System.Threading.Tasks;
-using CleanGraphQL.Domain.Reviews.Entities;
+using CleanGraphQLApi.Domain.Reviews.Entities;
 
 public interface IReviewsRepository
 {

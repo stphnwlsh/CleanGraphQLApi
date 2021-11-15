@@ -1,7 +1,7 @@
-namespace CleanGraphQL.Infrastructure.Tests.Integration.Persistance.InMemory.MovieReviews;
+namespace CleanGraphQLApi.Infrastructure.Tests.Integration.Persistance.InMemory.MovieReviews;
 
 using System;
-using CleanGraphQL.Infrastructure.Persistance.InMemory.MovieReviews;
+using CleanGraphQLApi.Infrastructure.Persistance.InMemory.MovieReviews;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 

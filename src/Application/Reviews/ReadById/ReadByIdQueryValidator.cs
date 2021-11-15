@@ -1,4 +1,4 @@
-namespace CleanGraphQL.Application.Reviews.ReadById;
+namespace CleanGraphQLApi.Application.Reviews.ReadById;
 
 using FluentValidation;
 
