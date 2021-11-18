@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using CleanGraphQLApi.Application.Common.Exceptions;
 using CleanGraphQLApi.Application.Common.Interfaces;
 using CleanGraphQLApi.Application.Reviews.Create;
-using CleanGraphQLApi.Domain.Reviews.Entities;
 using NSubstitute;
 using Shouldly;
 using Xunit;
@@ -64,7 +63,7 @@ public class CreateHandlerTests
         var exception = Should.Throw<NotFoundException>(async () => await handler.Handle(command, token));
 
         // Assert
-        exception.Message.ShouldBe("An author with the supplied id was not found.");
+        exception.Message.ShouldBe("The Author with the supplied id was not found.");
 
         _ = await authorsRepository.Received(1).AuthorExists(command.AuthorId, token);
         _ = await moviesRepository.DidNotReceive().MovieExists(command.MovieId, token);
@@ -95,7 +94,7 @@ public class CreateHandlerTests
         var exception = Should.Throw<NotFoundException>(async () => await handler.Handle(command, token));
 
         // Assert
-        exception.Message.ShouldBe("A movie with the supplied id was not found.");
+        exception.Message.ShouldBe("The Movie with the supplied id was not found.");
 
         _ = await authorsRepository.Received(1).AuthorExists(command.AuthorId, token);
         _ = await moviesRepository.Received(1).MovieExists(command.MovieId, token);

@@ -2,6 +2,7 @@ namespace CleanGraphQLApi.Application.Reviews.Create;
 
 using System.Threading;
 using System.Threading.Tasks;
+using CleanGraphQLApi.Application.Common.Enums;
 using CleanGraphQLApi.Application.Common.Exceptions;
 using CleanGraphQLApi.Application.Common.Interfaces;
 using CleanGraphQLApi.Domain.Reviews.Entities;
@@ -24,12 +25,12 @@ public class CreateHandler : IRequestHandler<CreateCommand, Review>
     {
         if (!await this.authorsRepository.AuthorExists(request.AuthorId, cancellationToken))
         {
-            throw new NotFoundException(Common.Enums.EntityType.Author, "An author with the supplied id was not found.");
+            NotFoundException.Throw(EntityType.Author);
         }
 
         if (!await this.moviesRepository.MovieExists(request.MovieId, cancellationToken))
         {
-            throw new NotFoundException(Common.Enums.EntityType.Movie, "A movie with the supplied id was not found.");
+            NotFoundException.Throw(EntityType.Movie);
         }
 
         return await this.reviewsRepository.CreateReview(request.AuthorId, request.MovieId, request.Stars, cancellationToken);

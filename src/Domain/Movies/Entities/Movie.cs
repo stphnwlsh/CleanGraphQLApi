@@ -6,8 +6,8 @@ using CleanGraphQLApi.Domain.Reviews.Entities;
 
 public class Movie : Entity
 {
-    public string Title { get; set; } = string.Empty;
+    public string Title { get; set; }
 
     [InverseProperty("ReviewedMovie")]
-    public ICollection<Review> Reviews { get; } = new List<Review>();
+    public ICollection<Review> Reviews { get; init; }
 }

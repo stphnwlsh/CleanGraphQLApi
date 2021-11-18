@@ -2,6 +2,8 @@ namespace CleanGraphQLApi.Application.Movies.ReadById;
 
 using System.Threading;
 using System.Threading.Tasks;
+using CleanGraphQLApi.Application.Common.Enums;
+using CleanGraphQLApi.Application.Common.Exceptions;
 using CleanGraphQLApi.Application.Common.Interfaces;
 using CleanGraphQLApi.Domain.Movies.Entities;
 using MediatR;
@@ -17,6 +19,10 @@ public class ReadByIdHandler : IRequestHandler<ReadByIdQuery, Movie?>
 
     public async Task<Movie?> Handle(ReadByIdQuery request, CancellationToken cancellationToken)
     {
-        return await this.repository.ReadMovieById(request.Id, cancellationToken);
+        var result = await this.repository.ReadMovieById(request.Id, cancellationToken);
+
+        NotFoundException.ThrowIfNull(result, EntityType.Movie);
+
+        return result;
     }
 }

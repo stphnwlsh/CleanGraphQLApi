@@ -1,19 +1,58 @@
-namespace CleanGraphQLApi.Application.Tests.Unit.Reviews.Create;
+namespace CleanGraphQLApi.Application.Tests.Unit.Reviews.Update;
 
-using CleanGraphQLApi.Application.Reviews.Create;
+using CleanGraphQLApi.Application.Reviews.Update;
 using FluentValidation.TestHelper;
 using Xunit;
 
-public class CreateCommandValidatorTests
+public class UpdateCommandValidatorTests
 {
-    private static readonly CreateCommandValidator Validator = new();
+    private static readonly UpdateCommandValidator Validator = new();
+
+    [Fact]
+    public void Validator_ShouldNotHaveValidationErrorFor_Id()
+    {
+        // Arrange
+        var command = new UpdateCommand
+        {
+            Id = Guid.NewGuid(),
+            AuthorId = Guid.NewGuid(),
+            MovieId = Guid.NewGuid(),
+            Stars = 5
+        };
+
+        // Act
+        var result = Validator.TestValidate(command);
+
+        // Assert
+        result.ShouldNotHaveValidationErrorFor(command => command.Id);
+    }
+
+    [Fact]
+    public void Validator_ShouldHaveValidationErrorFor_Id()
+    {
+        // Arrange
+        var command = new UpdateCommand
+        {
+            Id = Guid.Empty,
+            AuthorId = Guid.NewGuid(),
+            MovieId = Guid.NewGuid(),
+            Stars = 5
+        };
+
+        // Act
+        var result = Validator.TestValidate(command);
+
+        // Assert
+        _ = result.ShouldHaveValidationErrorFor(command => command.Id).WithErrorMessage("A review id was not supplied to Update the review.");
+    }
 
     [Fact]
     public void Validator_ShouldNotHaveValidationErrorFor_ReviewAuthorId()
     {
         // Arrange
-        var command = new CreateCommand
+        var command = new UpdateCommand
         {
+            Id = Guid.NewGuid(),
             AuthorId = Guid.NewGuid(),
             MovieId = Guid.NewGuid(),
             Stars = 5
@@ -30,8 +69,9 @@ public class CreateCommandValidatorTests
     public void Validator_ShouldHaveValidationErrorFor_ReviewAuthorId()
     {
         // Arrange
-        var command = new CreateCommand
+        var command = new UpdateCommand
         {
+            Id = Guid.NewGuid(),
             AuthorId = Guid.Empty,
             MovieId = Guid.NewGuid(),
             Stars = 5
@@ -41,15 +81,16 @@ public class CreateCommandValidatorTests
         var result = Validator.TestValidate(command);
 
         // Assert
-        _ = result.ShouldHaveValidationErrorFor(command => command.AuthorId).WithErrorMessage("An author id was not supplied to create the review.");
+        _ = result.ShouldHaveValidationErrorFor(command => command.AuthorId).WithErrorMessage("An author id was not supplied to Update the review.");
     }
 
     [Fact]
     public void Validator_ShouldNotHaveValidationErrorFor_ReviewedMovieId()
     {
         // Arrange
-        var command = new CreateCommand
+        var command = new UpdateCommand
         {
+            Id = Guid.NewGuid(),
             AuthorId = Guid.NewGuid(),
             MovieId = Guid.NewGuid(),
             Stars = 5
@@ -66,8 +107,9 @@ public class CreateCommandValidatorTests
     public void Validator_ShouldHaveValidationErrorFor_ReviewedMovieId()
     {
         // Arrange
-        var command = new CreateCommand
+        var command = new UpdateCommand
         {
+            Id = Guid.NewGuid(),
             AuthorId = Guid.NewGuid(),
             MovieId = Guid.Empty,
             Stars = 5
@@ -77,7 +119,7 @@ public class CreateCommandValidatorTests
         var result = Validator.TestValidate(command);
 
         // Assert
-        _ = result.ShouldHaveValidationErrorFor(command => command.MovieId).WithErrorMessage("A movie id was not supplied to create the review.");
+        _ = result.ShouldHaveValidationErrorFor(command => command.MovieId).WithErrorMessage("A movie id was not supplied to Update the review.");
     }
 
 
@@ -90,8 +132,9 @@ public class CreateCommandValidatorTests
     public void Validator_ShouldNotHaveValidationErrorFor_Stars(int stars)
     {
         // Arrange
-        var command = new CreateCommand
+        var command = new UpdateCommand
         {
+            Id = Guid.NewGuid(),
             AuthorId = Guid.NewGuid(),
             MovieId = Guid.NewGuid(),
             Stars = stars
@@ -113,8 +156,9 @@ public class CreateCommandValidatorTests
     public void Validator_ShouldHaveValidationErrorFor_Stars(int stars)
     {
         // Arrange
-        var command = new CreateCommand
+        var command = new UpdateCommand
         {
+            Id = Guid.NewGuid(),
             AuthorId = Guid.NewGuid(),
             MovieId = Guid.NewGuid(),
             Stars = stars

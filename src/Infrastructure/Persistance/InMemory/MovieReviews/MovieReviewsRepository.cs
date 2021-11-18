@@ -1,5 +1,7 @@
 namespace CleanGraphQLApi.Infrastructure.Persistance.InMemory.MovieReviews;
 
+using CleanGraphQLApi.Application.Common.Enums;
+using CleanGraphQLApi.Application.Common.Exceptions;
 using CleanGraphQLApi.Application.Common.Interfaces;
 using CleanGraphQLApi.Domain.Authors.Entities;
 using CleanGraphQLApi.Domain.Movies.Entities;
@@ -31,7 +33,7 @@ internal class MovieReviewsRepository : IAuthorsRepository, IMoviesRepository, I
 
     public virtual async Task<Author?> ReadAuthorById(Guid id, CancellationToken cancellationToken)
     {
-        return await this.context.Authors.Where(r => r.Id == id).Include(m => m.Reviews).ThenInclude(r => r.ReviewedMovie).AsNoTracking().FirstOrDefaultAsync(cancellationToken);
+        return await this.context.Authors.Where(r => r.Id == id).Include(a => a.Reviews).ThenInclude(r => r.ReviewedMovie).AsNoTracking().FirstOrDefaultAsync(cancellationToken);
     }
 
     public virtual async Task<bool> AuthorExists(Guid id, CancellationToken cancellationToken)
@@ -101,6 +103,29 @@ internal class MovieReviewsRepository : IAuthorsRepository, IMoviesRepository, I
     public async Task<bool> ReviewExists(Guid id, CancellationToken cancellationToken)
     {
         return await this.context.Reviews.AnyAsync(r => r.Id == id, cancellationToken);
+    }
+
+    public async Task<bool> UpdateReview(Guid id, Guid authorId, Guid movieId, int stars, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var review = this.context.Reviews.FirstOrDefault(r => r.Id == id);
+
+            NotFoundException.ThrowIfNull(review, EntityType.Review);
+
+            review.Stars = stars;
+            review.ReviewAuthorId = authorId;
+            review.ReviewedMovieId = movieId;
+
+            _ = this.context.Update(review);
+            _ = await this.context.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     #endregion Reviews

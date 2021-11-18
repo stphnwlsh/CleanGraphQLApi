@@ -9,27 +9,31 @@ using CleanGraphQLApi.Application.Common.Enums;
 [ExcludeFromCodeCoverage]
 public class NotFoundException : Exception
 {
-    public EntityType Entity { get; init; }
-
-    public NotFoundException(EntityType entity)
-    {
-        this.Entity = entity;
-    }
-
-    public NotFoundException(EntityType entity, string message)
+    public NotFoundException(string message)
         : base(message)
     {
-        this.Entity = entity;
-    }
-
-    public NotFoundException(EntityType entity, string message, Exception innerException)
-        : base(message, innerException)
-    {
-        this.Entity = entity;
     }
 
     protected NotFoundException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
+    }
+
+    /// <summary>Throws an <see cref="NotFoundException"/> if <paramref name="argument"/> is null.</summary>
+    /// <param name="argument">The reference type argument to validate as non-null.</param>
+    /// <param name="entityType">The entity type of the <paramref name="argument"/> parameter.</param>
+    public static void ThrowIfNull(object? argument, EntityType entityType)
+    {
+        if (argument is null)
+        {
+            Throw(entityType);
+        }
+    }
+
+    /// <summary>Throws an <see cref="NotFoundException"/></summary>
+    /// <param name="entityType">The entity type of the <paramref name="argument"/> parameter.</param>
+    public static void Throw(EntityType entityType)
+    {
+        throw new NotFoundException($"The {entityType} with the supplied id was not found.");
     }
 }
