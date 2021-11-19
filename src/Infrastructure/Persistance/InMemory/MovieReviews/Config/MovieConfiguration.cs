@@ -4,7 +4,7 @@ using CleanGraphQLApi.Domain.Movies.Entities;
 using CleanGraphQLApi.Infrastructure.Persistance.InMemory.Common.Config;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-public class MovieConfiguration : EntityConfiguration<Movie>
+internal class MovieConfiguration : EntityConfiguration<Movie>
 {
     public override void Configure(EntityTypeBuilder<Movie> builder)
     {

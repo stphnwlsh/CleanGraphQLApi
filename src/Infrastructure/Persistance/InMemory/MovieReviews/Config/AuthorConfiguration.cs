@@ -4,7 +4,7 @@ using CleanGraphQLApi.Domain.Authors.Entities;
 using CleanGraphQLApi.Infrastructure.Persistance.InMemory.Common.Config;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-public class AuthorConfiguration : EntityConfiguration<Author>
+internal class AuthorConfiguration : EntityConfiguration<Author>
 {
     public override void Configure(EntityTypeBuilder<Author> builder)
     {
