@@ -1,4 +1,9 @@
-# Clean GraphQL API 
+# Clean GraphQL API
+![Repo Views](https://gpvc.arturio.dev/stphnwlsh-CleanGraphQLApi)
+[![Build Pipeline](https://github.com/stphnwlsh/CleanGraphQLApi/actions/workflows/build-pipeline.yml/badge.svg)](https://github.com/stphnwlsh/CleanGraphQLApi/actions/workflows/build-pipeline.yml)
+[![Code Coverage](https://codecov.io/gh/stphnwlsh/CleanGraphQLApi/branch/main/graph/badge.svg?token=N3ZIADS1V2)](https://codecov.io/gh/stphnwlsh/CleanGraphQLApi)
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/stphnwlsh/CleanGraphQLApi)
+
 This is a sample application to be an example of using [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) alongside a .net implementation of [GraphQL](https://github.com/graphql-dotnet/graphql-dotnet).
 
 ## Features
