@@ -12,14 +12,14 @@
     <tags>dotnet api csharp template clean clean-architecture graphql</tags>
     <icon>images\icon.png</icon>
     <license type="file">docs\LICENSE.md</license>
-    <readme>docs\README.md</readme>
+    <readme>docs\NUGET.md</readme>
     <packageTypes>
       <packageType name="Template" />
     </packageTypes>
   </metadata>
   <files>
     <file src="icon.png" target="images\" />
-    <file src="LICENSE.md;README.md;" target="docs\" />
-    <file src="**" exclude="**\bin\**\*;**\obj\**\*;**\*.user;**\*.lock.json;**\.DS_Store;**\.git\**\*;**\.github\**\*;**\.vs\**\*;**\*LICENSE;**\*.gitattributes;**\*README.md;**\*.gitignore;**\*nuget.config;" target="content\" />
+    <file src="LICENSE.md;NUGET.md;" target="docs\" />
+    <file src="**" exclude="**\bin\**\*;**\obj\**\*;**\*.user;**\*.lock.json;**\.DS_Store;**\.git\**\*;**\.github\**\*;**\.vs\**\*;**\*LICENSE;**\*.gitattributes;**\*NUGET.md;**\*README.md;**\*.gitignore;**\*nuget.config;" target="content\" />
   </files>
 </package>
