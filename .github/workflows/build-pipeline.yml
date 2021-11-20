@@ -172,15 +172,6 @@ jobs:
         echo "::set-output name=branch::$(eval printf "%s" "$BRANCH_CURRENT")"
       shell: bash
 
-    - name: Outputs
-      run: |
-        echo Name: ${{ steps.prepare.outputs.name }}
-        echo Prefix: ${{ steps.prepare.outputs.version_prefix }}
-        echo Suffix: ${{ steps.prepare.outputs.version_suffix }}
-        echo Tag: ${{ steps.prepare.outputs.docker_tag }}
-        echo Branch:${{ steps.prepare.outputs.branch }}
-
-
     - name: Setup
       id: setup
       uses: NuGet/setup-nuget@v1.0.5
@@ -192,20 +183,16 @@ jobs:
       run: |
         if ([string]::IsNullOrEmpty(${Env:SUFFIX}))
         {
-            echo "NULL [${Env:VERSION}] [${Env:SUFFIX}]"
+            nuget pack template.nuspec -NoDefaultExcludes -Version $VERSION
         }
         else
         {
-            echo "NOT NULL [${Env:VERSION}] [${Env:SUFFIX}]"
+            nuget pack template.nuspec -NoDefaultExcludes -Version $VERSION -Suffix $SUFFIX
         }
       env:
         VERSION: ${{ steps.initialize.outputs.version_prefix }}
-        SUFFIX: ${{ steps.initialize.outputs.version_suffix2 }}
+        SUFFIX: ${{ steps.initialize.outputs.version_suffix }}
       shell: pwsh
 
     # - name: Publish
     #   run: nuget push *.nupkg -src https://api.nuget.org/v3/index.json
-
-
-
-    #     nuget pack template.nuspec -NoDefaultExcludes -Version $VERSION -Suffix $SUFFIX
