@@ -5,19 +5,21 @@
     <version>1.0.0</version>
     <authors>Stephen Walsh</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <license type="file">docs\LICENSE.md</license>
     <projectUrl>https://github.com/stphnwlsh/CleanGraphQLApi</projectUrl>
     <repository type="git" url="https://github.com/stphnwlsh/CleanGraphQLApi" branch="main" />
     <description>A template for an API using Clean Architecture and GraphQL.net.</description>
     <copyright>$copyright$</copyright>
     <tags>dotnet api csharp template clean clean-architecture graphql</tags>
+    <icon>images\icon.png</icon>
+    <license type="file">docs\LICENSE.md</license>
     <readme>docs\README.md</readme>
     <packageTypes>
       <packageType name="Template" />
     </packageTypes>
   </metadata>
   <files>
+    <file src="icon.png" target="images\" />
     <file src="LICENSE.md;README.md;" target="docs\" />
-    <file src="**" exclude="**\bin\**\*;**\obj\**\*;**\*.user;**\*.lock.json;**\.DS_Store;**\.git\**\*;**\.github\**\*;**\.vs\**\*;**\*LICENSE;**\*.gitattributes;**\*README.md;**\*.gitignore;**\*nuget.config;" target="/content" />
+    <file src="**" exclude="**\bin\**\*;**\obj\**\*;**\*.user;**\*.lock.json;**\.DS_Store;**\.git\**\*;**\.github\**\*;**\.vs\**\*;**\*LICENSE;**\*.gitattributes;**\*README.md;**\*.gitignore;**\*nuget.config;" target="content\" />
   </files>
 </package>
