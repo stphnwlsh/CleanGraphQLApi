@@ -179,7 +179,24 @@ jobs:
         nuget-api-key: ${{ secrets.NUGET_API_KEY }}
 
     - name: Pack
-      run: nuget pack template.nuspec -NoDefaultExcludes -
+      id: pack
+      run: |
+        if ($SUFFIX -eq $null)
+        {
+            echo "NULL [$VERSION] [$SUFFIX]"
+        }
+        else
+        {
+            echo "NOT NULL [$VERSION] [$SUFFIX]"
+        }
+      env:
+        VERSION: ${{ steps.initialize.outputs.version_prefix }}
+        SUFFIX: ${{ steps.initialize.outputs.version_suffix }}
+      shell: pwsh
 
-    - name: Publish
-      run: nuget push *.nupkg -src https://api.nuget.org/v3/index.json
+    # - name: Publish
+    #   run: nuget push *.nupkg -src https://api.nuget.org/v3/index.json
+
+
+
+    #     nuget pack template.nuspec -NoDefaultExcludes -Version $VERSION -Suffix $SUFFIX
