@@ -190,13 +190,13 @@ jobs:
     - name: Pack
       id: pack
       run: |
-        if ([string]::IsNullOrEmpty($SUFFIX))
+        if ([string]::IsNullOrEmpty(${Env:SUFFIX}))
         {
-            echo "NULL [${VERSION}] [${SUFFIX}]"
+            echo "NULL [${Env:VERSION}] [${Env:SUFFIX}]"
         }
         else
         {
-            echo "NOT NULL [${VERSION}] [${SUFFIX}]"
+            echo "NOT NULL [${Env:VERSION}] [${Env:SUFFIX}]"
         }
       env:
         VERSION: ${{ steps.initialize.outputs.version_prefix }}
