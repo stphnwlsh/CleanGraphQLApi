@@ -194,5 +194,5 @@ jobs:
         SUFFIX: ${{ steps.initialize.outputs.version_suffix }}
       shell: pwsh
 
-    # - name: Publish
-    #   run: nuget push *.nupkg -src https://api.nuget.org/v3/index.json
+    - name: Publish
+      run: nuget push *.nupkg -src https://api.nuget.org/v3/index.json
