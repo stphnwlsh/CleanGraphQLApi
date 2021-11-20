@@ -16,7 +16,7 @@ jobs:
       security-events: write
 
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         language: [ 'csharp' ]
 
@@ -42,6 +42,11 @@ jobs:
   pipeline:
     name: Build, Test and Publish
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        language: [ 'csharp' ]
 
     steps:
     - name: Checkout
@@ -135,6 +140,11 @@ jobs:
   template:
     name: Nuget Template
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        language: [ 'csharp' ]
 
     steps:
     - name: Checkout
