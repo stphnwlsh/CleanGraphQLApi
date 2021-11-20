@@ -200,7 +200,7 @@ jobs:
         }
       env:
         VERSION: ${{ steps.initialize.outputs.version_prefix }}
-        SUFFIX: ${{ steps.initialize.outputs.version_suffix }}
+        SUFFIX: ${{ steps.initialize.outputs.version_suffix2 }}
       shell: pwsh
 
     # - name: Publish
