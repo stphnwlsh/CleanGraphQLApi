@@ -183,11 +183,11 @@ jobs:
       run: |
         if ([string]::IsNullOrEmpty(${Env:SUFFIX}))
         {
-            nuget pack template.nuspec -NoDefaultExcludes -Version $VERSION
+            nuget pack template.nuspec -NoDefaultExcludes -Version ${Env:VERSION}
         }
         else
         {
-            nuget pack template.nuspec -NoDefaultExcludes -Version $VERSION -Suffix $SUFFIX
+            nuget pack template.nuspec -NoDefaultExcludes -Version ${Env:VERSION} -Suffix ${Env:SUFFIX}
         }
       env:
         VERSION: ${{ steps.initialize.outputs.version_prefix }}
