@@ -2,13 +2,14 @@
   "$schema": "http://json.schemastore.org/template",
   "author": "Stephen Walsh",
   "classifications": [
-    "CleanArchitecture",
+    "Clean Architecture",
     "Clean",
     "GraphQL",
+    "API",
     "Dotnet",
     "Docker"
   ],
-  "identity": "Clean.GraphQL.Template",
+  "identity": "CleanGraphQLApi.Template",
   "name": "Clean GraphQL API Template",
   "shortName": "cleangraphqlapi",
   "tags": {
