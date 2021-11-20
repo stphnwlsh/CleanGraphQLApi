@@ -172,6 +172,15 @@ jobs:
         echo "::set-output name=branch::$(eval printf "%s" "$BRANCH_CURRENT")"
       shell: bash
 
+    - name: Outputs
+      run: |
+        echo Name: ${{ steps.prepare.outputs.name }}
+        echo Prefix: ${{ steps.prepare.outputs.version_prefix }}
+        echo Suffix: ${{ steps.prepare.outputs.version_suffix }}
+        echo Tag: ${{ steps.prepare.outputs.docker_tag }}
+        echo Branch:${{ steps.prepare.outputs.branch }}
+
+
     - name: Setup
       id: setup
       uses: NuGet/setup-nuget@v1.0.5
@@ -181,13 +190,13 @@ jobs:
     - name: Pack
       id: pack
       run: |
-        if ($SUFFIX -eq $null)
+        if ([string]::IsNullOrEmpty($SUFFIX))
         {
-            echo "NULL [$VERSION] [$SUFFIX]"
+            echo "NULL [${VERSION}] [${SUFFIX}]"
         }
         else
         {
-            echo "NOT NULL [$VERSION] [$SUFFIX]"
+            echo "NOT NULL [${VERSION}] [${SUFFIX}]"
         }
       env:
         VERSION: ${{ steps.initialize.outputs.version_prefix }}
