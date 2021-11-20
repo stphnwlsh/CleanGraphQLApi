@@ -7,130 +7,130 @@ on:
     branches: [ main ]
 
 jobs:
-  analyse:
-    name: Static Analysis
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
+  # analyse:
+  #   name: Static Analysis
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     actions: read
+  #     contents: read
+  #     security-events: write
 
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ 'csharp' ]
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       language: [ 'csharp' ]
 
-    steps:
-    - name: Checkout
-      id: checkout
-      uses: actions/checkout@v2
+  #   steps:
+  #   - name: Checkout
+  #     id: checkout
+  #     uses: actions/checkout@v2
 
-    - name: Initialize
-      id: initialize
-      uses: github/codeql-action/init@v1
-      with:
-        languages: ${{ matrix.language }}
+  #   - name: Initialize
+  #     id: initialize
+  #     uses: github/codeql-action/init@v1
+  #     with:
+  #       languages: ${{ matrix.language }}
 
-    - name: Build
-      id: build
-      uses: github/codeql-action/autobuild@v1
+  #   - name: Build
+  #     id: build
+  #     uses: github/codeql-action/autobuild@v1
 
-    - name: Analysis
-      id: analysis
-      uses: github/codeql-action/analyze@v1
+  #   - name: Analysis
+  #     id: analysis
+  #     uses: github/codeql-action/analyze@v1
 
-  pipeline:
-    name: Build, Test and Publish
-    runs-on: ubuntu-latest
+  # pipeline:
+  #   name: Build, Test and Publish
+  #   runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout
-      id: checkout
-      uses: actions/checkout@v2
+  #   steps:
+  #   - name: Checkout
+  #     id: checkout
+  #     uses: actions/checkout@v2
 
-    - name: Initialize
-      id: initialize
-      run: |
-        NAME=$(echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]')
-        VERSION_PREFIX=$(date +'%Y.%m.%d').${GITHUB_RUN_NUMBER}
-        BRANCH_CURRENT=${GITHUB_REF#refs/*/}
-        BRANCH_CURRENT=${BRANCH_CURRENT//[^a-zA-Z0-9]/-}
+  #   - name: Initialize
+  #     id: initialize
+  #     run: |
+  #       NAME=$(echo ${GITHUB_REPOSITORY} | tr '[:upper:]' '[:lower:]')
+  #       VERSION_PREFIX=$(date +'%Y.%m.%d').${GITHUB_RUN_NUMBER}
+  #       BRANCH_CURRENT=${GITHUB_REF#refs/*/}
+  #       BRANCH_CURRENT=${BRANCH_CURRENT//[^a-zA-Z0-9]/-}
 
-        if [[ ${GITHUB_EVENT_NAME} == 'pull_request' ]]; then
-          BRANCH_BASE=${GITHUB_BASE_REF#refs/*/}
-          BRANCH_BASE=${BRANCH_BASE/[^a-zA-Z0-9]//-}
-          BRANCH_COMPARE=${GITHUB_HEAD_REF#refs/*/}
-          BRANCH_COMPARE=${BRANCH_COMPARE//[^a-zA-Z0-9]/-}
-          VERSION_SUFFIX="merge-${BRANCH_BASE}-${BRANCH_COMPARE}"
-        elif [[ ${GITHUB_EVENT_NAME} == ${{ github.event.repository.default_branch }} ]]; then
-          VERSION_SUFFIX="${BRANCH_CURRENT}"
-        fi
+  #       if [[ ${GITHUB_EVENT_NAME} == 'pull_request' ]]; then
+  #         BRANCH_BASE=${GITHUB_BASE_REF#refs/*/}
+  #         BRANCH_BASE=${BRANCH_BASE/[^a-zA-Z0-9]//-}
+  #         BRANCH_COMPARE=${GITHUB_HEAD_REF#refs/*/}
+  #         BRANCH_COMPARE=${BRANCH_COMPARE//[^a-zA-Z0-9]/-}
+  #         VERSION_SUFFIX="merge-${BRANCH_BASE}-${BRANCH_COMPARE}"
+  #       elif [[ ${GITHUB_EVENT_NAME} == ${{ github.event.repository.default_branch }} ]]; then
+  #         VERSION_SUFFIX="${BRANCH_CURRENT}"
+  #       fi
 
-        if [[ $VERSION_SUFFIX == '' ]]; then
-          DOCKER_TAG=$VERSION_PREFIX
-        else
-          DOCKER_TAG=$VERSION_PREFIX-$VERSION_SUFFIX
-        fi
+  #       if [[ $VERSION_SUFFIX == '' ]]; then
+  #         DOCKER_TAG=$VERSION_PREFIX
+  #       else
+  #         DOCKER_TAG=$VERSION_PREFIX-$VERSION_SUFFIX
+  #       fi
 
-        echo "::set-output name=name::$(eval printf "%s" "$NAME")"
-        echo "::set-output name=version_prefix::$(eval printf "%s" "$VERSION_PREFIX")"
-        echo "::set-output name=version_suffix::$(eval printf "%s" "$VERSION_SUFFIX")"
-        echo "::set-output name=docker_tag::$(eval printf "%s" "$DOCKER_TAG")"
-        echo "::set-output name=branch::$(eval printf "%s" "$BRANCH_CURRENT")"
-      shell: bash
+  #       echo "::set-output name=name::$(eval printf "%s" "$NAME")"
+  #       echo "::set-output name=version_prefix::$(eval printf "%s" "$VERSION_PREFIX")"
+  #       echo "::set-output name=version_suffix::$(eval printf "%s" "$VERSION_SUFFIX")"
+  #       echo "::set-output name=docker_tag::$(eval printf "%s" "$DOCKER_TAG")"
+  #       echo "::set-output name=branch::$(eval printf "%s" "$BRANCH_CURRENT")"
+  #     shell: bash
 
-    - name: Build
-      id: build
-      run: docker build .
-        --target coverage
-        --output type=local,dest=out
-        --tag $NAME:$DOCKER_TAG
-        --tag $NAME:latest
-        --build-arg VERSION_PREFIX=$VERSION_PREFIX
-        --build-arg VERSION_SUFFIX=$VERSION_SUFFIX
-      env:
-        DOCKER_BUILDKIT: 1
-        NAME: ${{ steps.initialize.outputs.name }}
-        VERSION_PREFIX: ${{ steps.initialize.outputs.version_prefix }}
-        VERSION_SUFFIX: ${{ steps.initialize.outputs.version_suffix }}
-        DOCKER_TAG: ${{ steps.initialize.outputs.docker_tag }}
+  #   - name: Build
+  #     id: build
+  #     run: docker build .
+  #       --target coverage
+  #       --output type=local,dest=out
+  #       --tag $NAME:$DOCKER_TAG
+  #       --tag $NAME:latest
+  #       --build-arg VERSION_PREFIX=$VERSION_PREFIX
+  #       --build-arg VERSION_SUFFIX=$VERSION_SUFFIX
+  #     env:
+  #       DOCKER_BUILDKIT: 1
+  #       NAME: ${{ steps.initialize.outputs.name }}
+  #       VERSION_PREFIX: ${{ steps.initialize.outputs.version_prefix }}
+  #       VERSION_SUFFIX: ${{ steps.initialize.outputs.version_suffix }}
+  #       DOCKER_TAG: ${{ steps.initialize.outputs.docker_tag }}
 
-    - name: Analysis
-      id: analysis
-      uses: codecov/codecov-action@v1
-      with:
-        files: ./out/coverage.opencover.xml
-        token: ${{ secrets.CODECOV_TOKEN }}
+  #   - name: Analysis
+  #     id: analysis
+  #     uses: codecov/codecov-action@v1
+  #     with:
+  #       files: ./out/coverage.opencover.xml
+  #       token: ${{ secrets.CODECOV_TOKEN }}
 
-    - name: Publish
-      id: publish
-      run: docker build .
-        --target run
-        --tag $NAME:$DOCKER_TAG
-        --tag $NAME:latest
-        --build-arg VERSION_PREFIX=$VERSION_PREFIX
-        --build-arg VERSION_SUFFIX=$VERSION_SUFFIX
-      env:
-        DOCKER_BUILDKIT: 1
-        NAME: ${{ steps.initialize.outputs.name }}
-        VERSION_PREFIX: ${{ steps.initialize.outputs.version_prefix }}
-        VERSION_SUFFIX: ${{ steps.initialize.outputs.version_suffix }}
-        DOCKER_TAG: ${{ steps.initialize.outputs.docker_tag }}
+  #   - name: Publish
+  #     id: publish
+  #     run: docker build .
+  #       --target run
+  #       --tag $NAME:$DOCKER_TAG
+  #       --tag $NAME:latest
+  #       --build-arg VERSION_PREFIX=$VERSION_PREFIX
+  #       --build-arg VERSION_SUFFIX=$VERSION_SUFFIX
+  #     env:
+  #       DOCKER_BUILDKIT: 1
+  #       NAME: ${{ steps.initialize.outputs.name }}
+  #       VERSION_PREFIX: ${{ steps.initialize.outputs.version_prefix }}
+  #       VERSION_SUFFIX: ${{ steps.initialize.outputs.version_suffix }}
+  #       DOCKER_TAG: ${{ steps.initialize.outputs.docker_tag }}
 
-    - name: Docker Login
-      id: login
-      if: ${{ github.ref == 'refs/heads/main' }}
-      uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-      with:
-        username: ${{ secrets.DOCKER_LOGIN }}
-        password: ${{ secrets.DOCKER_TOKEN }}
+  #   - name: Docker Login
+  #     id: login
+  #     if: ${{ github.ref == 'refs/heads/main' }}
+  #     uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+  #     with:
+  #       username: ${{ secrets.DOCKER_LOGIN }}
+  #       password: ${{ secrets.DOCKER_TOKEN }}
 
-    - name: Docker Push
-      id: push
-      if: ${{ github.ref == 'refs/heads/main' }}
-      run: docker push $NAME --all-tags
-      env:
-        NAME: ${{ steps.initialize.outputs.name }}
+  #   - name: Docker Push
+  #     id: push
+  #     if: ${{ github.ref == 'refs/heads/main' }}
+  #     run: docker push $NAME --all-tags
+  #     env:
+  #       NAME: ${{ steps.initialize.outputs.name }}
 
   template:
     name: Nuget Template
