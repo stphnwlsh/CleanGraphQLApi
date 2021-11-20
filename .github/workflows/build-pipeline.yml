@@ -195,4 +195,6 @@ jobs:
       shell: pwsh
 
     - name: Publish
+      id: publish
+      if: ${{ github.ref == 'refs/heads/main' }}
       run: nuget push *.nupkg -src https://api.nuget.org/v3/index.json
