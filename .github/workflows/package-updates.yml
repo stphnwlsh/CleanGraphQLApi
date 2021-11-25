@@ -52,7 +52,6 @@ jobs:
     - name: Push
       id: push
       if: ${{ steps.validate.outputs.needs_updates == 'true' }}
-      uses: actions-js/push@master
+      uses: stefanzweifel/git-auto-commit-action@v4
       with:
-        message: "Automated Dependency Updates"
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        commit_message: Automated Dependency Updates
