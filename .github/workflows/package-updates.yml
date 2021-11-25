@@ -28,6 +28,11 @@ jobs:
       id: tools
       run: dotnet tool install --global dotnet-outdated-tool
 
+    - name: Validate
+      id: validate
+      run: |
+        echo "::set-output name=outdated::$(dotnet outdated)\n"
+
     - name: Update
       id: update
       run: dotnet outdated -u
