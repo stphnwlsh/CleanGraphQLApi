@@ -1,4 +1,4 @@
-name: Update Dependencies
+name: Automated Dependency Updates
 
 on:
   push:
@@ -32,7 +32,7 @@ jobs:
       id: validate
       run: |
         OUTPUT=$(dotnet outdated)
-        if [[ $OUTPUT =~ "Discovering projects" ]]; then
+        if [[ $OUTPUT =~ "No outdated dependencies were detected" ]]; then
             echo "::set-output name=needs_updates::false"
         else
             echo "::set-output name=needs_updates::true"
@@ -48,3 +48,11 @@ jobs:
       id: test
       if: ${{ steps.validate.outputs.needs_updates == 'true' }}
       run: dotnet test -c Release -v minimal
+
+    - name: Push
+      id: push
+      if: ${{ steps.validate.outputs.needs_updates == 'true' }}
+      uses: actions-js/push@master
+      with:
+        message: "Automated Dependency Updates"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
