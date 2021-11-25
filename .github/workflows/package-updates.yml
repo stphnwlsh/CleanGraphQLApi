@@ -31,12 +31,20 @@ jobs:
     - name: Validate
       id: validate
       run: |
-        echo "::set-output name=outdated::$(dotnet outdated)\n"
+        OUTPUT=$(dotnet outdated)
+        if [[ $OUTPUT =~ "No outdated dependencies were detected" ]]; then
+            echo "::set-output name=needs_updates::false"
+        else
+            echo "::set-output name=needs_updates::true"
+        fi
+      shell: bash
 
     - name: Update
       id: update
+      if: ${{ steps.validate.outputs.needs_updates == 'true' }}
       run: dotnet outdated -u
 
     - name: Test
       id: test
+      if: ${{ steps.validate.outputs.needs_updates == 'true' }}
       run: dotnet test -c Release -v minimal
