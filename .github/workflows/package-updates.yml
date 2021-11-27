@@ -28,7 +28,7 @@ jobs:
 
     - name: Update
       id: update
-      uses: stphnwlsh/dotnet-outdated-action@v1
+      uses: stphnwlsh/dotnet-outdated-action@v1.0.0
 
     - name: Test
       id: test
