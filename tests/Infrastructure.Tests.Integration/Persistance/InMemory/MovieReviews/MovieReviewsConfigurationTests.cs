@@ -1,8 +1,6 @@
 namespace CleanGraphQLApi.Infrastructure.Tests.Integration.Persistance.InMemory.MovieReviews;
 
-using CleanGraphQLApi.Domain.Authors.Entities;
-using CleanGraphQLApi.Domain.Movies.Entities;
-using CleanGraphQLApi.Domain.Reviews.Entities;
+using CleanGraphQLApi.Application.Entities;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
 using Xunit;

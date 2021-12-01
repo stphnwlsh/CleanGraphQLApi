@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CleanGraphQLApi.Application.Common.Exceptions;
 using CleanGraphQLApi.Application.Common.Interfaces;
 using CleanGraphQLApi.Application.Reviews.ReadById;
-using CleanGraphQLApi.Domain.Reviews.Entities;
+using CleanGraphQLApi.Application.Entities;
 using NSubstitute;
 using Shouldly;
 using Xunit;

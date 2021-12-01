@@ -1,6 +1,6 @@
 namespace CleanGraphQLApi.Application.Authors.ReadById;
 
-using CleanGraphQLApi.Domain.Authors.Entities;
+using CleanGraphQLApi.Application.Entities;
 using MediatR;
 
 public class ReadByIdQuery : IRequest<Author>

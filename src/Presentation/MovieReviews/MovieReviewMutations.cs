@@ -3,7 +3,8 @@ namespace CleanGraphQLApi.Presentation.MovieReviews;
 using System;
 using CleanGraphQLApi.Application.Reviews.Create;
 using CleanGraphQLApi.Application.Reviews.Delete;
-using CleanGraphQLApi.Domain.Reviews.Entities;
+using CleanGraphQLApi.Application.Reviews.Update;
+using CleanGraphQLApi.Application.Entities;
 using CleanGraphQLApi.Presentation.MovieReviews.Types.InputObjects;
 using CleanGraphQLApi.Presentation.MovieReviews.Types.Objects;
 using GraphQL;
@@ -19,16 +20,16 @@ public class MovieReviewMutations : ObjectGraphType<object>
 
         _ = this.FieldAsync<ReviewObject, Review>(
             "createReview",
-            arguments: new QueryArguments(new QueryArgument<NonNullGraphType<ReviewInputType>> { Name = "review" }),
+            arguments: new QueryArguments(new QueryArgument<NonNullGraphType<CreateReviewInputType>> { Name = "input" }),
             resolve: async (context) =>
             {
                 try
                 {
-                    return await mediator.Send(context.GetArgument<CreateCommand>("review"));
+                    return await mediator.Send(context.GetArgument<CreateCommand>("input"));
                 }
                 catch (Exception ex)
                 {
-                    context.Errors.Add(new ExecutionError(ex.Message, ex));
+                    context.Errors.Add(new ExecutionError("A an error occured while attempting to create the review.", ex));
                     return null;
                 }
             }
@@ -49,5 +50,22 @@ public class MovieReviewMutations : ObjectGraphType<object>
                     return false;
                 }
             });
+
+        _ = this.FieldAsync<BooleanGraphType>(
+            "updateReview",
+            arguments: new QueryArguments(new QueryArgument<NonNullGraphType<UpdateReviewInputType>> { Name = "input" }),
+            resolve: async (context) =>
+            {
+                try
+                {
+                    return await mediator.Send(context.GetArgument<UpdateCommand>("input"));
+                }
+                catch (Exception ex)
+                {
+                    context.Errors.Add(new ExecutionError("A an error occured while attempting to update the review.", ex));
+                    return null;
+                }
+            }
+        );
     }
 }

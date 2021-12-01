@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CleanGraphQLApi.Application.Common.Enums;
 using CleanGraphQLApi.Application.Common.Exceptions;
 using CleanGraphQLApi.Application.Common.Interfaces;
-using CleanGraphQLApi.Domain.Movies.Entities;
+using CleanGraphQLApi.Application.Entities;
 using MediatR;
 
 public class ReadByIdHandler : IRequestHandler<ReadByIdQuery, Movie?>

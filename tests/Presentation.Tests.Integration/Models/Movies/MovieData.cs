@@ -11,6 +11,12 @@ public partial class Movie
     [JsonPropertyName("title")]
     public string Title { get; set; }
 
+    [JsonPropertyName("dateCreated")]
+    public DateTime DateCreated { get; set; }
+
+    [JsonPropertyName("dateModified")]
+    public DateTime DateModified { get; set; }
+
     [JsonPropertyName("reviews")]
     public Review[] Reviews { get; set; }
 }
@@ -22,6 +28,12 @@ public partial class Review
 
     [JsonPropertyName("stars")]
     public int Stars { get; set; }
+
+    [JsonPropertyName("dateCreated")]
+    public DateTime DateCreated { get; set; }
+
+    [JsonPropertyName("dateModified")]
+    public DateTime DateModified { get; set; }
 
     [JsonPropertyName("author")]
     public Author Author { get; set; }
@@ -37,4 +49,10 @@ public partial class Author
 
     [JsonPropertyName("lastName")]
     public string LastName { get; set; }
+
+    [JsonPropertyName("dateCreated")]
+    public DateTime DateCreated { get; set; }
+
+    [JsonPropertyName("dateModified")]
+    public DateTime DateModified { get; set; }
 }

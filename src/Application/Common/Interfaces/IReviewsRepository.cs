@@ -1,7 +1,7 @@
 namespace CleanGraphQLApi.Application.Common.Interfaces;
 
 using System.Threading.Tasks;
-using CleanGraphQLApi.Domain.Reviews.Entities;
+using CleanGraphQLApi.Application.Entities;
 
 public interface IReviewsRepository
 {

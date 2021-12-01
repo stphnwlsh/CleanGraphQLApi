@@ -1,9 +1,7 @@
 namespace CleanGraphQLApi.Infrastructure.Persistance.InMemory.MovieReviews;
 
 using System.Reflection;
-using CleanGraphQLApi.Domain.Authors.Entities;
-using CleanGraphQLApi.Domain.Movies.Entities;
-using CleanGraphQLApi.Domain.Reviews.Entities;
+using CleanGraphQLApi.Application.Entities;
 using Microsoft.EntityFrameworkCore;
 
 internal class MovieReviewsDbContext : DbContext

@@ -1,6 +1,6 @@
 namespace CleanGraphQLApi.Infrastructure.Persistance.InMemory.Common.Config;
 
-using CleanGraphQLApi.Domain.Common.Entity;
+using CleanGraphQLApi.Application.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,5 +11,7 @@ internal abstract class EntityConfiguration<T> : IEntityTypeConfiguration<T>
     {
         _ = builder.HasKey(e => e.Id);
         _ = builder.Property(m => m.Id).ValueGeneratedOnAdd().IsRequired();
+        _ = builder.Property(m => m.DateCreated).ValueGeneratedOnAdd().IsRequired();
+        _ = builder.Property(m => m.DateModified).ValueGeneratedOnAdd().IsRequired();
     }
 }

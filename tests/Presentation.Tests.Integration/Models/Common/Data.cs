@@ -28,4 +28,7 @@ public partial class Data
 
     [JsonPropertyName("deleteReview")]
     public bool DeleteReview { get; set; }
+
+    [JsonPropertyName("updateReview")]
+    public bool UpdateReview { get; set; }
 }

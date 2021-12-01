@@ -3,7 +3,7 @@ namespace CleanGraphQLApi.Application.Movies.ReadAll;
 using System.Threading;
 using System.Threading.Tasks;
 using CleanGraphQLApi.Application.Common.Interfaces;
-using CleanGraphQLApi.Domain.Movies.Entities;
+using CleanGraphQLApi.Application.Entities;
 using MediatR;
 
 public class ReadAllHandler : IRequestHandler<ReadAllQuery, List<Movie>>
