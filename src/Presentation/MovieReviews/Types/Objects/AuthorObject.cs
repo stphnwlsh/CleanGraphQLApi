@@ -1,6 +1,6 @@
 namespace CleanGraphQLApi.Presentation.MovieReviews.Types.Objects;
 
-using CleanGraphQLApi.Domain.Authors.Entities;
+using CleanGraphQLApi.Application.Entities;
 using GraphQL.DataLoader;
 using GraphQL.Types;
 using MediatR;
@@ -20,5 +20,7 @@ public sealed class AuthorObject : ObjectGraphType<Author>
             description: "This authors reviews",
             type: typeof(ListGraphType<ReviewObject>),
             resolve: m => m.Source?.Reviews);
+        _ = this.Field(m => m.DateCreated).Description("Date the author was created");
+        _ = this.Field(m => m.DateModified).Description("Date the author was modified");
     }
 }

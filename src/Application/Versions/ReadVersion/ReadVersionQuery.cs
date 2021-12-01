@@ -1,6 +1,6 @@
 namespace CleanGraphQLApi.Application.Versions.ReadVersion;
 
-using CleanGraphQLApi.Domain.Version;
+using CleanGraphQLApi.Application.Entities;
 using MediatR;
 
 public class ReadVersionQuery : IRequest<ApplicationVersion>

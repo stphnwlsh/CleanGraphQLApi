@@ -3,7 +3,7 @@ namespace CleanGraphQLApi.Application.Authors.ReadAll;
 using System.Threading;
 using System.Threading.Tasks;
 using CleanGraphQLApi.Application.Common.Interfaces;
-using CleanGraphQLApi.Domain.Authors.Entities;
+using CleanGraphQLApi.Application.Entities;
 using MediatR;
 
 public class ReadAllHandler : IRequestHandler<ReadAllQuery, List<Author>>

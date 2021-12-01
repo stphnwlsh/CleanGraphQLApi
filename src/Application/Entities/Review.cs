@@ -1,9 +1,6 @@
-namespace CleanGraphQLApi.Domain.Reviews.Entities;
+namespace CleanGraphQLApi.Application.Entities;
 
 using System.ComponentModel.DataAnnotations.Schema;
-using CleanGraphQLApi.Domain.Authors.Entities;
-using CleanGraphQLApi.Domain.Common.Entity;
-using CleanGraphQLApi.Domain.Movies.Entities;
 
 public class Review : Entity
 {

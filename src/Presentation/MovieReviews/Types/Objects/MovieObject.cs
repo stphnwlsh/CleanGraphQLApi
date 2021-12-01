@@ -1,6 +1,6 @@
 namespace CleanGraphQLApi.Presentation.MovieReviews.Types.Objects;
 
-using CleanGraphQLApi.Domain.Movies.Entities;
+using CleanGraphQLApi.Application.Entities;
 using GraphQL.DataLoader;
 using GraphQL.Types;
 using MediatR;
@@ -19,5 +19,7 @@ public sealed class MovieObject : ObjectGraphType<Movie>
             description: "Reviews of the movie",
             type: typeof(ListGraphType<ReviewObject>),
             resolve: m => m.Source?.Reviews);
+        _ = this.Field(m => m.DateCreated).Description("Date the movie was created");
+        _ = this.Field(m => m.DateModified).Description("Date the movie was modified");
     }
 }

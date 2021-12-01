@@ -1,4 +1,4 @@
-namespace CleanGraphQLApi.Domain.Version;
+namespace CleanGraphQLApi.Application.Entities;
 
 public class ApplicationVersion
 {

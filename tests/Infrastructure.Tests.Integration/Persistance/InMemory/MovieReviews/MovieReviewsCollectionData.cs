@@ -1,9 +1,7 @@
 namespace CleanGraphQLApi.Infrastructure.Tests.Integration.Persistance.InMemory.MovieReviews;
 
 using System;
-using CleanGraphQLApi.Domain.Authors.Entities;
-using CleanGraphQLApi.Domain.Movies.Entities;
-using CleanGraphQLApi.Domain.Reviews.Entities;
+using CleanGraphQLApi.Application.Entities;
 using CleanGraphQLApi.Infrastructure.Persistance.InMemory.MovieReviews;
 
 internal static class MovieReviewsCollectionData

@@ -3,7 +3,7 @@ namespace CleanGraphQLApi.Application.Versions.ReadVersion;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using CleanGraphQLApi.Domain.Version;
+using CleanGraphQLApi.Application.Entities;
 using MediatR;
 
 public class ReadVersionHandler : IRequestHandler<ReadVersionQuery, ApplicationVersion>

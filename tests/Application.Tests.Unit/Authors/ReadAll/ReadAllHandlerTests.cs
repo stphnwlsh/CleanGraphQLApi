@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CleanGraphQLApi.Application.Authors.ReadAll;
 using CleanGraphQLApi.Application.Common.Interfaces;
-using CleanGraphQLApi.Domain.Authors.Entities;
+using CleanGraphQLApi.Application.Entities;
 using NSubstitute;
 using Shouldly;
 using Xunit;

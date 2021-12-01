@@ -1,6 +1,6 @@
 namespace CleanGraphQLApi.Infrastructure.Persistance.InMemory.MovieReviews.Config;
 
-using CleanGraphQLApi.Domain.Movies.Entities;
+using CleanGraphQLApi.Application.Entities;
 using CleanGraphQLApi.Infrastructure.Persistance.InMemory.Common.Config;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

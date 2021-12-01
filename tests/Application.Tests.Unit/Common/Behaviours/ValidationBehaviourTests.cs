@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using CleanGraphQLApi.Application.Authors.ReadById;
 using CleanGraphQLApi.Application.Common.Behaviours;
-using CleanGraphQLApi.Domain.Authors.Entities;
+using CleanGraphQLApi.Application.Entities;
 using FluentValidation;
 using MediatR;
 using NSubstitute;

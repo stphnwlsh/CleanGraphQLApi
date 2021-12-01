@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CleanGraphQLApi.Application.Common.Exceptions;
 using CleanGraphQLApi.Application.Common.Interfaces;
 using CleanGraphQLApi.Application.Movies.ReadById;
-using CleanGraphQLApi.Domain.Movies.Entities;
+using CleanGraphQLApi.Application.Entities;
 using NSubstitute;
 using Shouldly;
 using Xunit;

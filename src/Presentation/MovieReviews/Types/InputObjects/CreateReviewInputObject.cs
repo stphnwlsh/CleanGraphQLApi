@@ -2,12 +2,12 @@ namespace CleanGraphQLApi.Presentation.MovieReviews.Types.InputObjects;
 
 using GraphQL.Types;
 
-public sealed class ReviewInputType : InputObjectGraphType
+public sealed class CreateReviewInputType : InputObjectGraphType
 {
-    public ReviewInputType()
+    public CreateReviewInputType()
     {
-        this.Name = "ReviewInput";
-        this.Description = "A review of the movie";
+        this.Name = "CreateReviewInput";
+        this.Description = "A review of a movie to be created";
 
         _ = this.Field<IdGraphType>("AuthorId", "Id of the Author of the review.");
         _ = this.Field<IdGraphType>("MovieId", "Id of the Movie being reviewed.");

@@ -1,8 +1,6 @@
-namespace CleanGraphQLApi.Domain.Authors.Entities;
+namespace CleanGraphQLApi.Application.Entities;
 
 using System.ComponentModel.DataAnnotations.Schema;
-using CleanGraphQLApi.Domain.Common.Entity;
-using CleanGraphQLApi.Domain.Reviews.Entities;
 
 public class Author : Entity
 {
