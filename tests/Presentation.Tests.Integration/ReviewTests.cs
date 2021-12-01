@@ -1,4 +1,5 @@
 using System;
+using Shouldly;
 
 namespace CleanGraphQLApi.Presentation.Tests.Integration;
 
@@ -12,8 +13,10 @@ public class ReviewTests
 {
     private static readonly GraphQLApplication Application = new();
 
+    #region Create
+
     [Fact]
-    public async Task Reviews_ShouldCreate_Review()
+    public async Task Create_ShouldCreate_Review()
     {
         // Arrange
         using var client = Application.CreateClient();
@@ -21,8 +24,6 @@ public class ReviewTests
         var author = (await authorResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Authors[0];
         using var movieResponse = await client.GetAsync("/graphql?query={movies{id,title}}");
         var movie = (await movieResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Movies[0];
-
-        // Act
         var content = new Models.Reviews.Create.CreateReviewInputData
         {
             Query = "mutation($review:CreateReviewInput!){createReview(input:$review){id,stars,dateCreated,dateModified,author{id,firstName,lastName,dateCreated,dateModified,},movie{id,title,dateCreated,dateModified}}}",
@@ -36,6 +37,8 @@ public class ReviewTests
                 }
             }
         };
+
+        // Act
         using var response = await client.PostAsync($"/graphql", content.ToStringContent());
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
@@ -73,14 +76,80 @@ public class ReviewTests
     }
 
     [Fact]
-    public async Task Reviews_ShouldDelete_Review()
+    public async Task Create_ShouldNotCreate_Review()
+    {
+        // Arrange
+        using var client = Application.CreateClient();
+        var content = new Models.Reviews.Create.CreateReviewInputData
+        {
+            Query = "mutation($review:CreateReviewInput!){createReview(input:$review){id,stars,dateCreated,dateModified,author{id,firstName,lastName,dateCreated,dateModified,},movie{id,title,dateCreated,dateModified}}}",
+            Variables = new Models.Reviews.Create.Variables
+            {
+                Review = new Models.Reviews.Create.Review
+                {
+                    AuthorId = Guid.Empty,
+                    MovieId = Guid.Empty,
+                    Stars = 5
+                }
+            }
+        };
+
+        // Act
+        using var response = await client.PostAsync($"/graphql", content.ToStringContent());
+        var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        _ = result.ShouldNotBeNull();
+
+        _ = result.Data.ShouldNotBeNull();
+        result.Data.CreateReview.ShouldBeNull();
+
+        result.Errors.ShouldNotBeEmpty();
+        result.Errors.Count.ShouldBe(1);
+        result.Errors[0].Message.ShouldContain("A an error occured while attempting to create the review.");
+    }
+
+    [Fact]
+    public async Task CreateNull_ShouldNotCreate_Review()
+    {
+        // Arrange
+        using var client = Application.CreateClient();
+        var content = new Models.Reviews.Create.CreateReviewInputData
+        {
+            Query = "mutation($review:CreateReviewInput!){createReview(input:$review){id,stars,dateCreated,dateModified,author{id,firstName,lastName,dateCreated,dateModified,},movie{id,title,dateCreated,dateModified}}}",
+
+        };
+
+        // Act
+        using var response = await client.PostAsync($"/graphql", content.ToStringContent());
+        var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        _ = result.ShouldNotBeNull();
+
+        result.Data.ShouldBeNull();
+
+        result.Errors.ShouldNotBeEmpty();
+        result.Errors.Count.ShouldBe(1);
+        result.Errors[0].Message.ShouldContain("GraphQL.Validation.InvalidVariableError");
+        result.Errors[0].Message.ShouldContain("No value provided for a non-null variable.");
+    }
+
+    #endregion Create
+
+    #region Delete
+
+    [Fact]
+    public async Task Delete_ShouldDelete_Review()
     {
         // Arrange
         using var client = Application.CreateClient();
         using var reviewResponse = await client.GetAsync("/graphql?query={reviews{id}}");
         var reviewId = (await reviewResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Reviews[0].Id;
-
-        // Act
         var content = new Models.Reviews.Delete.DeleteReviewInputData
         {
             Query = "mutation($id:ID!){deleteReview(id:$id)}",
@@ -89,6 +158,8 @@ public class ReviewTests
                 Id = reviewId
             }
         };
+
+        // Act
         using var response = await client.PostAsync($"/graphql", content.ToStringContent());
         var resultS = await response.Content.ReadAsStringAsync();
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
@@ -101,6 +172,67 @@ public class ReviewTests
 
         result.Data.DeleteReview.ShouldBeTrue();
     }
+
+    [Fact]
+    public async Task Delete_ShouldNotDelete_Review()
+    {
+        // Arrange
+        using var client = Application.CreateClient();
+        var content = new Models.Reviews.Delete.DeleteReviewInputData
+        {
+            Query = "mutation($id:ID!){deleteReview(id:$id)}",
+            Variables = new Models.Reviews.Delete.Variables
+            {
+                Id = Guid.Empty
+            }
+        };
+
+        // Act
+        using var response = await client.PostAsync($"/graphql", content.ToStringContent());
+        var resultS = await response.Content.ReadAsStringAsync();
+        var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        _ = result.ShouldNotBeNull();
+
+        _ = result.Data.ShouldNotBeNull();
+        result.Data.DeleteReview.ShouldBeFalse();
+
+        result.Errors.ShouldNotBeEmpty();
+        result.Errors.Count.ShouldBe(1);
+        result.Errors[0].Message.ShouldContain("A an error occured while attempting to delete the review.");
+    }
+
+    [Fact]
+    public async Task DeleteNull_ShouldNotDelete_Review()
+    {
+        // Arrange
+        using var client = Application.CreateClient();
+        var content = new Models.Reviews.Delete.DeleteReviewInputData
+        {
+            Query = "mutation($id:ID!){deleteReview(id:$id)}"
+        };
+
+        // Act
+        using var response = await client.PostAsync($"/graphql", content.ToStringContent());
+        var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        _ = result.ShouldNotBeNull();
+
+        result.Data.ShouldBeNull();
+
+        result.Errors.ShouldNotBeEmpty();
+        result.Errors.Count.ShouldBe(1);
+        result.Errors[0].Message.ShouldContain("GraphQL.Validation.InvalidVariableError");
+        result.Errors[0].Message.ShouldContain("No value provided for a non-null variable.");
+    }
+
+    #endregion Delete
 
     [Fact]
     public async Task Reviews_ShouldReturn_ReviewsList()
@@ -119,7 +251,7 @@ public class ReviewTests
         _ = result.Data.ShouldNotBeNull();
 
         result.Data.Reviews.ShouldNotBeEmpty();
-        result.Data.Reviews.Length.ShouldBe(150);
+        result.Data.Reviews.Length.ShouldBeGreaterThan(145);
 
         foreach (var review in result.Data.Reviews)
         {
@@ -202,7 +334,9 @@ public class ReviewTests
         result.Data.Review.Movie.DateModified.ShouldNotBe(default);
     }
 
-        [Fact]
+    #region Update
+
+    [Fact]
     public async Task Update_ShouldUpdate_Review()
     {
         // Arrange
@@ -213,8 +347,6 @@ public class ReviewTests
         var movie = (await movieResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Movies[0];
         using var reviewResponse = await client.GetAsync("/graphql?query={reviews{id}}");
         var review = (await reviewResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Reviews[0];
-
-        // Act
         var content = new Models.Reviews.Update.UpdateReviewInputData()
         {
             Query = "mutation($review:UpdateReviewInput!){updateReview(input:$review)}",
@@ -229,9 +361,9 @@ public class ReviewTests
                 }
             }
         };
-        var stringContent = content.ToStringContent();
+
+        // Act
         using var response = await client.PostAsync($"/graphql", content.ToStringContent());
-        var stringtest = await response.Content.ReadAsStringAsync();
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
@@ -242,4 +374,70 @@ public class ReviewTests
 
         result.Data.UpdateReview.ShouldBeTrue();
     }
+
+    [Fact]
+    public async Task Update_ShouldNotUpdate_Review()
+    {
+        // Arrange
+        using var client = Application.CreateClient();
+        var content = new Models.Reviews.Update.UpdateReviewInputData()
+        {
+            Query = "mutation($review:UpdateReviewInput!){updateReview(input:$review)}",
+            Variables = new Models.Reviews.Update.Variables
+            {
+                Review = new Models.Reviews.Update.Review
+                {
+                    Id = Guid.Empty,
+                    AuthorId = Guid.Empty,
+                    MovieId = Guid.Empty,
+                    Stars = 5
+                }
+            }
+        };
+
+        // Act
+        using var response = await client.PostAsync($"/graphql", content.ToStringContent());
+        var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        _ = result.ShouldNotBeNull();
+
+        _ = result.Data.ShouldNotBeNull();
+        result.Data.UpdateReview.ShouldBeFalse();
+
+        result.Errors.ShouldNotBeEmpty();
+        result.Errors.Count.ShouldBe(1);
+        result.Errors[0].Message.ShouldContain("A an error occured while attempting to update the review.");
+    }
+
+    [Fact]
+    public async Task UpdateNull_ShouldNotDelete_Review()
+    {
+        // Arrange
+        using var client = Application.CreateClient();
+        var content = new Models.Reviews.Update.UpdateReviewInputData()
+        {
+            Query = "mutation($review:UpdateReviewInput!){updateReview(input:$review)}"
+        };
+
+        // Act
+        using var response = await client.PostAsync($"/graphql", content.ToStringContent());
+        var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        _ = result.ShouldNotBeNull();
+
+        result.Data.ShouldBeNull();
+
+        result.Errors.ShouldNotBeEmpty();
+        result.Errors.Count.ShouldBe(1);
+        result.Errors[0].Message.ShouldContain("GraphQL.Validation.InvalidVariableError");
+        result.Errors[0].Message.ShouldContain("No value provided for a non-null variable.");
+    }
+
+    #endregion Update
 }

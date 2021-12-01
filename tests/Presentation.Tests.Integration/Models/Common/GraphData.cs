@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace CleanGraphQLApi.Presentation.Tests.Integration.Models.Common;
 
 using System.Text.Json.Serialization;
@@ -9,4 +11,7 @@ public partial class GraphData
 
     [JsonPropertyName("extensions")]
     public Extensions Extensions { get; set; }
+
+    [JsonPropertyName("errors")]
+    public List<ErrorMessage> Errors { get; set; }
 }

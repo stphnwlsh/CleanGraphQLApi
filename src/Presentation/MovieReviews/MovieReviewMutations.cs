@@ -25,7 +25,11 @@ public class MovieReviewMutations : ObjectGraphType<object>
             {
                 try
                 {
-                    return await mediator.Send(context.GetArgument<CreateCommand>("input"));
+                    var input = context.GetArgument<CreateCommand>("input");
+
+                    ArgumentNullException.ThrowIfNull(input);
+
+                    return await mediator.Send(input);
                 }
                 catch (Exception ex)
                 {
@@ -42,7 +46,11 @@ public class MovieReviewMutations : ObjectGraphType<object>
             {
                 try
                 {
-                    return await mediator.Send(new DeleteCommand { Id = context.GetArgument<Guid>("id") });
+                    var input = context.GetArgument<Guid>("id");
+
+                    ArgumentNullException.ThrowIfNull(input);
+
+                    return await mediator.Send(new DeleteCommand { Id = input });
                 }
                 catch (Exception ex)
                 {
@@ -58,12 +66,16 @@ public class MovieReviewMutations : ObjectGraphType<object>
             {
                 try
                 {
-                    return await mediator.Send(context.GetArgument<UpdateCommand>("input"));
+                    var input = context.GetArgument<UpdateCommand>("input");
+
+                    ArgumentNullException.ThrowIfNull(input);
+
+                    return await mediator.Send(input);
                 }
                 catch (Exception ex)
                 {
                     context.Errors.Add(new ExecutionError("A an error occured while attempting to update the review.", ex));
-                    return null;
+                    return false;
                 }
             }
         );
