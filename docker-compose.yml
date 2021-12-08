@@ -1,0 +1,40 @@
+version: '3'
+
+networks:
+  default:
+    name: cleanminimalapi
+    driver: bridge
+
+services:
+  api:
+    build:
+      context: .
+      args:
+        VERSION_PREFIX: 1.1.1.1
+        VERSION_SUFFIX: docker
+    container_name: graphql
+    environment:
+      - ASPNETCORE_ENVIRONMENT=docker
+      - Serilog__WriteTo__0__Args__serverUrl=http://seq:5341
+      - Zipkin__Endpoint=http://localhost:8882/api/v2/spans
+    ports:
+      - 8880:80
+    networks:
+      - default
+  logging:
+    image: datalust/seq:latest
+    container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 8881:80
+      - 5341:5341
+    networks:
+      - default
+  telemetry:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - 8882:9411
+    networks:
+      - default

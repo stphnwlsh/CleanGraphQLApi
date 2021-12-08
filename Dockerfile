@@ -8,14 +8,12 @@ ARG BASE_IMAGE_RUNTIME_TAG=6.0-alpine
 # Setup Build Image
 FROM ${BASE_IMAGE_REPO}/${BASE_IMAGE_BUILD}:${BASE_IMAGE_BUILD_TAG} AS build
 
+# Build, Test and Publish ENVS
 # Build, Test and Publish ARGS
 ARG VERSION_PREFIX=1.0.0.0
 ARG VERSION_SUFFIX
-ARG ENVIRONMENT=docker
 
-# Build, Test and Publish ENVS
-ENV DOTNET_ENVIRONMENT=${ENVIRONMENT}
-
+# Set Working Directory
 WORKDIR /sln
 
 # Dotnet Restore
@@ -40,6 +38,7 @@ RUN dotnet build --no-restore -c Release -v minimal -p:VersionPrefix=${VERSION_P
 FROM build AS test
 RUN dotnet test --no-restore --no-build -c Release -v minimal -p:CollectCoverage=true  -p:CoverletOutput=../results/ -p:MergeWith="../results/coverage.json" -p:CoverletOutputFormat=opencover%2cjson -m:1
 
+# Output Code Coverage Results
 FROM scratch AS coverage
 COPY --from=test /sln/tests/results/*.xml .
 
