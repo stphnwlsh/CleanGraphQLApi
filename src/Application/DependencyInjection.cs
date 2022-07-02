@@ -2,7 +2,7 @@ namespace CleanGraphQLApi.Application;
 
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using CleanGraphQLApi.Application.Common.Behaviours;
+using Common.Behaviours;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;

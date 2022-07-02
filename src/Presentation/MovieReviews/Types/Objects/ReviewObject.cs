@@ -1,6 +1,6 @@
 namespace CleanGraphQLApi.Presentation.MovieReviews.Types.Objects;
 
-using CleanGraphQLApi.Application.Entities;
+using Application.Reviews.Entities;
 using GraphQL.Types;
 
 public sealed class ReviewObject : ObjectGraphType<Review>

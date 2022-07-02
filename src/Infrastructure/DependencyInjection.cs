@@ -1,12 +1,13 @@
-using SimpleDateTimeProvider;
-
 namespace CleanGraphQLApi.Infrastructure;
 
 using System.Diagnostics.CodeAnalysis;
-using CleanGraphQLApi.Application.Common.Interfaces;
-using CleanGraphQLApi.Infrastructure.Persistance.InMemory.MovieReviews;
+using Application.Authors;
+using Application.Movies;
+using Application.Reviews;
+using Databases.MoviesReviews;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SimpleDateTimeProvider;
 
 [ExcludeFromCodeCoverage]
 public static class DependencyInjection
@@ -16,10 +17,12 @@ public static class DependencyInjection
         _ = services.AddEntityFrameworkInMemoryDatabase();
         _ = services.AddDbContext<MovieReviewsDbContext>(options => options.UseInMemoryDatabase($"Movies-{Guid.NewGuid()}"), ServiceLifetime.Singleton);
 
-        _ = services.AddSingleton<MovieReviewsRepository>();
-        _ = services.AddSingleton<IAuthorsRepository>(p => p.GetRequiredService<MovieReviewsRepository>());
-        _ = services.AddSingleton<IMoviesRepository>(x => x.GetRequiredService<MovieReviewsRepository>());
-        _ = services.AddSingleton<IReviewsRepository>(x => x.GetRequiredService<MovieReviewsRepository>());
+        _ = services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+        _ = services.AddSingleton<EntityFrameworkMovieReviewsRepository>();
+        _ = services.AddSingleton<IAuthorsRepository>(p => p.GetRequiredService<EntityFrameworkMovieReviewsRepository>());
+        _ = services.AddSingleton<IMoviesRepository>(x => x.GetRequiredService<EntityFrameworkMovieReviewsRepository>());
+        _ = services.AddSingleton<IReviewsRepository>(x => x.GetRequiredService<EntityFrameworkMovieReviewsRepository>());
 
         _ = services.AddSingleton<IDateTimeProvider, SystemDateTimeProvider>();
 

@@ -1,6 +1,6 @@
 namespace CleanGraphQLApi.Presentation.MovieReviews.Types.Objects;
 
-using CleanGraphQLApi.Application.Entities;
+using Application.Movies.Entities;
 using GraphQL.DataLoader;
 using GraphQL.Types;
 using MediatR;

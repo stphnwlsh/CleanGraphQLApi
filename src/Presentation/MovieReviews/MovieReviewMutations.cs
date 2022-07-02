@@ -1,15 +1,13 @@
 namespace CleanGraphQLApi.Presentation.MovieReviews;
 
 using System;
-using CleanGraphQLApi.Application.Reviews.Create;
-using CleanGraphQLApi.Application.Reviews.Delete;
-using CleanGraphQLApi.Application.Reviews.Update;
-using CleanGraphQLApi.Application.Entities;
 using CleanGraphQLApi.Presentation.MovieReviews.Types.InputObjects;
 using CleanGraphQLApi.Presentation.MovieReviews.Types.Objects;
 using GraphQL;
 using GraphQL.Types;
 using MediatR;
+using Commands = Application.Reviews.Commands;
+using Entities = Application.Reviews.Entities;
 
 public class MovieReviewMutations : ObjectGraphType<object>
 {
@@ -18,15 +16,14 @@ public class MovieReviewMutations : ObjectGraphType<object>
         this.Name = "MovieReviewMutations";
         this.Description = "The base mutation for all the entities in our object graph.";
 
-        _ = this.FieldAsync<ReviewObject, Review>(
+        _ = this.FieldAsync<ReviewObject, Entities.Review>(
             "createReview",
             arguments: new QueryArguments(new QueryArgument<NonNullGraphType<CreateReviewInputType>> { Name = "input" }),
             resolve: async (context) =>
             {
                 try
                 {
-                    var input = context.GetArgument<CreateCommand>("input");
-
+                    var input = context.GetArgument<Commands.CreateReview.CreateReviewCommand>("input");
                     ArgumentNullException.ThrowIfNull(input);
 
                     return await mediator.Send(input);
@@ -50,7 +47,7 @@ public class MovieReviewMutations : ObjectGraphType<object>
 
                     ArgumentNullException.ThrowIfNull(input);
 
-                    return await mediator.Send(new DeleteCommand { Id = input });
+                    return await mediator.Send(new Commands.DeleteReview.DeleteReviewCommand { Id = input });
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +63,7 @@ public class MovieReviewMutations : ObjectGraphType<object>
             {
                 try
                 {
-                    var input = context.GetArgument<UpdateCommand>("input");
+                    var input = context.GetArgument<Commands.UpdateReview.UpdateReviewCommand>("input");
 
                     ArgumentNullException.ThrowIfNull(input);
 

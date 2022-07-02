@@ -1,10 +1,10 @@
 namespace CleanGraphQLApi.Presentation;
 
 using System.Diagnostics.CodeAnalysis;
-using CleanGraphQLApi.Presentation.MovieReviews;
 using GraphQL;
 using GraphQL.SystemTextJson;
 using Microsoft.Extensions.DependencyInjection;
+using Presentation.MovieReviews;
 
 [ExcludeFromCodeCoverage]
 public static class DependencyInjection

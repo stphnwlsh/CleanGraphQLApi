@@ -3,7 +3,7 @@ namespace CleanGraphQLApi.Application.Common.Exceptions;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
-using CleanGraphQLApi.Application.Common.Enums;
+using Enums;
 
 [Serializable]
 [ExcludeFromCodeCoverage]
@@ -22,7 +22,7 @@ public class NotFoundException : Exception
     /// <summary>Throws an <see cref="NotFoundException"/> if <paramref name="argument"/> is null.</summary>
     /// <param name="argument">The reference type argument to validate as non-null.</param>
     /// <param name="entityType">The entity type of the <paramref name="argument"/> parameter.</param>
-    public static void ThrowIfNull(object? argument, EntityType entityType)
+    public static void ThrowIfNull(object argument, EntityType entityType)
     {
         if (argument is null)
         {

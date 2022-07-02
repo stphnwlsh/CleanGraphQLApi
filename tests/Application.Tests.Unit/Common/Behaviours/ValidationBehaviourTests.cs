@@ -3,9 +3,9 @@ namespace CleanGraphQLApi.Application.Tests.Unit.Common.Behaviours;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using CleanGraphQLApi.Application.Authors.ReadById;
-using CleanGraphQLApi.Application.Common.Behaviours;
-using CleanGraphQLApi.Application.Entities;
+using Application.Authors.Entities;
+using Application.Authors.Queries.GetAuthorById;
+using Application.Common.Behaviours;
 using FluentValidation;
 using MediatR;
 using NSubstitute;
@@ -18,9 +18,9 @@ public class ValidationBehaviourTests
     public async void Handle_ShouldValidate_NoErrors()
     {
         // Arrange
-        var query = new ReadByIdQuery { Id = Guid.NewGuid() };
-        var validators = new List<IValidator<ReadByIdQuery>> { new ReadByIdQueryValidator() };
-        var handler = new ValidationBehaviour<ReadByIdQuery, Author>(validators);
+        var query = new GetAuthorByIdQuery { Id = Guid.NewGuid() };
+        var validators = new List<IValidator<GetAuthorByIdQuery>> { new GetAuthorByIdValidator() };
+        var handler = new ValidationBehaviour<GetAuthorByIdQuery, Author>(validators);
         var token = new CancellationTokenSource().Token;
         var deletgate = Substitute.For<RequestHandlerDelegate<Author>>();
 
@@ -42,9 +42,9 @@ public class ValidationBehaviourTests
     public void Handle_ShouldValidate_Errors()
     {
         // Arrange
-        var query = new ReadByIdQuery { Id = Guid.Empty };
-        var validators = new List<IValidator<ReadByIdQuery>> { new ReadByIdQueryValidator() };
-        var handler = new ValidationBehaviour<ReadByIdQuery, Author>(validators);
+        var query = new GetAuthorByIdQuery { Id = Guid.Empty };
+        var validators = new List<IValidator<GetAuthorByIdQuery>> { new GetAuthorByIdValidator() };
+        var handler = new ValidationBehaviour<GetAuthorByIdQuery, Author>(validators);
         var token = new CancellationTokenSource().Token;
         var deletgate = Substitute.For<RequestHandlerDelegate<Author>>();
 

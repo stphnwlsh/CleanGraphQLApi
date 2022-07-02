@@ -1,7 +1,12 @@
 using CleanGraphQLApi.Presentation.Extensions;
 using Serilog;
 
-var app = WebApplication.CreateBuilder(args).ConfigureBuilder().Build().ConfigureApp();
+var builder = WebApplication
+                .CreateBuilder(args)
+                .ConfigureBuilder();
+var app = builder
+            .Build()
+            .ConfigureApplication();
 
 try
 {
