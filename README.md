@@ -40,9 +40,10 @@ This solution is loosly based on Clean Architecture patterns, it's by no means p
 ## Features
 There are plenty of handy implementations of features throughout this solution, in no particular order here are some that might interest you.
 
-- Logging using [Serilog](https://github.com/serilog/serilog)
-- Mediator Pattern using [Mediatr](https://github.com/jbogard/MediatR)
-- Validation using [FluentValidation](https://github.com/FluentValidation/FluentValidation)
+- Application Logging - [Serilog](https://github.com/serilog/serilog) - Configured using appsettings.json and able to log to different locations.
+- Mediator Pattern - [Mediatr](https://github.com/jbogard/MediatR) - Simple and easy setup, requests sent to the and handler pick them up with minimal effort.
+- Object Mapping - [AutoMapper]() - Mapping database object to domain object with very little effort.
+- Object Validation - [FluentValidation](https://github.com/FluentValidation/FluentValidation) - Dictate and and validate the domain object via specialised classes configured with easy to understand rules.
 - Testing using [Shouldly](https://github.com/shouldly/shouldly) and [NSubstitute](https://github.com/nsubstitute/NSubstitute)
 - GraphQL using [GraphQL for .NET](https://github.com/graphql-dotnet/graphql-dotnet)
 

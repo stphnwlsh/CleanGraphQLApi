@@ -1,22 +1,20 @@
 namespace CleanGraphQLApi.Presentation;
 
 using System.Diagnostics.CodeAnalysis;
-using GraphQL;
-using GraphQL.SystemTextJson;
+using GraphQL.Authors.Queries;
 using Microsoft.Extensions.DependencyInjection;
-using Presentation.MovieReviews;
 
 [ExcludeFromCodeCoverage]
 public static class DependencyInjection
 {
     public static IServiceCollection AddPresentation(this IServiceCollection services)
     {
-        _ = services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        _ = services.AddSingleton<IDocumentWriter, DocumentWriter>();
+        //_ = services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        //_ = services.AddSingleton<IDocumentWriter, DocumentWriter>();
 
-        _ = services.AddSingleton<MovieReviewQueries>();
-        _ = services.AddSingleton<MovieReviewMutations>();
-        _ = services.AddSingleton<MovieReviewSchema>();
+        _ = services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        //_ = services.AddSingleton<MovieReviewMutations>();
+        //_ = services.AddSingleton<MovieReviewSchema>();
 
         return services;
     }

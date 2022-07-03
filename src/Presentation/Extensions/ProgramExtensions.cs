@@ -3,12 +3,14 @@ namespace CleanGraphQLApi.Presentation.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Application;
-using GraphQL.Server;
+using GraphQL.Authors.Queries;
+using GraphQL.Authors.Types;
+using GraphQL.Movies.Types;
+using GraphQL.Reviews.Types;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Presentation;
-using Presentation.MovieReviews;
 using Serilog;
 
 [ExcludeFromCodeCoverage]
@@ -32,23 +34,8 @@ public static class ProgramExtensions
         #region GraphQL
 
         _ = builder.Services
-            .AddGraphQL((options, provider) =>
-            {
-                // Load GraphQL Server configurations
-                var graphQLOptions = builder.Configuration.GetSection("GraphQL").Get<GraphQLOptions>();
-
-                options.ComplexityConfiguration = graphQLOptions.ComplexityConfiguration;
-                options.EnableMetrics = graphQLOptions.EnableMetrics;
-
-                var logger = provider.GetRequiredService<ILogger<Program>>();
-                options.UnhandledExceptionDelegate = ctx => logger.LogError("{Error} occurred", ctx.OriginalException.Message);
-            })
-            // Add required services for GraphQL request/response de/serialization
-            .AddSystemTextJson() // For .NET Core 3+
-            .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = true)
-            //.AddWebSockets() // Add required services for web socket support
-            .AddDataLoader() // Add required services for DataLoader support
-            .AddGraphTypes(typeof(MovieReviewSchema)); // Add all IGraphType implementors in assembly which ChatSchema exists
+            .AddGraphQLServer()
+            .AddQueryType<AuthorQueries>();
 
         #endregion GraphQL
 
@@ -73,8 +60,7 @@ public static class ProgramExtensions
 
         #region GraphQL
 
-        _ = app.UseGraphQL<MovieReviewSchema>();
-        _ = app.UseGraphQLPlayground();
+        _ = app.MapGraphQL();
 
         #endregion GraphQL
 

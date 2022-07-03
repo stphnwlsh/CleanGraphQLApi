@@ -20,9 +20,7 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'CleanGraphQL' " />
   <ItemGroup>
-    <PackageReference Include="GraphQL" Version="4.7.1" />
-    <PackageReference Include="GraphQL.Server.Transports.AspNetCore.SystemTextJson" Version="5.2.0" />
-    <PackageReference Include="GraphQL.Server.Ui.Playground" Version="5.2.0" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="12.11.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
     <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
