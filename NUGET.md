@@ -3,6 +3,7 @@
 This is a template API using [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) alongside a .net implementation of [GraphQL](https://github.com/graphql-dotnet/graphql-dotnet).
 
 ## Installation
+
 This is a template and you can install it using the [dotnet new cli](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-new).  To install the lastest version of the template run the following command.
 ```
 dotnet new --install CleanGraphQLApi.Template

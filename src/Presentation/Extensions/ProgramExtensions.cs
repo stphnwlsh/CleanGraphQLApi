@@ -3,12 +3,16 @@ namespace CleanGraphQLApi.Presentation.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Application;
-using GraphQL.Server;
+using global::GraphQL;
+using global::GraphQL.MicrosoftDI;
+using global::GraphQL.Server;
+using global::GraphQL.SystemTextJson;
+using global::GraphQL.Types;
+using GraphQL;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Presentation;
-using Presentation.MovieReviews;
 using Serilog;
 
 [ExcludeFromCodeCoverage]
@@ -31,24 +35,14 @@ public static class ProgramExtensions
 
         #region GraphQL
 
-        _ = builder.Services
-            .AddGraphQL((options, provider) =>
-            {
-                // Load GraphQL Server configurations
-                var graphQLOptions = builder.Configuration.GetSection("GraphQL").Get<GraphQLOptions>();
-
-                options.ComplexityConfiguration = graphQLOptions.ComplexityConfiguration;
-                options.EnableMetrics = graphQLOptions.EnableMetrics;
-
-                var logger = provider.GetRequiredService<ILogger<Program>>();
-                options.UnhandledExceptionDelegate = ctx => logger.LogError("{Error} occurred", ctx.OriginalException.Message);
-            })
-            // Add required services for GraphQL request/response de/serialization
-            .AddSystemTextJson() // For .NET Core 3+
+        _ = builder.Services.AddGraphQL(b => b
+            .AddHttpMiddleware<ISchema>()
+            .AddSystemTextJson()
             .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = true)
-            //.AddWebSockets() // Add required services for web socket support
-            .AddDataLoader() // Add required services for DataLoader support
-            .AddGraphTypes(typeof(MovieReviewSchema)); // Add all IGraphType implementors in assembly which ChatSchema exists
+            .AddSchema<MovieReviewSchema>()
+            .AddGraphTypes(typeof(MovieReviewSchema).Assembly));
+
+        _ = builder.Services.AddHttpContextAccessor();
 
         #endregion GraphQL
 
@@ -73,7 +67,7 @@ public static class ProgramExtensions
 
         #region GraphQL
 
-        _ = app.UseGraphQL<MovieReviewSchema>();
+        _ = app.UseGraphQL<ISchema>();
         _ = app.UseGraphQLPlayground();
 
         #endregion GraphQL

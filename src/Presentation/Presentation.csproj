@@ -18,11 +18,12 @@
     <NoWarn>S3903,CS8602,CS8618</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'CleanGraphQL' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'CleanGraphQLApi' " />
   <ItemGroup>
-    <PackageReference Include="GraphQL" Version="4.7.1" />
-    <PackageReference Include="GraphQL.Server.Transports.AspNetCore.SystemTextJson" Version="5.2.0" />
-    <PackageReference Include="GraphQL.Server.Ui.Playground" Version="5.2.0" />
+    <PackageReference Include="GraphQL.MicrosoftDI" Version="5.3.2" />
+    <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="GraphQL.Server.Ui.Playground" Version="6.1.0" />
+    <PackageReference Include="GraphQL.SystemTextJson" Version="5.3.2" />
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
     <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />

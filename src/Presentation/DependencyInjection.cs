@@ -1,10 +1,11 @@
 namespace CleanGraphQLApi.Presentation;
 
 using System.Diagnostics.CodeAnalysis;
+using CleanGraphQLApi.Presentation.GraphQL;
+using CleanGraphQLApi.Presentation.GraphQL.Mutations;
+using CleanGraphQLApi.Presentation.GraphQL.Queries;
+using global::GraphQL.SystemTextJson;
 using GraphQL;
-using GraphQL.SystemTextJson;
-using Microsoft.Extensions.DependencyInjection;
-using Presentation.MovieReviews;
 
 [ExcludeFromCodeCoverage]
 public static class DependencyInjection
@@ -12,7 +13,6 @@ public static class DependencyInjection
     public static IServiceCollection AddPresentation(this IServiceCollection services)
     {
         _ = services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        _ = services.AddSingleton<IDocumentWriter, DocumentWriter>();
 
         _ = services.AddSingleton<MovieReviewQueries>();
         _ = services.AddSingleton<MovieReviewMutations>();
