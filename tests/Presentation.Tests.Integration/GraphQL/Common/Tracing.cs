@@ -2,7 +2,7 @@ namespace CleanGraphQLApi.Presentation.Tests.Integration.GraphQL.Common;
 
 using System.Text.Json.Serialization;
 
-public abstract partial class Tracing
+public partial class Tracing
 {
     [JsonPropertyName("version")]
     public long Version { get; set; }

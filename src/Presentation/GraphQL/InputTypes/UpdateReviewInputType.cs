@@ -2,7 +2,7 @@ namespace CleanGraphQLApi.Presentation.GraphQL.InputTypes;
 
 using global::GraphQL.Types;
 
-public abstract sealed class UpdateReviewInputType : InputObjectGraphType
+public sealed class UpdateReviewInputType : InputObjectGraphType
 {
     public UpdateReviewInputType()
     {

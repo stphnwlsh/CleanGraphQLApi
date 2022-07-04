@@ -3,7 +3,7 @@ namespace CleanGraphQLApi.Presentation.Tests.Integration.GraphQL.Authors;
 using System;
 using System.Text.Json.Serialization;
 
-public abstract partial class Author
+public partial class Author
 {
     [JsonPropertyName("id")]
     public Guid Id { get; set; }
@@ -24,7 +24,7 @@ public abstract partial class Author
     public Review[] Reviews { get; set; }
 }
 
-public abstract partial class Review
+public partial class Review
 {
     [JsonPropertyName("id")]
     public Guid Id { get; set; }
@@ -42,7 +42,7 @@ public abstract partial class Review
     public Movie Movie { get; set; }
 }
 
-public abstract partial class Movie
+public partial class Movie
 {
     [JsonPropertyName("id")]
     public Guid Id { get; set; }

@@ -3,7 +3,7 @@ namespace CleanGraphQLApi.Presentation.Tests.Integration.GraphQL.Common;
 using System.Text.Json.Serialization;
 using Reviews.Query;
 
-public abstract partial class Data
+public partial class Data
 {
     [JsonPropertyName("author")]
     public Authors.Author Author { get; set; }

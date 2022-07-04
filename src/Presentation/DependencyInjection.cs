@@ -4,8 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using CleanGraphQLApi.Presentation.GraphQL;
 using CleanGraphQLApi.Presentation.GraphQL.Mutations;
 using CleanGraphQLApi.Presentation.GraphQL.Queries;
-using global::GraphQL.SystemTextJson;
-using GraphQL;
 
 [ExcludeFromCodeCoverage]
 public static class DependencyInjection

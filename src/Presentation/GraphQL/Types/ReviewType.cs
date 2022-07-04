@@ -3,7 +3,7 @@ namespace CleanGraphQLApi.Presentation.GraphQL.Types;
 using Application.Reviews.Entities;
 using global::GraphQL.Types;
 
-public abstract sealed class ReviewType : ObjectGraphType<Review>
+public sealed class ReviewType : ObjectGraphType<Review>
 {
     public ReviewType()
     {
