@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Dockerfile = Dockerfile
 		NuGet.config = NuGet.config
 		README.md = README.md
+		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F76F0E9E-98D3-4C66-8FDD-181E8C823DDA}"
@@ -29,6 +30,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Tests.Unit", "tests\Application.Tests.Unit\Application.Tests.Unit.csproj", "{27106CF1-B15D-4274-98BE-3316495ACEEC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation.Tests.Integration", "tests\Presentation.Tests.Integration\Presentation.Tests.Integration.csproj", "{DB7F98AB-3D02-4652-80BC-681A00168ECC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{4CC846F2-7742-47F9-B63F-F0F6EF5A3B9B}"
+	ProjectSection(SolutionItems) = preProject
+		docs\RUN.md = docs\RUN.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
