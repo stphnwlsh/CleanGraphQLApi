@@ -1,6 +1,6 @@
 namespace CleanGraphQLApi.Application.Common.Entities;
 
-public record Entity
+public abstract record Entity
 {
     public Guid Id { get; init; }
     public DateTime DateCreated { get; init; }
