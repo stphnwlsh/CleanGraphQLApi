@@ -122,7 +122,6 @@ public class ReviewTests
         var content = new CreateReviewInputData
         {
             Query = "mutation($review:CreateReviewInput!){createReview(input:$review){id,stars,dateCreated,dateModified,author{id,firstName,lastName,dateCreated,dateModified,},movie{id,title,dateCreated,dateModified}}}",
-
         };
 
         // Act
@@ -130,7 +129,7 @@ public class ReviewTests
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
         _ = result.ShouldNotBeNull();
 
@@ -223,7 +222,7 @@ public class ReviewTests
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
         _ = result.ShouldNotBeNull();
 
@@ -430,7 +429,7 @@ public class ReviewTests
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
-        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+        response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
         _ = result.ShouldNotBeNull();
 
