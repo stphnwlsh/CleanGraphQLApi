@@ -1,8 +1,9 @@
-namespace CleanGraphQLApi.Application.Reviews.Commands.CreateReview;
+namespace CleanGraphQLApi.Presentation.Validators;
 
+using CleanGraphQLApi.Presentation.Requests;
 using FluentValidation;
 
-public class CreateReviewValidator : AbstractValidator<CreateReviewCommand>
+public class CreateReviewValidator : AbstractValidator<CreateReviewRequest>
 {
     public CreateReviewValidator()
     {
