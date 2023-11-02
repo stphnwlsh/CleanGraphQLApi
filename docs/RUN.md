@@ -16,7 +16,7 @@ dotnet run --project ./src/Presentation
 
 Docker compose makes it easier to start multiple containers at one time and manage their configuration from one file (`docker-compose.yml`).  This project will run the application and a [Seq](https://datalust.co/seq) containter for application logging.  
 
-- App - http://localhost:8080/ui/playground
+- App - http://localhost:8080/graphql
 - Seq - http://localhost:5341
 
 To start the Containers

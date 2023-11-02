@@ -1,49 +1,21 @@
 namespace CleanGraphQLApi.Presentation.GraphQL.Queries;
 
-using Application.Authors.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using HotChocolate;
 using MediatR;
-using Authors = Application.Authors;
 
+using Entities = Application.Authors.Entities;
+using Queries = Application.Authors.Queries;
+
+// [GraphQLName("Authors")]
+// [GraphQLDescription("The queries used for all retireving information about the authors in the collection.")]
 public class AuthorQueries
 {
-    private readonly IMediator mediator;
-
-    public AuthorQueries(IMediator mediator)
+    [GraphQLName("authors")]
+    [GraphQLDescription("Returns a list of all authors in the collection.")]
+    public async Task<List<Entities.Author>> GetAuthorsAsync([Service] IMediator mediator, CancellationToken cancellationToken)
     {
-        this.mediator = mediator;
+        return await mediator.Send(new Queries.GetAuthors.GetAuthorsQuery(), cancellationToken);
     }
-
-    public async Task<List<Author>> GetAuthors()
-    {
-        return await this.mediator.Send(new Authors.Queries.GetAuthors.GetAuthorsQuery());
-    }
-
-    // public MovieReviewQueries(IMediator mediator)
-    // {
-    //     this.Name = "MovieReviewQueries";
-    //     this.Description = "The base query for all the movie reviews in our object graph.";
-
-
-    //     #region Authors
-
-
-
-    //     // _ = this.FieldAsync<ListGraphType<AuthorType>>(
-    //     //     name: "authors",
-    //     //     description: "Gets a list of all authors.",
-    //     //     resolve: async context =>
-
-    //     // _ = this.FieldAsync<AuthorType, Author>(
-    //     //     name: "author",
-    //     //     description: "Gets an author by their unique identifier.",
-    //     //     arguments: new QueryArguments(
-    //     //         new QueryArgument<NonNullGraphType<IdGraphType>>
-    //     //         {
-    //     //             Name = "id",
-    //     //             Description = "The unique GUID of the author."
-    //     //         }),
-    //     //     resolve: async context => await mediator.Send(new Authors.Queries.GetAuthorById.GetAuthorByIdQuery { Id = context.GetArgument("id", Guid.Empty) }));
-
-    //         #endregion Authors
-    // }
 }

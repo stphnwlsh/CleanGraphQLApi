@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using Application;
 using FluentValidation;
 using Infrastructure;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,14 +49,6 @@ public static class WebApplicationBuilderExtensions
 
         #endregion Serialisation
 
-        #region GraphQL
-
-        _ = builder.Services
-            .AddGraphQLServer()
-            .AddQueryType<AuthorQueries>();
-
-        #endregion GraphQL
-
         #region Validation
 
         //_ = builder.Services.AddSingleton(typeof(IEndpointFilter), typeof(ValidationFilter<>));
@@ -69,6 +62,17 @@ public static class WebApplicationBuilderExtensions
         _ = builder.Services.AddApplication();
 
         #endregion Project Dependencies
+
+        #region GraphQL
+
+        _ = builder.Services
+            .AddGraphQLServer()
+            .RegisterService<IMediator>()
+            .AddQueryType<AuthorQueries>()
+            .AddQueryType<MovieQueries>()
+            .AddQueryType<ReviewQueries>();
+
+        #endregion GraphQL
 
         return builder;
     }
