@@ -6,7 +6,7 @@ using Extensions;
 using Infrastructure.Databases.MoviesReviews;
 using Infrastructure.Databases.MoviesReviews.Mapping;
 using Microsoft.EntityFrameworkCore;
-using SimpleDateTimeProvider;
+using Microsoft.Extensions.Time.Testing;
 using Xunit;
 
 [CollectionDefinition("MovieReviews")]
@@ -22,7 +22,7 @@ public class MovieReviewsDataFixture : IDisposable
     private bool disposedValue;
 
     internal MovieReviewsDbContext Context { get; set; }
-    internal IDateTimeProvider DateTimeProvider { get; set; }
+    internal FakeTimeProvider TimeProvider { get; set; }
     internal IMapper Mapper { get; set; }
     internal EntityFrameworkMovieReviewsRepository Repository { get; set; }
 
@@ -32,12 +32,7 @@ public class MovieReviewsDataFixture : IDisposable
 
         this.Context = new MovieReviewsDbContext(options);
 
-        this.DateTimeProvider = new MockDateTimeProvider
-        {
-            Now = new DateTime(2000, 01, 01, 01, 01, 01),
-            Today = new DateTime(2000, 01, 01, 00, 00, 00),
-            UtcNow = new DateTime(1999, 12, 31, 23, 51, 01)
-        };
+        this.TimeProvider = new FakeTimeProvider(new DateTimeOffset(1999, 12, 31, 23, 51, 01, TimeSpan.Zero));
 
         this.Mapper = new MapperConfiguration(cfg =>
             cfg
@@ -50,7 +45,7 @@ public class MovieReviewsDataFixture : IDisposable
                 }))
                 .CreateMapper();
 
-        this.Repository = new EntityFrameworkMovieReviewsRepository(this.Context, this.DateTimeProvider, this.Mapper);
+        this.Repository = new EntityFrameworkMovieReviewsRepository(this.Context, this.TimeProvider, this.Mapper);
 
         if (this.Context != null)
         {
