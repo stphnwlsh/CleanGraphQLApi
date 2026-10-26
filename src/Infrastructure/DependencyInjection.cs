@@ -7,7 +7,6 @@ using Application.Reviews;
 using Databases.MoviesReviews;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using SimpleDateTimeProvider;
 
 [ExcludeFromCodeCoverage]
 public static class DependencyInjection
@@ -24,7 +23,7 @@ public static class DependencyInjection
         _ = services.AddSingleton<IMoviesRepository>(x => x.GetRequiredService<EntityFrameworkMovieReviewsRepository>());
         _ = services.AddSingleton<IReviewsRepository>(x => x.GetRequiredService<EntityFrameworkMovieReviewsRepository>());
 
-        _ = services.AddSingleton<IDateTimeProvider, SystemDateTimeProvider>();
+        _ = services.AddSingleton(TimeProvider.System);
 
         return services;
     }

@@ -8,7 +8,7 @@ This is a template API using [Clean Architecture](https://blog.cleancoder.com/un
 
 ## Prerequisites
 
-This solution in built on the [.net 6 SDK](https://dotnet.microsoft.com/download/dotnet/6.0), you need to install that before it will work for you.  If you want to build the Dockerfile you will need to install  [Docker](https://www.docker.com/products/docker-desktop) as well.
+This solution in built on the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0), you need to install that before it will work for you.  If you want to build the Dockerfile you will need to install  [Docker](https://www.docker.com/products/docker-desktop) as well.
 
 ## Installation
 
