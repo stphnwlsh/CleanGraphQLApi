@@ -1,7 +1,6 @@
 namespace CleanGraphQLApi.Infrastructure.Tests.Integration.Databases.MovieReviews;
 
 using System;
-using AutoMapper;
 using Extensions;
 using Infrastructure.Databases.MoviesReviews;
 using Infrastructure.Databases.MoviesReviews.Mapping;
@@ -23,7 +22,6 @@ public class MovieReviewsDataFixture : IDisposable
 
     internal MovieReviewsDbContext Context { get; set; }
     internal FakeTimeProvider TimeProvider { get; set; }
-    internal IMapper Mapper { get; set; }
     internal EntityFrameworkMovieReviewsRepository Repository { get; set; }
 
     public MovieReviewsDataFixture()
@@ -34,18 +32,7 @@ public class MovieReviewsDataFixture : IDisposable
 
         this.TimeProvider = new FakeTimeProvider(new DateTimeOffset(1999, 12, 31, 23, 51, 01, TimeSpan.Zero));
 
-        this.Mapper = new MapperConfiguration(cfg =>
-            cfg
-                .AddProfiles(new List<Profile>()
-                {
-                    new AuthorMappingProfile(),
-                    new EntitiyMappingProfile(),
-                    new MovieMappingProfile(),
-                    new ReviewMappingProfile()
-                }))
-                .CreateMapper();
-
-        this.Repository = new EntityFrameworkMovieReviewsRepository(this.Context, this.TimeProvider, this.Mapper);
+        this.Repository = new EntityFrameworkMovieReviewsRepository(this.Context, this.TimeProvider, new MovieReviewsMapper());
 
         if (this.Context != null)
         {

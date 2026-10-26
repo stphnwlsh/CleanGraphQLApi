@@ -5,6 +5,7 @@ using Application.Authors;
 using Application.Movies;
 using Application.Reviews;
 using Databases.MoviesReviews;
+using Databases.MoviesReviews.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,7 +17,7 @@ public static class DependencyInjection
         _ = services.AddEntityFrameworkInMemoryDatabase();
         _ = services.AddDbContext<MovieReviewsDbContext>(options => options.UseInMemoryDatabase($"Movies-{Guid.NewGuid()}"), ServiceLifetime.Singleton);
 
-        _ = services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        _ = services.AddSingleton<MovieReviewsMapper>();
 
         _ = services.AddSingleton<EntityFrameworkMovieReviewsRepository>();
         _ = services.AddSingleton<IAuthorsRepository>(p => p.GetRequiredService<EntityFrameworkMovieReviewsRepository>());
