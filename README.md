@@ -2,6 +2,7 @@
 
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/stphnwlsh/CleanGraphQLApi/Build%20Pipeline?label=Build%20Pipeline&logo=github&logoColor=white&style=for-the-badge)](https://github.com/stphnwlsh/CleanGraphQLApi/actions/workflows/build-pipeline.yml)
 [![Codecov](https://img.shields.io/codecov/c/github/stphnwlsh/CleanGraphQLApi?label=Code%20Coverage&logo=codecov&logoColor=white&style=for-the-badge)](https://codecov.io/gh/stphnwlsh/CleanGraphQLApi)
+[![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/stphnwlsh/CleanGraphQLApi?label=OpenSSF%20Scorecard&style=for-the-badge)](https://scorecard.dev/viewer/?uri=github.com/stphnwlsh/CleanGraphQLApi)
 ![Nuget](https://img.shields.io/nuget/v/CleanGraphQLApi.Template?label=nuget%20template&logo=nuget&logoColor=white&style=for-the-badge)
 
 This is a template API using [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) alongside a .net implementation of [GraphQL](https://github.com/graphql-dotnet/graphql-dotnet).
