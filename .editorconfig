@@ -192,9 +192,8 @@ dotnet_diagnostic.IDE0059.severity = suggestion
 # https://docs.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/formatting-rules#net-formatting-rules
 [*.{cs,csx,cake,vb,vbx}]
 # Organize using directives
-dotnet_sort_system_directives_first = true:warning
-dotnet_separate_import_directive_groups = false:warning
-dotnet_diagnostic.IDE0055.severity = warning
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
 # Dotnet namespace options
 dotnet_style_namespace_match_folder = true:suggestion
 dotnet_diagnostic.IDE0130.severity = suggestion
