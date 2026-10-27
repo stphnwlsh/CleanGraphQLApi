@@ -2,8 +2,8 @@ namespace CleanGraphQLApi.Infrastructure.Tests.Integration.Databases.MovieReview
 
 using System;
 using Extensions;
-using Infrastructure.Databases.MoviesReviews;
-using Infrastructure.Databases.MoviesReviews.Mapping;
+using Infrastructure.Databases.MovieReviews;
+using Infrastructure.Databases.MovieReviews.Mapping;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Time.Testing;
 using Xunit;
@@ -18,28 +18,26 @@ public class MovieReviewsCollectionFixture : ICollectionFixture<MovieReviewsData
 
 public class MovieReviewsDataFixture : IDisposable
 {
-    private bool disposedValue;
-
     internal MovieReviewsDbContext Context { get; set; }
     internal FakeTimeProvider TimeProvider { get; set; }
     internal EntityFrameworkMovieReviewsRepository Repository { get; set; }
 
     public MovieReviewsDataFixture()
     {
-        var options = new DbContextOptionsBuilder<MovieReviewsDbContext>().UseInMemoryDatabase($"TestMovies-{Guid.NewGuid()}").Options;
+        var options = new DbContextOptionsBuilder<MovieReviewsDbContext>()
+            .UseInMemoryDatabase($"TestMovies-{Guid.NewGuid()}")
+            .Options;
 
         this.Context = new MovieReviewsDbContext(options);
 
-        this.TimeProvider = new FakeTimeProvider(new DateTimeOffset(1999, 12, 31, 23, 51, 01, TimeSpan.Zero));
+        this.TimeProvider = new FakeTimeProvider();
+        this.TimeProvider.SetUtcNow(new DateTime(2009, 12, 31, 23, 51, 01));
 
         this.Repository = new EntityFrameworkMovieReviewsRepository(this.Context, this.TimeProvider, new MovieReviewsMapper());
 
-        if (this.Context != null)
-        {
-            _ = this.Context.Database.EnsureDeleted();
-            _ = this.Context.Database.EnsureCreated();
-            _ = this.Context.AddTestData();
-        }
+        _ = this.Context.Database.EnsureDeleted();
+        _ = this.Context.Database.EnsureCreated();
+        _ = this.Context.AddTestData();
     }
 
     public void Dispose()
@@ -50,14 +48,10 @@ public class MovieReviewsDataFixture : IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-        if (!this.disposedValue)
+        if (disposing)
         {
-            if (disposing)
-            {
-                this.Context?.Dispose();
-            }
-
-            this.disposedValue = true;
+            this.Context?.Dispose();
+            this.Context = null;
         }
     }
 }

@@ -19,16 +19,10 @@ public class GetAuthorsHandlerTests
 
         var context = Substitute.For<IAuthorsRepository>();
         var handler = new GetAuthorsHandler(context);
-        var token = new CancellationTokenSource().Token;
+        using var tokenSource = new CancellationTokenSource();
+        var token = tokenSource.Token;
 
-        _ = context.GetAuthors(token).Returns(new List<Author> {
-            new Author
-            {
-                Id = Guid.Empty,
-                FirstName = "FirstName",
-                LastName = "LastName"
-            }
-        });
+        _ = context.GetAuthors(token).Returns([new Author(Guid.Empty, "FirstName", "LastName")]);
 
         // Act
         var result = await handler.Handle(query, token);
@@ -36,8 +30,12 @@ public class GetAuthorsHandlerTests
         // Assert
         _ = await context.Received(1).GetAuthors(token);
 
+        _ = result.ShouldNotBeNull();
+        _ = result.ShouldBeOfType<List<Author>>();
+
         result.ShouldNotBeEmpty();
         result.Count.ShouldBe(1);
+
         result[0].Id.ShouldBe(Guid.Empty);
         result[0].FirstName.ShouldBe("FirstName");
         result[0].LastName.ShouldBe("LastName");

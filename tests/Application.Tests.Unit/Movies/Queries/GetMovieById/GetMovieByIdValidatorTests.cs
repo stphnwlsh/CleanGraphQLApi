@@ -1,18 +1,18 @@
 namespace CleanGraphQLApi.Application.Tests.Unit.Movies.Queries.GetMovieById;
 
-using Application.Reviews.Queries.GetReviewById;
+using Application.Movies.Queries.GetMovieById;
 using FluentValidation.TestHelper;
 using Xunit;
 
-public class GetReviewByIdValidatorTests
+public class GetMovieByIdValidatorTests
 {
-    private static readonly GetReviewByIdValidator Validator = new();
+    private static readonly GetMovieByIdValidator Validator = new();
 
     [Fact]
     public void Validator_ShouldHaveValidationErrorFor_IdNull()
     {
         // Arrange
-        var query = new GetReviewByIdQuery();
+        var query = new GetMovieByIdQuery();
 
         // Act
         var result = Validator.TestValidate(query);
@@ -25,7 +25,7 @@ public class GetReviewByIdValidatorTests
     public void Validator_ShouldHaveValidationErrorFor_IdEmpty()
     {
         // Arrange
-        var query = new GetReviewByIdQuery { Id = Guid.Empty };
+        var query = new GetMovieByIdQuery { Id = Guid.Empty };
 
         // Act
         var result = Validator.TestValidate(query);
@@ -38,7 +38,7 @@ public class GetReviewByIdValidatorTests
     public void Validator_ShouldNotHaveValidationErrorFor_Id()
     {
         // Arrange
-        var query = new GetReviewByIdQuery { Id = Guid.NewGuid() };
+        var query = new GetMovieByIdQuery { Id = Guid.NewGuid() };
 
         // Act
         var result = Validator.TestValidate(query);

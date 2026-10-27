@@ -16,17 +16,17 @@ public class ReadByIdHandlerTests
     public async Task Handle_ShouldPassThrough_Query()
     {
         // Arrange
-        var query = new GetMovieByIdQuery { Id = Guid.Empty };
+        var query = new GetMovieByIdQuery
+        {
+            Id = Guid.Empty
+        };
 
         var context = Substitute.For<IMoviesRepository>();
         var handler = new GetMovieByIdHandler(context);
-        var token = new CancellationTokenSource().Token;
+        using var tokenSource = new CancellationTokenSource();
+        var token = tokenSource.Token;
 
-        _ = context.GetMovieById(Arg.Any<Guid>(), token).Returns(new Movie
-        {
-            Id = Guid.Empty,
-            Title = "Title"
-        });
+        _ = context.GetMovieById(Arg.Any<Guid>(), token).Returns(new Movie(Guid.Empty, "Title"));
 
         // Act
         var result = await handler.Handle(query, token);
@@ -35,19 +35,26 @@ public class ReadByIdHandlerTests
         _ = await context.Received(1).GetMovieById(query.Id, token);
 
         _ = result.ShouldNotBeNull();
+        _ = result.ShouldBeOfType<Movie>();
+
         result.Id.ShouldBe(Guid.Empty);
         result.Title.ShouldBe("Title");
+        result.Reviews.ShouldBeNull();
     }
 
     [Fact]
     public async Task Handle_ShouldThrowException_DoesNotExist()
     {
         // Arrange
-        var query = new GetMovieByIdQuery { Id = Guid.Empty };
+        var query = new GetMovieByIdQuery
+        {
+            Id = Guid.Empty
+        };
 
         var context = Substitute.For<IMoviesRepository>();
         var handler = new GetMovieByIdHandler(context);
-        var token = new CancellationTokenSource().Token;
+        using var tokenSource = new CancellationTokenSource();
+        var token = tokenSource.Token;
 
         // Act
         var exception = Should.Throw<NotFoundException>(async () => await handler.Handle(query, token));

@@ -15,14 +15,12 @@ public sealed class ReviewType : ObjectGraphType<Review>
         _ = this.Field(
             name: "Movie",
             description: "The movie being reviewed",
-            type: typeof(MovieType),
+            type: typeof(ReviewedMovieType),
             resolve: m => m.Source?.ReviewedMovie);
         _ = this.Field(
             name: "Author",
             description: "The author of the review",
-            type: typeof(AuthorType),
+            type: typeof(ReviewAuthorType),
             resolve: m => m.Source?.ReviewAuthor);
-        _ = this.Field(m => m.DateCreated).Description("Date the review was created");
-        _ = this.Field(m => m.DateModified).Description("Date the review was modified");
     }
 }

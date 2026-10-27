@@ -1,15 +1,11 @@
-namespace CleanGraphQLApi.Infrastructure.Databases.MoviesReviews;
+namespace CleanGraphQLApi.Infrastructure.Databases.MovieReviews;
 
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
-internal class MovieReviewsDbContext : DbContext
+internal class MovieReviewsDbContext(DbContextOptions<MovieReviewsDbContext> options) : DbContext(options)
 {
-    public MovieReviewsDbContext(DbContextOptions<MovieReviewsDbContext> options) : base(options)
-    {
-    }
-
     public DbSet<Author> Authors { get; set; }
     public DbSet<Movie> Movies { get; set; }
     public DbSet<Review> Reviews { get; set; }

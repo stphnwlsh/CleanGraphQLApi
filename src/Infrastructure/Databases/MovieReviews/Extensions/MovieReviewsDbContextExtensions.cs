@@ -1,4 +1,4 @@
-namespace CleanGraphQLApi.Infrastructure.Databases.MoviesReviews.Extensions;
+namespace CleanGraphQLApi.Infrastructure.Databases.MovieReviews.Extensions;
 
 using System;
 using Bogus;
@@ -9,12 +9,12 @@ internal static class MovieReviewsDbContextExtensions
     public static MovieReviewsDbContext AddData(this MovieReviewsDbContext context)
     {
         var authors = new Faker<Author>()
-                   .RuleFor(a => a.Id, _ => Guid.NewGuid())
-                   .RuleFor(a => a.FirstName, f => f.Person.FirstName)
-                   .RuleFor(a => a.LastName, f => f.Person.LastName)
-                   .RuleFor(a => a.DateCreated, f => f.Date.Past())
-                   .RuleFor(a => a.DateModified, f => f.Date.Past())
-                   .Generate(15);
+            .RuleFor(a => a.Id, _ => Guid.NewGuid())
+            .RuleFor(a => a.FirstName, f => f.Person.FirstName)
+            .RuleFor(a => a.LastName, f => f.Person.LastName)
+            .RuleFor(a => a.DateCreated, f => f.Date.Past())
+            .RuleFor(a => a.DateModified, f => f.Date.Past())
+            .Generate(15);
 
         context.AddRange(authors);
 

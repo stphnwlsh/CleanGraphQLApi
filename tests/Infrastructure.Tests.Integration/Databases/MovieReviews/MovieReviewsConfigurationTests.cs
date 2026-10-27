@@ -1,33 +1,32 @@
 namespace CleanGraphQLApi.Infrastructure.Tests.Integration.Databases.MovieReviews;
 
-using Infrastructure.Databases.MoviesReviews.Models;
+using Infrastructure.Databases.MovieReviews.Models;
 using Microsoft.EntityFrameworkCore;
 using Shouldly;
 using Xunit;
 
 [Collection("MovieReviews")]
-public class MovieReviewsConfigurationTests
+public class MovieReviewsConfigurationTests(MovieReviewsDataFixture fixture)
 {
-    private readonly MovieReviewsDataFixture fixture;
-
-    public MovieReviewsConfigurationTests(MovieReviewsDataFixture fixture)
-    {
-        this.fixture = fixture;
-    }
-
-    #region Configuration
-
     [Fact]
-    public async void Database_ShouldBe_Configured()
+    public async Task Database_ShouldBe_Configured()
     {
         // Arrange
-        var context = this.fixture.Context;
-        var token = new CancellationTokenSource().Token;
+        var context = fixture.Context;
+        using var tokenSource = new CancellationTokenSource();
+        var token = tokenSource.Token;
 
         // Act
-        var author = await context.Authors.Include(a => a.Reviews).FirstOrDefaultAsync(a => a.FirstName == "One", token);
-        var movie = await context.Movies.Include(m => m.Reviews).FirstOrDefaultAsync(m => m.Title == "One", token);
-        var review = await context.Reviews.Include(r => r.ReviewAuthor).Include(r => r.ReviewedMovie).FirstOrDefaultAsync(m => m.Stars == 5, token);
+        var author = await context.Authors
+            .Include(a => a.Reviews)
+            .FirstOrDefaultAsync(a => a.FirstName == "One", token);
+        var movie = await context.Movies
+            .Include(m => m.Reviews)
+            .FirstOrDefaultAsync(m => m.Title == "One", token);
+        var review = await context.Reviews
+            .Include(r => r.ReviewAuthor)
+            .Include(r => r.ReviewedMovie)
+            .FirstOrDefaultAsync(m => m.Stars == 5, token);
 
         // Assert
         context.Database.IsInMemory().ShouldBeTrue();
@@ -51,6 +50,4 @@ public class MovieReviewsConfigurationTests
         _ = review.ReviewedMovieId.ShouldBeOfType<Guid>();
         _ = review.ReviewedMovie.ShouldBeOfType<Movie>();
     }
-
-    #endregion Configuration
 }

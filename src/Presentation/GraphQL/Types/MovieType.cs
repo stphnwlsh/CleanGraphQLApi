@@ -18,7 +18,5 @@ public sealed class MovieType : ObjectGraphType<Movie>
             description: "Reviews of the movie",
             type: typeof(ListGraphType<ReviewType>),
             resolve: m => m.Source?.Reviews);
-        _ = this.Field(m => m.DateCreated).Description("Date the movie was created");
-        _ = this.Field(m => m.DateModified).Description("Date the movie was modified");
     }
 }

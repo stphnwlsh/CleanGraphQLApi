@@ -1,7 +1,9 @@
-namespace CleanGraphQLApi.Infrastructure.Databases.MoviesReviews.Models;
+namespace CleanGraphQLApi.Infrastructure.Databases.MovieReviews.Models;
 
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
+[ExcludeFromCodeCoverage]
 internal record Review : Entity
 {
     public int Stars { get; set; }

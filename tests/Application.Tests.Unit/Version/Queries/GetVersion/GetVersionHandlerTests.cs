@@ -2,6 +2,7 @@ namespace CleanGraphQLApi.Application.Tests.Unit.Version.Queries.GetVersion;
 
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Versions.Entities;
 using Application.Versions.Queries.GetVersion;
 using Shouldly;
 using Xunit;
@@ -15,13 +16,15 @@ public class GetVersionHandlerTests
         var query = new GetVersionQuery();
 
         var handler = new GetVersionHandler();
-        var token = new CancellationTokenSource().Token;
+        using var tokenSource = new CancellationTokenSource();
+        var token = tokenSource.Token;
 
         // Act
         var result = await handler.Handle(query, token);
 
         // Assert
         _ = result.ShouldNotBeNull();
+        _ = result.ShouldBeOfType<Version>();
 
         _ = result.FileVersion.ShouldBeOfType<string>();
         result.FileVersion.ShouldNotBeNullOrWhiteSpace();

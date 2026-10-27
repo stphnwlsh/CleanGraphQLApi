@@ -1,4 +1,4 @@
-namespace CleanGraphQLApi.Infrastructure.Databases.MoviesReviews.Configuration;
+namespace CleanGraphQLApi.Infrastructure.Databases.MovieReviews.Configuration;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Models;
