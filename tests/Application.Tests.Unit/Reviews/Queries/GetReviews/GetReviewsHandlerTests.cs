@@ -21,12 +21,7 @@ public class GetReviewsHandlerTests
         var handler = new GetReviewsHandler(context);
         var token = new CancellationTokenSource().Token;
 
-        _ = context.GetReviews(token).Returns(new List<Review> {
-            new Review{
-                Id = Guid.Empty,
-                Stars = 5
-            }
-        });
+        _ = context.GetReviews(token).Returns([new Review(Guid.Empty, 5)]);
 
         // Act
         var result = await handler.Handle(query, token);
@@ -34,8 +29,12 @@ public class GetReviewsHandlerTests
         // Assert
         _ = await context.Received(1).GetReviews(token);
 
+        _ = result.ShouldNotBeNull();
+        _ = result.ShouldBeOfType<List<Review>>();
+
         result.ShouldNotBeEmpty();
         result.Count.ShouldBe(1);
+
         result[0].Id.ShouldBe(Guid.Empty);
         result[0].Stars.ShouldBe(5);
     }

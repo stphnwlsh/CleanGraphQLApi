@@ -21,12 +21,7 @@ public class GetMoviesHandlerTests
         var handler = new GetMoviesHandler(context);
         var token = new CancellationTokenSource().Token;
 
-        _ = context.GetMovies(token).Returns(new List<Movie> {
-            new Movie{
-                Id = Guid.Empty,
-                Title = "Title"
-            }
-        });
+        _ = context.GetMovies(token).Returns([new Movie(Guid.Empty, "Title")]);
 
         // Act
         var result = await handler.Handle(query, token);
@@ -34,8 +29,12 @@ public class GetMoviesHandlerTests
         // Assert
         _ = await context.Received(1).GetMovies(token);
 
+        _ = result.ShouldNotBeNull();
+        _ = result.ShouldBeOfType<List<Movie>>();
+
         result.ShouldNotBeEmpty();
         result.Count.ShouldBe(1);
+
         result[0].Id.ShouldBe(Guid.Empty);
         result[0].Title.ShouldBe("Title");
     }

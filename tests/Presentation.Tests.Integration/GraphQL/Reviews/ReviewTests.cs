@@ -29,7 +29,7 @@ public class ReviewTests
         var movie = (await movieResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Movies[0];
         var content = new CreateReviewInputData
         {
-            Query = "mutation($review:CreateReviewInput!){createReview(input:$review){id,stars,dateCreated,dateModified,author{id,firstName,lastName,dateCreated,dateModified,},movie{id,title,dateCreated,dateModified}}}",
+            Query = "mutation($review:CreateReviewInput!){createReview(input:$review){id,stars,author{id,firstName,lastName,},movie{id,title}}}",
             Variables = new Variables
             {
                 Review = new Review
@@ -55,27 +55,15 @@ public class ReviewTests
         _ = result.Data.CreateReview.Id.ShouldBeOfType<Guid>();
         _ = result.Data.CreateReview.Stars.ShouldBeOfType<int>();
         result.Data.CreateReview.Stars.ShouldBe(5);
-        result.Data.CreateReview.DateCreated.ShouldBeOfType<DateTime>();
-        result.Data.CreateReview.DateCreated.ShouldNotBe(default);
-        result.Data.CreateReview.DateModified.ShouldBeOfType<DateTime>();
-        result.Data.CreateReview.DateModified.ShouldNotBe(default);
 
         _ = result.Data.CreateReview.Author.ShouldNotBeNull();
         result.Data.CreateReview.Author.Id.ShouldBe(author.Id);
         result.Data.CreateReview.Author.FirstName.ShouldBe(author.FirstName);
         result.Data.CreateReview.Author.LastName.ShouldBe(author.LastName);
-        result.Data.CreateReview.Author.DateCreated.ShouldBeOfType<DateTime>();
-        result.Data.CreateReview.Author.DateCreated.ShouldNotBe(default);
-        result.Data.CreateReview.Author.DateModified.ShouldBeOfType<DateTime>();
-        result.Data.CreateReview.Author.DateModified.ShouldNotBe(default);
 
         _ = result.Data.CreateReview.Movie.ShouldNotBeNull();
         result.Data.CreateReview.Movie.Id.ShouldBe(movie.Id);
         result.Data.CreateReview.Movie.Title.ShouldBe(movie.Title);
-        result.Data.CreateReview.Movie.DateCreated.ShouldBeOfType<DateTime>();
-        result.Data.CreateReview.Movie.DateCreated.ShouldNotBe(default);
-        result.Data.CreateReview.Movie.DateModified.ShouldBeOfType<DateTime>();
-        result.Data.CreateReview.Movie.DateModified.ShouldNotBe(default);
     }
 
     [Fact]
@@ -85,7 +73,7 @@ public class ReviewTests
         using var client = Application.CreateClient();
         var content = new CreateReviewInputData
         {
-            Query = "mutation($review:CreateReviewInput!){createReview(input:$review){id,stars,dateCreated,dateModified,author{id,firstName,lastName,dateCreated,dateModified,},movie{id,title,dateCreated,dateModified}}}",
+            Query = "mutation($review:CreateReviewInput!){createReview(input:$review){id,stars,author{id,firstName,lastName,},movie{id,title}}}",
             Variables = new Variables
             {
                 Review = new Review
@@ -121,7 +109,7 @@ public class ReviewTests
         using var client = Application.CreateClient();
         var content = new CreateReviewInputData
         {
-            Query = "mutation($review:CreateReviewInput!){createReview(input:$review){id,stars,dateCreated,dateModified,author{id,firstName,lastName,dateCreated,dateModified,},movie{id,title,dateCreated,dateModified}}}",
+            Query = "mutation($review:CreateReviewInput!){createReview(input:$review){id,stars,author{id,firstName,lastName,},movie{id,title}}}",
         };
 
         // Act
@@ -243,7 +231,7 @@ public class ReviewTests
         using var client = Application.CreateClient();
 
         // Act
-        using var response = await client.GetAsync("/graphql?query={reviews{id,stars,dateCreated,dateModified,author{id,firstName,lastName,dateCreated,dateModified},movie{id,title,dateCreated,dateModified}}}");
+        using var response = await client.GetAsync("/graphql?query={reviews{id,stars,author{id,firstName,lastName},movie{id,title}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
@@ -261,10 +249,6 @@ public class ReviewTests
             _ = review.Id.ShouldBeOfType<Guid>();
             _ = review.Stars.ShouldBeOfType<int>();
             review.Stars.ShouldBeInRange(1, 5);
-            review.Author.DateCreated.ShouldBeOfType<DateTime>();
-            review.Author.DateCreated.ShouldNotBe(default);
-            review.Author.DateModified.ShouldBeOfType<DateTime>();
-            review.Author.DateModified.ShouldNotBe(default);
 
             _ = review.Author.ShouldNotBeNull();
             _ = review.Author.Id.ShouldBeOfType<Guid>();
@@ -272,19 +256,11 @@ public class ReviewTests
             review.Author.FirstName.ShouldNotBeNullOrWhiteSpace();
             _ = review.Author.LastName.ShouldBeOfType<string>();
             review.Author.LastName.ShouldNotBeNullOrWhiteSpace();
-            review.Author.DateCreated.ShouldBeOfType<DateTime>();
-            review.Author.DateCreated.ShouldNotBe(default);
-            review.Author.DateModified.ShouldBeOfType<DateTime>();
-            review.Author.DateModified.ShouldNotBe(default);
 
             _ = review.Movie.ShouldNotBeNull();
             _ = review.Movie.Id.ShouldBeOfType<Guid>();
             _ = review.Movie.Title.ShouldBeOfType<string>();
             review.Movie.Title.ShouldNotBeNullOrWhiteSpace();
-            review.Movie.DateCreated.ShouldBeOfType<DateTime>();
-            review.Movie.DateCreated.ShouldNotBe(default);
-            review.Movie.DateModified.ShouldBeOfType<DateTime>();
-            review.Movie.DateModified.ShouldNotBe(default);
         }
     }
 
@@ -298,7 +274,7 @@ public class ReviewTests
         var reviewId = setupResult.Data.Reviews[0].Id;
 
         // Act
-        using var response = await client.GetAsync($"/graphql?query={{review(id:\"{reviewId}\"){{id,stars,dateCreated,dateModified,author{{id,firstName,lastName,dateCreated,dateModified}},movie{{id,title,dateCreated,dateModified}}}}}}");
+        using var response = await client.GetAsync($"/graphql?query={{review(id:\"{reviewId}\"){{id,stars,author{{id,firstName,lastName}},movie{{id,title}}}}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
@@ -311,10 +287,6 @@ public class ReviewTests
         _ = result.Data.Review.Id.ShouldBeOfType<Guid>();
         _ = result.Data.Review.Stars.ShouldBeOfType<int>();
         result.Data.Review.Stars.ShouldBeInRange(1, 5);
-        result.Data.Review.DateCreated.ShouldBeOfType<DateTime>();
-        result.Data.Review.DateCreated.ShouldNotBe(default);
-        result.Data.Review.DateModified.ShouldBeOfType<DateTime>();
-        result.Data.Review.DateModified.ShouldNotBe(default);
 
         _ = result.Data.Review.Author.ShouldNotBeNull();
         _ = result.Data.Review.Author.Id.ShouldBeOfType<Guid>();
@@ -322,18 +294,10 @@ public class ReviewTests
         result.Data.Review.Author.FirstName.ShouldNotBeNullOrWhiteSpace();
         _ = result.Data.Review.Author.LastName.ShouldBeOfType<string>();
         result.Data.Review.Author.LastName.ShouldNotBeNullOrWhiteSpace();
-        result.Data.Review.Author.DateCreated.ShouldBeOfType<DateTime>();
-        result.Data.Review.Author.DateCreated.ShouldNotBe(default);
-        result.Data.Review.Author.DateModified.ShouldBeOfType<DateTime>();
-        result.Data.Review.Author.DateModified.ShouldNotBe(default);
 
         _ = result.Data.Review.Movie.ShouldNotBeNull();
         _ = result.Data.Review.Movie.Id.ShouldBeOfType<Guid>();
         _ = result.Data.Review.Movie.Title.ShouldBeOfType<string>();
-        result.Data.Review.Movie.DateCreated.ShouldBeOfType<DateTime>();
-        result.Data.Review.Movie.DateCreated.ShouldNotBe(default);
-        result.Data.Review.Movie.DateModified.ShouldBeOfType<DateTime>();
-        result.Data.Review.Movie.DateModified.ShouldNotBe(default);
     }
 
     #region Update

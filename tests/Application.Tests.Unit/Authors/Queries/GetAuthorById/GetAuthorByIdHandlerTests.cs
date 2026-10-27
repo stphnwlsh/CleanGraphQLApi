@@ -16,18 +16,16 @@ public class GetAuthorByIdHandlerTests
     public async Task Handle_ShouldPassThrough_Query()
     {
         // Arrange
-        var query = new GetAuthorByIdQuery { Id = Guid.Empty };
+        var query = new GetAuthorByIdQuery
+        {
+            Id = Guid.Empty
+        };
 
         var context = Substitute.For<IAuthorsRepository>();
         var handler = new GetAuthorByIdHandler(context);
         var token = new CancellationTokenSource().Token;
 
-        _ = context.GetAuthorById(Arg.Any<Guid>(), token).Returns(new Author
-        {
-            Id = Guid.Empty,
-            FirstName = "FirstName",
-            LastName = "LastName"
-        });
+        _ = context.GetAuthorById(Arg.Any<Guid>(), token).Returns(new Author(Guid.Empty, "FirstName", "LastName"));
 
         // Act
         var result = await handler.Handle(query, token);
@@ -36,9 +34,12 @@ public class GetAuthorByIdHandlerTests
         _ = await context.Received(1).GetAuthorById(query.Id, token);
 
         _ = result.ShouldNotBeNull();
+        _ = result.ShouldBeOfType<Author>();
+
         result.Id.ShouldBe(Guid.Empty);
         result.FirstName.ShouldBe("FirstName");
         result.LastName.ShouldBe("LastName");
+        result.Reviews.ShouldBeNull();
     }
 
 
@@ -46,7 +47,10 @@ public class GetAuthorByIdHandlerTests
     public async Task Handle_ShouldThrowException_DoesNotExist()
     {
         // Arrange
-        var query = new GetAuthorByIdQuery { Id = Guid.Empty };
+        var query = new GetAuthorByIdQuery
+        {
+            Id = Guid.Empty
+        };
 
         var context = Substitute.For<IAuthorsRepository>();
         var handler = new GetAuthorByIdHandler(context);

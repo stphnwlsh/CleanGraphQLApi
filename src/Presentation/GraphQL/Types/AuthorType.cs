@@ -19,7 +19,5 @@ public sealed class AuthorType : ObjectGraphType<Author>
             description: "This authors reviews",
             type: typeof(ListGraphType<ReviewType>),
             resolve: m => m.Source?.Reviews);
-        _ = this.Field(m => m.DateCreated).Description("Date the author was created");
-        _ = this.Field(m => m.DateModified).Description("Date the author was modified");
     }
 }

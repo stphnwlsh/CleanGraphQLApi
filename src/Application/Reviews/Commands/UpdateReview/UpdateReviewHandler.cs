@@ -2,26 +2,35 @@ namespace CleanGraphQLApi.Application.Reviews.Commands.UpdateReview;
 
 using System.Threading;
 using System.Threading.Tasks;
+using CleanGraphQLApi.Application.Authors;
+using CleanGraphQLApi.Application.Movies;
 using Common.Enums;
 using Common.Exceptions;
 using MediatR;
 
-public class UpdateReviewHandler : IRequestHandler<UpdateReviewCommand, bool>
+public class UpdateReviewHandler(
+    IAuthorsRepository authorsRepository,
+    IMoviesRepository moviesRepository,
+    IReviewsRepository reviewsRepository) : IRequestHandler<UpdateReviewCommand, bool>
 {
-    private readonly IReviewsRepository repository;
-
-    public UpdateReviewHandler(IReviewsRepository repository)
-    {
-        this.repository = repository;
-    }
-
     public async Task<bool> Handle(UpdateReviewCommand request, CancellationToken cancellationToken)
     {
-        if (!await this.repository.ReviewExists(request.Id, cancellationToken))
+        if (!await reviewsRepository.ReviewExists(request.Id, cancellationToken))
         {
             NotFoundException.Throw(EntityType.Review);
         }
 
-        return await this.repository.UpdateReview(request.Id, request.AuthorId, request.MovieId, request.Stars, cancellationToken);
+        if (!await authorsRepository.AuthorExists(request.AuthorId, cancellationToken))
+        {
+            NotFoundException.Throw(EntityType.Author);
+        }
+
+        if (!await moviesRepository.MovieExists(request.MovieId, cancellationToken))
+        {
+            NotFoundException.Throw(EntityType.Movie);
+        }
+
+        return await reviewsRepository
+            .UpdateReview(request.Id, request.AuthorId, request.MovieId, request.Stars, cancellationToken);
     }
 }
