@@ -22,7 +22,8 @@ public class ValidationBehaviourTests
         var query = new GetAuthorByIdQuery { Id = Guid.NewGuid() };
         var validators = new List<IValidator<GetAuthorByIdQuery>> { new GetAuthorByIdValidator() };
         var handler = new ValidationBehaviour<GetAuthorByIdQuery, Author>(validators);
-        var token = new CancellationTokenSource().Token;
+        using var tokenSource = new CancellationTokenSource();
+        var token = tokenSource.Token;
         var next = Substitute.For<RequestHandlerDelegate<Author>>();
 
         _ = next().Returns(new Author(Guid.Empty, "Test", "Test"));
@@ -41,7 +42,8 @@ public class ValidationBehaviourTests
         var query = new GetAuthorByIdQuery { Id = Guid.Empty };
         var validators = new List<IValidator<GetAuthorByIdQuery>> { new GetAuthorByIdValidator() };
         var handler = new ValidationBehaviour<GetAuthorByIdQuery, Author>(validators);
-        var token = new CancellationTokenSource().Token;
+        using var tokenSource = new CancellationTokenSource();
+        var token = tokenSource.Token;
         var next = Substitute.For<RequestHandlerDelegate<Author>>();
 
         // Act
