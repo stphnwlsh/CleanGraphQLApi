@@ -6,7 +6,7 @@
     <PackageId>CleanGraphQLApi.Template</PackageId>
     <Title>Clean GraphQL API Template</Title>
     <Authors>Stephen Walsh</Authors>
-    <Description>A template for an API using Alignment with other Clean Examplesa streamlined verion of Clean Architecture and GraphQL.net.</Description>
+    <Description>A template for an API using a streamlined version of Clean Architecture and GraphQL.NET.</Description>
     <PackageTags>dotnet;api;csharp;template;clean;clean-architecture;graphql</PackageTags>
     <PackageProjectUrl>https://github.com/stphnwlsh/CleanGraphQLApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/stphnwlsh/CleanGraphQLApi</RepositoryUrl>
@@ -24,7 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="../**/*" Exclude="../**/bin/**;../**/obj/**;../**/*.user;../**/*.lock.json;../**/.DS_Store;../**/.git/**;../**/.github/**;../**/.vs/**;../LICENSE.md;../**/*.gitattributes;../NUGET.md;../README.md;../**/*.gitignore;../**/nuget.config;../template/**;../**/.dockerignore;../**/.editorconfig;../icon.png;" />
+    <Content Include="../**/*" Exclude="../**/bin/**;../**/obj/**;../**/*.user;../**/*.lock.json;../**/.DS_Store;../**/.git/**;../**/.github/**;../**/.vs/**;../LICENSE.md;../**/*.gitattributes;../NUGET.md;../README.md;../CONTRIBUTING.md;../CODE_OF_CONDUCT.md;../**/*.gitignore;../**/nuget.config;../template/**;../**/.dockerignore;../**/.editorconfig;../icon.png;" />
     <None Include="../icon.png" Pack="true" PackagePath="images/" />
     <None Include="../LICENSE.md" Pack="true" PackagePath="docs/" />
     <None Include="../NUGET.md" Pack="true" PackagePath="docs/" />
