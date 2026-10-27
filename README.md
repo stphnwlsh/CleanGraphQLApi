@@ -73,7 +73,7 @@ The one deliberate break from Clean Architecture is that the Presentation projec
 
 ### Project structure
 
-1. **Presentation** - Exposes the Application layer as a GraphQL schema. Queries and mutations resolve through MediatR, and a GraphQL Playground is included for exploring the schema.
+1. **Presentation** - Exposes the Application layer as a GraphQL schema. Queries and mutations send commands and queries through Mediator, Application errors become GraphQL errors, and a GraphQL Playground is included for exploring the schema.
 1. **Application** - Owns the domain and business logic. Commands and queries are validated and handled here, and each domain type has its own repository interface. This layer doesn't care what fulfils those contracts, as long as something does.
 1. **Infrastructure** - Owns the data. It implements the repository interfaces to fetch, create, update and remove data, and maps its own data models onto the Application entities so persistence details don't leak upwards.
 
@@ -81,8 +81,9 @@ The one deliberate break from Clean Architecture is that the Presentation projec
 
 - GraphQL using [GraphQL for .NET](https://github.com/graphql-dotnet/graphql-dotnet) with a [GraphQL Playground](https://github.com/graphql-dotnet/server) UI
 - Logging using [Serilog](https://github.com/serilog/serilog), with [Seq](https://datalust.co/seq) when running in Docker
-- Mediator pattern using [MediatR](https://github.com/jbogard/MediatR)
-- Validation using [FluentValidation](https://github.com/FluentValidation/FluentValidation)
+- Mediator pattern using [Mediator](https://github.com/martinothamar/Mediator)
+- Validation using [FluentValidation](https://github.com/FluentValidation/FluentValidation) in an Application pipeline behaviour
+- GraphQL errors mapped from Application exceptions, with validation failures and not-found codes in the error extensions
 - Object mapping using [Mapperly](https://mapperly.riok.app)
 - In-memory data using [Entity Framework Core](https://learn.microsoft.com/ef/core/providers/in-memory/) seeded with [Bogus](https://github.com/bchavez/Bogus)
 - Testing using [xUnit](https://xunit.net), [Shouldly](https://github.com/shouldly/shouldly) and [NSubstitute](https://github.com/nsubstitute/NSubstitute), with coverage from [Coverlet](https://github.com/coverlet-coverage/coverlet)

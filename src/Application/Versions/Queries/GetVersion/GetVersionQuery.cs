@@ -1,7 +1,7 @@
 namespace CleanGraphQLApi.Application.Versions.Queries.GetVersion;
 
 using Entities;
-using MediatR;
+using Mediator;
 
 public class GetVersionQuery : IRequest<Version>
 {

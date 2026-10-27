@@ -2,11 +2,10 @@ namespace CleanGraphQLApi.Presentation.GraphQL.Types;
 
 using Application.Authors.Entities;
 using global::GraphQL.Types;
-using MediatR;
 
 public sealed class AuthorType : ObjectGraphType<Author>
 {
-    public AuthorType(IMediator mediator)
+    public AuthorType()
     {
         this.Name = nameof(Author);
         this.Description = "An author in the collection";

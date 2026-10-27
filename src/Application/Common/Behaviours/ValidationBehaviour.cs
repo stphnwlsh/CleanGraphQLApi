@@ -5,17 +5,16 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
-using MediatR;
+using Mediator;
 
-public class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
+public class ValidationBehaviour<TMessage, TResponse>(IEnumerable<IValidator<TMessage>> validators) : IPipelineBehavior<TMessage, TResponse>
+    where TMessage : IMessage
 {
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async ValueTask<TResponse> Handle(TMessage message, MessageHandlerDelegate<TMessage, TResponse> next, CancellationToken cancellationToken)
     {
         if (validators.Any())
         {
-            var context = new ValidationContext<TRequest>(request);
-
+            var context = new ValidationContext<TMessage>(message);
             var validationResults = await Task.WhenAll(validators.Select(v => v.ValidateAsync(context, cancellationToken)));
             var failures = validationResults.SelectMany(r => r.Errors).Where(f => f != null).ToList();
 
@@ -25,6 +24,6 @@ public class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRe
             }
         }
 
-        return await next();
+        return await next(message, cancellationToken);
     }
 }

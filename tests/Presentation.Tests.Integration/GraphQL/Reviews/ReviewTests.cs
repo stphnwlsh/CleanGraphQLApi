@@ -99,7 +99,8 @@ public class ReviewTests
 
         result.Errors.ShouldNotBeEmpty();
         result.Errors.Count.ShouldBe(1);
-        result.Errors[0].Message.ShouldContain("A an error occured while attempting to create the review.");
+        result.Errors[0].Message.ShouldBe("One or more validation errors occurred.");
+        result.Errors[0].Extensions.Code.ShouldBe("VALIDATION");
     }
 
     [Fact]
@@ -125,7 +126,6 @@ public class ReviewTests
 
         result.Errors.ShouldNotBeEmpty();
         result.Errors.Count.ShouldBe(1);
-        result.Errors[0].Message.ShouldContain("GraphQL.Validation.InvalidVariableError");
         result.Errors[0].Message.ShouldContain("No value provided for a non-null variable.");
     }
 
@@ -160,7 +160,7 @@ public class ReviewTests
         _ = result.ShouldNotBeNull();
         _ = result.Data.ShouldNotBeNull();
 
-        result.Data.DeleteReview.ShouldBeTrue();
+        result.Data.DeleteReview.ShouldBe(true);
     }
 
     [Fact]
@@ -188,11 +188,12 @@ public class ReviewTests
         _ = result.ShouldNotBeNull();
 
         _ = result.Data.ShouldNotBeNull();
-        result.Data.DeleteReview.ShouldBeFalse();
+        result.Data.DeleteReview.ShouldBeNull();
 
         result.Errors.ShouldNotBeEmpty();
         result.Errors.Count.ShouldBe(1);
-        result.Errors[0].Message.ShouldContain("A an error occured while attempting to delete the review.");
+        result.Errors[0].Message.ShouldBe("One or more validation errors occurred.");
+        result.Errors[0].Extensions.Code.ShouldBe("VALIDATION");
     }
 
     [Fact]
@@ -218,7 +219,6 @@ public class ReviewTests
 
         result.Errors.ShouldNotBeEmpty();
         result.Errors.Count.ShouldBe(1);
-        result.Errors[0].Message.ShouldContain("GraphQL.Validation.InvalidVariableError");
         result.Errors[0].Message.ShouldContain("No value provided for a non-null variable.");
     }
 
@@ -338,7 +338,7 @@ public class ReviewTests
         _ = result.ShouldNotBeNull();
         _ = result.Data.ShouldNotBeNull();
 
-        result.Data.UpdateReview.ShouldBeTrue();
+        result.Data.UpdateReview.ShouldBe(true);
     }
 
     [Fact]
@@ -371,11 +371,12 @@ public class ReviewTests
         _ = result.ShouldNotBeNull();
 
         _ = result.Data.ShouldNotBeNull();
-        result.Data.UpdateReview.ShouldBeFalse();
+        result.Data.UpdateReview.ShouldBeNull();
 
         result.Errors.ShouldNotBeEmpty();
         result.Errors.Count.ShouldBe(1);
-        result.Errors[0].Message.ShouldContain("A an error occured while attempting to update the review.");
+        result.Errors[0].Message.ShouldBe("One or more validation errors occurred.");
+        result.Errors[0].Extensions.Code.ShouldBe("VALIDATION");
     }
 
     [Fact]
@@ -401,7 +402,6 @@ public class ReviewTests
 
         result.Errors.ShouldNotBeEmpty();
         result.Errors.Count.ShouldBe(1);
-        result.Errors[0].Message.ShouldContain("GraphQL.Validation.InvalidVariableError");
         result.Errors[0].Message.ShouldContain("No value provided for a non-null variable.");
     }
 

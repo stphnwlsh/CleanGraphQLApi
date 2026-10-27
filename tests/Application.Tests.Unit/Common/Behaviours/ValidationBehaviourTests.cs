@@ -8,7 +8,7 @@ using Application.Authors.Entities;
 using Application.Authors.Queries.GetAuthorById;
 using Application.Common.Behaviours;
 using FluentValidation;
-using MediatR;
+using Mediator;
 using NSubstitute;
 using Shouldly;
 using Xunit;
@@ -24,9 +24,9 @@ public class ValidationBehaviourTests
         var handler = new ValidationBehaviour<GetAuthorByIdQuery, Author>(validators);
         using var tokenSource = new CancellationTokenSource();
         var token = tokenSource.Token;
-        var next = Substitute.For<RequestHandlerDelegate<Author>>();
+        var next = Substitute.For<MessageHandlerDelegate<GetAuthorByIdQuery, Author>>();
 
-        _ = next().Returns(new Author(Guid.Empty, "Test", "Test"));
+        _ = next(query, token).Returns(new Author(Guid.Empty, "Test", "Test"));
 
         // Act
         var result = await handler.Handle(query, next, token);
@@ -44,7 +44,7 @@ public class ValidationBehaviourTests
         var handler = new ValidationBehaviour<GetAuthorByIdQuery, Author>(validators);
         using var tokenSource = new CancellationTokenSource();
         var token = tokenSource.Token;
-        var next = Substitute.For<RequestHandlerDelegate<Author>>();
+        var next = Substitute.For<MessageHandlerDelegate<GetAuthorByIdQuery, Author>>();
 
         // Act
         var exception = Should.Throw<ValidationException>(async () => await handler.Handle(query, next, token));

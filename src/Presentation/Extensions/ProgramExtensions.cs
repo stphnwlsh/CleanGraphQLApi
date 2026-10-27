@@ -9,6 +9,7 @@ using global::GraphQL.Server;
 using global::GraphQL.SystemTextJson;
 using global::GraphQL.Types;
 using GraphQL;
+using GraphQL.Errors;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,9 +37,8 @@ public static class ProgramExtensions
         #region GraphQL
 
         _ = builder.Services.AddGraphQL(b => b
-            .AddHttpMiddleware<ISchema>()
             .AddSystemTextJson()
-            .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = true)
+            .AddErrorInfoProvider(new ApplicationErrorInfoProvider())
             .AddSchema<MovieReviewSchema>()
             .AddGraphTypes(typeof(MovieReviewSchema).Assembly));
 
@@ -48,6 +48,7 @@ public static class ProgramExtensions
 
         #region Project Dependencies
 
+        _ = builder.Services.AddMediator(options => options.ServiceLifetime = ServiceLifetime.Scoped);
         _ = builder.Services.AddInfrastructure();
         _ = builder.Services.AddApplication();
         _ = builder.Services.AddPresentation();
