@@ -56,9 +56,9 @@ public class MovieTests
     {
         // Arrange
         using var client = Application.CreateClient();
-        using var setupResponse = await client.GetAsync("/graphql?query={movies{id}}");
+        using var setupResponse = await client.GetAsync("/graphql?query={movies{id,reviews{id}}}");
         var setupResult = (await setupResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>();
-        var movieId = setupResult.Data.Movies[0].Id;
+        var movieId = setupResult.Data.Movies.First(m => m.Reviews.Any()).Id;
 
         // Act
         using var response = await client.GetAsync($"/graphql?query={{movie(id:\"{movieId}\"){{id,title,reviews{{id,stars,author{{id,firstName,lastName}}}}}}}}");
