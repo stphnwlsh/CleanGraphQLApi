@@ -18,7 +18,7 @@ public class ApplicationErrorInfoProvider : ErrorInfoProvider
         {
             case ValidationException validationException:
                 info.Message = "One or more validation errors occurred.";
-                info.Extensions ??= new Dictionary<string, object?>();
+                info.Extensions ??= new Dictionary<string, object>();
                 info.Extensions["errors"] = validationException.Errors
                     .GroupBy(e => e.PropertyName)
                     .ToDictionary(g => g.Key, g => g.Select(e => e.ErrorMessage).Distinct().ToArray());

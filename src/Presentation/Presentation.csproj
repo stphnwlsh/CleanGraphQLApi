@@ -15,10 +15,10 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'CleanGraphQLApi' " />
   <ItemGroup>
-    <PackageReference Include="GraphQL.MicrosoftDI" Version="5.3.2" />
-    <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="6.1.0" />
-    <PackageReference Include="GraphQL.Server.Ui.Playground" Version="6.1.0" />
-    <PackageReference Include="GraphQL.SystemTextJson" Version="5.3.2" />
+    <PackageReference Include="GraphQL.MicrosoftDI" Version="8.8.5" />
+    <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="8.3.3" />
+    <PackageReference Include="GraphQL.Server.Ui.Playground" Version="8.3.3" />
+    <PackageReference Include="GraphQL.SystemTextJson" Version="8.8.5" />
     <PackageReference Include="Mediator.SourceGenerator" Version="3.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

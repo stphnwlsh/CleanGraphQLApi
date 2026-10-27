@@ -37,7 +37,6 @@ public static class ProgramExtensions
         #region GraphQL
 
         _ = builder.Services.AddGraphQL(b => b
-            .AddHttpMiddleware<ISchema>()
             .AddSystemTextJson()
             .AddErrorInfoProvider(new ApplicationErrorInfoProvider())
             .AddSchema<MovieReviewSchema>()
