@@ -4,17 +4,17 @@ using System;
 using Application.Authors.Entities;
 using Application.Movies.Entities;
 using Application.Reviews.Entities;
+using CleanGraphQLApi.Presentation.GraphQL.Extensions;
 using CleanGraphQLApi.Presentation.GraphQL.Types;
 using global::GraphQL;
 using global::GraphQL.Types;
-using MediatR;
 using Authors = Application.Authors;
 using Movies = Application.Movies;
 using Reviews = Application.Reviews;
 
 public class MovieReviewQueries : ObjectGraphType<object>
 {
-    public MovieReviewQueries(IMediator mediator)
+    public MovieReviewQueries()
     {
         this.Name = "MovieReviewQueries";
         this.Description = "The base query for all the movie reviews in our object graph.";
@@ -25,7 +25,7 @@ public class MovieReviewQueries : ObjectGraphType<object>
         _ = this.FieldAsync<ListGraphType<AuthorType>>(
             name: "authors",
             description: "Gets a list of all authors.",
-            resolve: async context => await mediator.Send(new Authors.Queries.GetAuthors.GetAuthorsQuery()));
+            resolve: async context => await context.Sender().Send(new Authors.Queries.GetAuthors.GetAuthorsQuery()));
 
         _ = this.FieldAsync<AuthorType, Author>(
             name: "author",
@@ -36,7 +36,7 @@ public class MovieReviewQueries : ObjectGraphType<object>
                     Name = "id",
                     Description = "The unique GUID of the author."
                 }),
-            resolve: async context => await mediator.Send(new Authors.Queries.GetAuthorById.GetAuthorByIdQuery { Id = context.GetArgument("id", Guid.Empty) }));
+            resolve: async context => await context.Sender().Send(new Authors.Queries.GetAuthorById.GetAuthorByIdQuery { Id = context.GetArgument("id", Guid.Empty) }));
 
         #endregion Authors
 
@@ -45,7 +45,7 @@ public class MovieReviewQueries : ObjectGraphType<object>
         _ = this.FieldAsync<ListGraphType<MovieType>>(
             name: "movies",
             description: "Gets a list of all movies.",
-            resolve: async context => await mediator.Send(new Movies.Queries.GetMovies.GetMoviesQuery()));
+            resolve: async context => await context.Sender().Send(new Movies.Queries.GetMovies.GetMoviesQuery()));
 
         _ = this.FieldAsync<MovieType, Movie>(
             name: "movie",
@@ -56,7 +56,7 @@ public class MovieReviewQueries : ObjectGraphType<object>
                     Name = "id",
                     Description = "The unique GUID of the movie."
                 }),
-            resolve: async context => await mediator.Send(new Movies.Queries.GetMovieById.GetMovieByIdQuery { Id = context.GetArgument("id", Guid.Empty) }));
+            resolve: async context => await context.Sender().Send(new Movies.Queries.GetMovieById.GetMovieByIdQuery { Id = context.GetArgument("id", Guid.Empty) }));
 
         #endregion Movies
 
@@ -65,7 +65,7 @@ public class MovieReviewQueries : ObjectGraphType<object>
         _ = this.FieldAsync<ListGraphType<ReviewType>>(
             name: "reviews",
             description: "Gets a list of all reviews.",
-            resolve: async context => await mediator.Send(new Reviews.Queries.GetReviews.GetReviewsQuery()));
+            resolve: async context => await context.Sender().Send(new Reviews.Queries.GetReviews.GetReviewsQuery()));
 
         _ = this.FieldAsync<ReviewType, Review>(
             name: "review",
@@ -76,7 +76,7 @@ public class MovieReviewQueries : ObjectGraphType<object>
                     Name = "id",
                     Description = "The unique GUID of the review."
                 }),
-            resolve: async (context) => await mediator.Send(new Reviews.Queries.GetReviewById.GetReviewByIdQuery { Id = context.GetArgument("id", Guid.Empty) }));
+            resolve: async (context) => await context.Sender().Send(new Reviews.Queries.GetReviewById.GetReviewByIdQuery { Id = context.GetArgument("id", Guid.Empty) }));
 
         #endregion Reviews
     }

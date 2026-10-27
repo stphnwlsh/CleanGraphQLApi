@@ -90,4 +90,45 @@ public class AuthorTests
             review.Movie.Title.ShouldNotBeNullOrWhiteSpace();
         }
     }
+
+    [Fact]
+    public async Task Author_ShouldReturn_ValidationError()
+    {
+        // Arrange
+        using var client = Application.CreateClient();
+
+        // Act
+        using var response = await client.GetAsync($"/graphql?query={{author(id:\"{Guid.Empty}\"){{id}}}}");
+        var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        _ = result.ShouldNotBeNull();
+
+        result.Errors.Count.ShouldBe(1);
+        result.Errors[0].Message.ShouldBe("One or more validation errors occurred.");
+        result.Errors[0].Extensions.Code.ShouldBe("VALIDATION");
+        result.Errors[0].Extensions.Errors["Id"].ShouldBe(["An Author Id was not supplied."]);
+    }
+
+    [Fact]
+    public async Task Author_ShouldReturn_NotFoundError()
+    {
+        // Arrange
+        using var client = Application.CreateClient();
+
+        // Act
+        using var response = await client.GetAsync($"/graphql?query={{author(id:\"{Guid.NewGuid()}\"){{id}}}}");
+        var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        _ = result.ShouldNotBeNull();
+
+        result.Errors.Count.ShouldBe(1);
+        result.Errors[0].Message.ShouldBe("The Author with the supplied id was not found.");
+        result.Errors[0].Extensions.Code.ShouldBe("NOT_FOUND");
+    }
 }

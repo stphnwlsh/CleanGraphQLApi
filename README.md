@@ -60,8 +60,9 @@ It's streamlined into 3 functional projects.  All serve their own purpse and seg
 There are plenty of handy implementations of features throughout this solution, in no particular order here are some that might interest you.
 
 - Logging using [Serilog](https://github.com/serilog/serilog)
-- Mediator Pattern using [Mediatr](https://github.com/jbogard/MediatR)
-- Validation using [FluentValidation](https://github.com/FluentValidation/FluentValidation)
+- Mediator Pattern using [Mediator](https://github.com/martinothamar/Mediator)
+- Validation using [FluentValidation](https://github.com/FluentValidation/FluentValidation) in an Application pipeline behaviour
+- GraphQL errors mapped from Application exceptions, with validation failures and not-found codes in the error extensions
 - Testing using [Shouldly](https://github.com/shouldly/shouldly) and [NSubstitute](https://github.com/nsubstitute/NSubstitute)
 - GraphQL using [GraphQL for .NET](https://github.com/graphql-dotnet/graphql-dotnet)
 

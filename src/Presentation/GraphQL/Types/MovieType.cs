@@ -2,11 +2,10 @@ namespace CleanGraphQLApi.Presentation.GraphQL.Types;
 
 using Application.Movies.Entities;
 using global::GraphQL.Types;
-using MediatR;
 
 public sealed class MovieType : ObjectGraphType<Movie>
 {
-    public MovieType(IMediator mediator)
+    public MovieType()
     {
         this.Name = nameof(Movie);
         this.Description = "A movie in the collection";
