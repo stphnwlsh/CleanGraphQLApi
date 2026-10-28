@@ -26,18 +26,14 @@ public static class PageExtensions
             return 0;
         }
 
-        try
-        {
-            var value = Encoding.UTF8.GetString(Convert.FromBase64String(after));
+        var bytes = new byte[after.Length];
 
-            if (value.StartsWith(Prefix, StringComparison.Ordinal)
-                && int.TryParse(value.AsSpan(Prefix.Length), NumberStyles.None, CultureInfo.InvariantCulture, out var offset))
-            {
-                return offset;
-            }
-        }
-        catch (FormatException)
+        if (Convert.TryFromBase64String(after, bytes, out var length)
+            && Encoding.UTF8.GetString(bytes, 0, length) is var value
+            && value.StartsWith(Prefix, StringComparison.Ordinal)
+            && int.TryParse(value.AsSpan(Prefix.Length), NumberStyles.None, CultureInfo.InvariantCulture, out var offset))
         {
+            return offset;
         }
 
         throw new ValidationException(
