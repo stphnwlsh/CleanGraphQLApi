@@ -1,26 +1,16 @@
 namespace CleanGraphQLApi.Presentation.GraphQL.Types;
 
 using Application.Reviews.Entities;
-using global::GraphQL.Types;
+using HotChocolate.Types;
 
-public sealed class ReviewType : ObjectGraphType<Review>
+[ObjectType<Review>]
+public static partial class ReviewType
 {
-    public ReviewType()
+    static partial void Configure(IObjectTypeDescriptor<Review> descriptor)
     {
-        this.Name = nameof(Review);
-        this.Description = "A review in the collection";
-
-        _ = this.Field(m => m.Id).Description("Identifier of the review");
-        _ = this.Field(r => r.Stars).Description("Star rating out of five");
-        _ = this.Field(
-            name: "Movie",
-            description: "The movie being reviewed",
-            type: typeof(ReviewedMovieType),
-            resolve: m => m.Source?.ReviewedMovie);
-        _ = this.Field(
-            name: "Author",
-            description: "The author of the review",
-            type: typeof(ReviewAuthorType),
-            resolve: m => m.Source?.ReviewAuthor);
+        _ = descriptor.Field(r => r.Id);
+        _ = descriptor.Field(r => r.Stars);
+        _ = descriptor.Field(r => r.ReviewedMovie).Name("movie");
+        _ = descriptor.Field(r => r.ReviewAuthor).Name("author");
     }
 }

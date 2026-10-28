@@ -1,16 +1,14 @@
 namespace CleanGraphQLApi.Presentation.GraphQL.Types;
 
 using Application.Movies.Entities;
-using global::GraphQL.Types;
+using HotChocolate.Types;
 
-public sealed class ReviewedMovieType : ObjectGraphType<ReviewedMovie>
+[ObjectType<ReviewedMovie>]
+public static partial class ReviewedMovieType
 {
-    public ReviewedMovieType()
+    static partial void Configure(IObjectTypeDescriptor<ReviewedMovie> descriptor)
     {
-        this.Name = nameof(ReviewedMovie);
-        this.Description = "The movie a review is about";
-
-        _ = this.Field(m => m.Id).Description("Identifier of the movie");
-        _ = this.Field(m => m.Title).Description("Title of the movie");
+        _ = descriptor.Field(m => m.Id);
+        _ = descriptor.Field(m => m.Title).Type<NonNullType<StringType>>();
     }
 }

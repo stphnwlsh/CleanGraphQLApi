@@ -126,7 +126,7 @@ public class ReviewTests
 
         result.Errors.ShouldNotBeEmpty();
         result.Errors.Count.ShouldBe(1);
-        result.Errors[0].Message.ShouldContain("No value provided for a non-null variable.");
+        result.Errors[0].Message.ShouldBe("Variable `review` is required.");
     }
 
     #endregion Create
@@ -142,7 +142,7 @@ public class ReviewTests
         var reviewId = (await reviewResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Reviews[0].Id;
         var content = new DeleteReviewInputData
         {
-            Query = "mutation($id:ID!){deleteReview(id:$id)}",
+            Query = "mutation($id:UUID!){deleteReview(id:$id)}",
             Variables = new Delete.Variables
             {
                 Id = reviewId
@@ -151,7 +151,6 @@ public class ReviewTests
 
         // Act
         using var response = await client.PostAsync($"/graphql", content.ToStringContent());
-        var resultS = await response.Content.ReadAsStringAsync();
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
@@ -170,7 +169,7 @@ public class ReviewTests
         using var client = Application.CreateClient();
         var content = new DeleteReviewInputData
         {
-            Query = "mutation($id:ID!){deleteReview(id:$id)}",
+            Query = "mutation($id:UUID!){deleteReview(id:$id)}",
             Variables = new Delete.Variables
             {
                 Id = Guid.Empty
@@ -179,7 +178,6 @@ public class ReviewTests
 
         // Act
         using var response = await client.PostAsync($"/graphql", content.ToStringContent());
-        var resultS = await response.Content.ReadAsStringAsync();
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
@@ -203,7 +201,7 @@ public class ReviewTests
         using var client = Application.CreateClient();
         var content = new DeleteReviewInputData
         {
-            Query = "mutation($id:ID!){deleteReview(id:$id)}"
+            Query = "mutation($id:UUID!){deleteReview(id:$id)}"
         };
 
         // Act
@@ -219,7 +217,7 @@ public class ReviewTests
 
         result.Errors.ShouldNotBeEmpty();
         result.Errors.Count.ShouldBe(1);
-        result.Errors[0].Message.ShouldContain("No value provided for a non-null variable.");
+        result.Errors[0].Message.ShouldBe("Variable `id` is required.");
     }
 
     #endregion Delete
@@ -402,8 +400,55 @@ public class ReviewTests
 
         result.Errors.ShouldNotBeEmpty();
         result.Errors.Count.ShouldBe(1);
-        result.Errors[0].Message.ShouldContain("No value provided for a non-null variable.");
+        result.Errors[0].Message.ShouldBe("Variable `review` is required.");
     }
 
     #endregion Update
+
+    #region Search
+
+    [Fact]
+    public async Task SearchReviews_ShouldFilter_ByMovie()
+    {
+        // Arrange
+        using var client = Application.CreateClient();
+        using var setupResponse = await client.GetAsync("/graphql?query={reviews{movie{id}}}");
+        var movieId = (await setupResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Reviews[0].Movie.Id;
+
+        // Act
+        using var response = await client.GetAsync($"/graphql?query={{searchReviews(movieId:\"{movieId}\",first:50){{totalCount,nodes{{id,stars,movie{{id}}}}}}}}");
+        var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        _ = result.ShouldNotBeNull();
+        result.Errors.ShouldBeNull();
+
+        var page = result.Data.SearchReviews;
+        page.TotalCount.ShouldBeGreaterThan(0);
+        page.Nodes.ShouldAllBe(r => r.Movie.Id == movieId);
+    }
+
+    [Fact]
+    public async Task SearchReviews_ShouldFilter_ByAuthor()
+    {
+        // Arrange
+        using var client = Application.CreateClient();
+        using var setupResponse = await client.GetAsync("/graphql?query={reviews{author{id}}}");
+        var authorId = (await setupResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Reviews[0].Author.Id;
+
+        // Act
+        using var response = await client.GetAsync($"/graphql?query={{searchReviews(authorId:\"{authorId}\",first:50){{totalCount,nodes{{id,author{{id}}}}}}}}");
+        var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        var page = result.Data.SearchReviews;
+        page.TotalCount.ShouldBeGreaterThan(0);
+        page.Nodes.ShouldAllBe(r => r.Author.Id == authorId);
+    }
+
+    #endregion Search
 }

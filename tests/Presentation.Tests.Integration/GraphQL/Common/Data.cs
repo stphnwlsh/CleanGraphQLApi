@@ -23,6 +23,18 @@ public partial class Data
     [JsonPropertyName("reviews")]
     public Review[] Reviews { get; set; }
 
+    [JsonPropertyName("searchAuthors")]
+    public Connection<Authors.Author> SearchAuthors { get; set; }
+
+    [JsonPropertyName("searchMovies")]
+    public Connection<Movies.Movie> SearchMovies { get; set; }
+
+    [JsonPropertyName("searchReviews")]
+    public Connection<Review> SearchReviews { get; set; }
+
+    [JsonPropertyName("version")]
+    public Versions.Version Version { get; set; }
+
     [JsonPropertyName("createReview")]
     public Review CreateReview { get; set; }
 

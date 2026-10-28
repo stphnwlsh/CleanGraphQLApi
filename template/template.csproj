@@ -6,8 +6,8 @@
     <PackageId>CleanGraphQLApi.Template</PackageId>
     <Title>Clean GraphQL API Template</Title>
     <Authors>Stephen Walsh</Authors>
-    <Description>A dotnet new template for a GraphQL API using GraphQL for .NET, built with a streamlined Clean Architecture on .NET 10.</Description>
-    <PackageTags>dotnet;csharp;dotnet-template;template;clean-architecture;cqrs;mediator;fluentvalidation;mapperly;entity-framework-core;docker;aspnetcore;graphql;graphql-dotnet</PackageTags>
+    <Description>A dotnet new template for a GraphQL API using Hot Chocolate, built with a streamlined Clean Architecture on .NET 10.</Description>
+    <PackageTags>dotnet;csharp;dotnet-template;template;clean-architecture;cqrs;mediator;fluentvalidation;mapperly;entity-framework-core;docker;aspnetcore;graphql;hotchocolate</PackageTags>
     <PackageProjectUrl>https://github.com/stphnwlsh/CleanGraphQLApi</PackageProjectUrl>
     <RepositoryUrl>https://github.com/stphnwlsh/CleanGraphQLApi</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

@@ -18,7 +18,7 @@ dotnet run --project ./src/Presentation
 docker compose up -d --build
 ```
 
-- App: <http://localhost:8080/ui/playground> (GraphQL Playground)
+- App: <http://localhost:8080/graphql> (Nitro)
 - Seq: <http://localhost:5341>
 
 To shut the containers down:

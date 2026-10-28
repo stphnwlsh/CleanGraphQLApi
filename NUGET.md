@@ -1,6 +1,6 @@
 # Clean GraphQL API
 
-A `dotnet new` template for a GraphQL API built with a streamlined version of Clean Architecture and [GraphQL for .NET](https://github.com/graphql-dotnet/graphql-dotnet).
+A `dotnet new` template for a GraphQL API built with a streamlined version of Clean Architecture and [Hot Chocolate](https://chillicream.com/docs/hotchocolate).
 
 It shares its Application and Infrastructure layers with four sibling templates for Minimal APIs, Web API controllers, GraphQL, Model Context Protocol and AWS Lambda.
 
