@@ -1,6 +1,7 @@
 namespace CleanGraphQLApi.Presentation.GraphQL.Mutations;
 
 using Application.Reviews.Entities;
+using HotChocolate.Authorization;
 using HotChocolate.Types;
 using Inputs;
 using Mediator;
@@ -13,6 +14,7 @@ public static partial class ReviewMutations
     /// Creates a review of a movie and returns it.
     /// </summary>
     /// <param name="input">The review to create.</param>
+    [Authorize]
     public static async Task<Review?> CreateReview(CreateReviewInput input, ISender sender, CancellationToken cancellationToken)
     {
         return await sender.Send(new Commands.CreateReview.CreateReviewCommand
@@ -27,6 +29,7 @@ public static partial class ReviewMutations
     /// Updates the author, movie and star rating of a review. Returns true when the review was updated.
     /// </summary>
     /// <param name="input">The review to update.</param>
+    [Authorize]
     public static async Task<bool?> UpdateReview(UpdateReviewInput input, ISender sender, CancellationToken cancellationToken)
     {
         return await sender.Send(new Commands.UpdateReview.UpdateReviewCommand
@@ -42,6 +45,7 @@ public static partial class ReviewMutations
     /// Deletes a review. Returns true when the review was deleted.
     /// </summary>
     /// <param name="id">The unique identifier of the review.</param>
+    [Authorize]
     public static async Task<bool?> DeleteReview(Guid id, ISender sender, CancellationToken cancellationToken)
     {
         return await sender.Send(new Commands.DeleteReview.DeleteReviewCommand { Id = id }, cancellationToken);
