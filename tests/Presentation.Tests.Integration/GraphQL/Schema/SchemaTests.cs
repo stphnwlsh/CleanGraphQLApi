@@ -16,7 +16,7 @@ public class SchemaTests
     {
         // Arrange
         using var client = Application.CreateClient();
-        var expected = await File.ReadAllTextAsync(Path.Combine("GraphQL", "Schema", "schema.graphql"));
+        var expected = await File.ReadAllTextAsync(Path.Join("GraphQL", "Schema", "schema.graphql"));
 
         // Act
         using var response = await client.GetAsync("/graphql?sdl");
