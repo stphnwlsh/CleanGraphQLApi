@@ -131,4 +131,51 @@ public class AuthorTests
         result.Errors[0].Message.ShouldBe("The Author with the supplied id was not found.");
         result.Errors[0].Extensions.Code.ShouldBe("NOT_FOUND");
     }
+
+    [Fact]
+    public async Task SearchAuthors_ShouldReturn_FirstPage()
+    {
+        // Arrange
+        using var client = Application.CreateClient();
+
+        // Act
+        using var response = await client.GetAsync("/graphql?query={searchAuthors{totalCount,pageInfo{hasNextPage,hasPreviousPage},nodes{id,firstName,lastName}}}");
+        var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        _ = result.ShouldNotBeNull();
+        result.Errors.ShouldBeNull();
+
+        var page = result.Data.SearchAuthors;
+        page.TotalCount.ShouldBe(15);
+        page.Nodes.Length.ShouldBe(10);
+        page.PageInfo.HasNextPage.ShouldBeTrue();
+        page.PageInfo.HasPreviousPage.ShouldBeFalse();
+    }
+
+    [Fact]
+    public async Task SearchAuthors_ShouldFilter_ByQuery()
+    {
+        // Arrange
+        using var client = Application.CreateClient();
+        using var setupResponse = await client.GetAsync("/graphql?query={authors{lastName}}");
+        var term = (await setupResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Authors[0].LastName.ToLowerInvariant();
+
+        // Act
+        using var response = await client.GetAsync($"/graphql?query={{searchAuthors(query:\"{term}\",first:50){{totalCount,nodes{{firstName,lastName}}}}}}");
+        var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        var page = result.Data.SearchAuthors;
+        page.TotalCount.ShouldBeGreaterThan(0);
+
+        foreach (var author in page.Nodes)
+        {
+            $"{author.FirstName} {author.LastName}".ShouldContain(term, Case.Insensitive);
+        }
+    }
 }

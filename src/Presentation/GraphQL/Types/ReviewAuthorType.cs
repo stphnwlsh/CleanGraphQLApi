@@ -1,17 +1,15 @@
 namespace CleanGraphQLApi.Presentation.GraphQL.Types;
 
 using Application.Authors.Entities;
-using global::GraphQL.Types;
+using HotChocolate.Types;
 
-public sealed class ReviewAuthorType : ObjectGraphType<ReviewAuthor>
+[ObjectType<ReviewAuthor>]
+public static partial class ReviewAuthorType
 {
-    public ReviewAuthorType()
+    static partial void Configure(IObjectTypeDescriptor<ReviewAuthor> descriptor)
     {
-        this.Name = nameof(ReviewAuthor);
-        this.Description = "The author of a review";
-
-        _ = this.Field(m => m.Id).Description("Identifier of the author");
-        _ = this.Field(m => m.FirstName).Description("First name of the movie reviewer");
-        _ = this.Field(m => m.LastName).Description("Last name of the movie reviewer");
+        _ = descriptor.Field(a => a.Id);
+        _ = descriptor.Field(a => a.FirstName).Type<NonNullType<StringType>>();
+        _ = descriptor.Field(a => a.LastName).Type<NonNullType<StringType>>();
     }
 }

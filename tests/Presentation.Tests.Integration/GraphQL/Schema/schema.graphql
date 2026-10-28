@@ -1,0 +1,273 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  "Gets every author, with the reviews they have written."
+  authors: [Author!]! @cost(weight: "10")
+  "Gets an author by their unique identifier."
+  author("The unique identifier of the author." id: UUID!): Author
+    @cost(weight: "10")
+  "Finds authors whose first or last name contains a search term, one page at a time."
+  searchAuthors(
+    "The words to look for, ignoring case. Leave empty to list every author."
+    query: String
+    "Returns the first _n_ elements from the list."
+    first: Int
+    "Returns the elements in the list that come after the specified cursor."
+    after: String
+  ): AuthorsConnection
+    @listSize(
+      assumedSize: 50
+      slicingArguments: ["first"]
+      slicingArgumentDefaultValue: 10
+      sizedFields: ["edges", "nodes"]
+      requireOneSlicingArgument: false
+    )
+    @cost(weight: "10")
+  "Gets every movie, with the reviews written about it."
+  movies: [Movie!]! @cost(weight: "10")
+  "Gets a movie by its unique identifier."
+  movie("The unique identifier of the movie." id: UUID!): Movie
+    @cost(weight: "10")
+  "Finds movies whose title contains a search term, one page at a time."
+  searchMovies(
+    "The words to look for, ignoring case. Leave empty to list every movie."
+    query: String
+    "Returns the first _n_ elements from the list."
+    first: Int
+    "Returns the elements in the list that come after the specified cursor."
+    after: String
+  ): MoviesConnection
+    @listSize(
+      assumedSize: 50
+      slicingArguments: ["first"]
+      slicingArgumentDefaultValue: 10
+      sizedFields: ["edges", "nodes"]
+      requireOneSlicingArgument: false
+    )
+    @cost(weight: "10")
+  "Gets every review, with its movie and author."
+  reviews: [Review!]! @cost(weight: "10")
+  "Gets a review by its unique identifier."
+  review("The unique identifier of the review." id: UUID!): Review
+    @cost(weight: "10")
+  "Finds reviews, optionally only those for one movie or by one author, one page at a time."
+  searchReviews(
+    "Only return reviews of this movie. Leave empty for every movie."
+    movieId: UUID
+    "Only return reviews by this author. Leave empty for every author."
+    authorId: UUID
+    "Returns the first _n_ elements from the list."
+    first: Int
+    "Returns the elements in the list that come after the specified cursor."
+    after: String
+  ): ReviewsConnection
+    @listSize(
+      assumedSize: 50
+      slicingArguments: ["first"]
+      slicingArgumentDefaultValue: 10
+      sizedFields: ["edges", "nodes"]
+      requireOneSlicingArgument: false
+    )
+    @cost(weight: "10")
+  "Gets the file and informational versions of the running application."
+  version: Version! @cost(weight: "10")
+}
+
+type Mutation {
+  "Creates a review of a movie and returns it."
+  createReview("The review to create." input: CreateReviewInput!): Review
+    @cost(weight: "10")
+  "Updates the author, movie and star rating of a review. Returns true when the review was updated."
+  updateReview("The review to update." input: UpdateReviewInput!): Boolean
+    @cost(weight: "10")
+  "Deletes a review. Returns true when the review was deleted."
+  deleteReview("The unique identifier of the review." id: UUID!): Boolean
+    @cost(weight: "10")
+}
+
+"A person who writes movie reviews."
+type Author {
+  "The unique identifier of the author."
+  id: UUID!
+  "The author's first name."
+  firstName: String!
+  "The author's last name."
+  lastName: String!
+  "The reviews the author has written."
+  reviews: [Review!]
+}
+
+"A connection to a list of items."
+type AuthorsConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AuthorsEdge!]
+  "A flattened list of the nodes."
+  nodes: [Author!]
+  "Identifies the total count of items in the connection."
+  totalCount: Int! @cost(weight: "10")
+}
+
+"An edge in a connection."
+type AuthorsEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Author!
+}
+
+"A movie that can be reviewed."
+type Movie {
+  "The unique identifier of the movie."
+  id: UUID!
+  "The title of the movie."
+  title: String!
+  "The reviews written about the movie."
+  reviews: [Review!]
+}
+
+"A connection to a list of items."
+type MoviesConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [MoviesEdge!]
+  "A flattened list of the nodes."
+  nodes: [Movie!]
+  "Identifies the total count of items in the connection."
+  totalCount: Int! @cost(weight: "10")
+}
+
+"An edge in a connection."
+type MoviesEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Movie!
+}
+
+"Information about pagination in a connection."
+type PageInfo {
+  "Indicates whether more edges exist following the set defined by the clients arguments."
+  hasNextPage: Boolean!
+  "Indicates whether more edges exist prior the set defined by the clients arguments."
+  hasPreviousPage: Boolean!
+  "When paginating backwards, the cursor to continue."
+  startCursor: String
+  "When paginating forwards, the cursor to continue."
+  endCursor: String
+}
+
+"A star rating an author has given a movie."
+type Review {
+  "The unique identifier of the review."
+  id: UUID!
+  "The star rating, from 1 to 5."
+  stars: Int!
+  "The movie that was reviewed."
+  movie: ReviewedMovie
+  "The author who wrote the review."
+  author: ReviewAuthor
+}
+
+"The author who wrote a review."
+type ReviewAuthor {
+  "The unique identifier of the author."
+  id: UUID!
+  "The author's first name."
+  firstName: String!
+  "The author's last name."
+  lastName: String!
+}
+
+"The movie a review is about."
+type ReviewedMovie {
+  "The unique identifier of the movie."
+  id: UUID!
+  "The title of the movie."
+  title: String!
+}
+
+"A connection to a list of items."
+type ReviewsConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [ReviewsEdge!]
+  "A flattened list of the nodes."
+  nodes: [Review!]
+  "Identifies the total count of items in the connection."
+  totalCount: Int! @cost(weight: "10")
+}
+
+"An edge in a connection."
+type ReviewsEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Review!
+}
+
+"The version details of the running application."
+type Version {
+  "The assembly file version."
+  fileVersion: String
+  "The informational version, which can include a pre-release label or commit hash."
+  informationalVersion: String
+}
+
+"A review of a movie to create."
+input CreateReviewInput {
+  "The unique identifier of the author writing the review."
+  authorId: UUID!
+  "The unique identifier of the movie being reviewed."
+  movieId: UUID!
+  "The star rating, from 1 to 5."
+  stars: Int!
+}
+
+"A review of a movie to update."
+input UpdateReviewInput {
+  "The unique identifier of the review."
+  id: UUID!
+  "The unique identifier of the author who wrote the review."
+  authorId: UUID!
+  "The unique identifier of the movie being reviewed."
+  movieId: UUID!
+  "The star rating, from 1 to 5."
+  stars: Int!
+}
+
+"The `UUID` scalar type represents a Universally Unique Identifier (UUID) as defined by RFC 9562."
+scalar UUID
+  @specifiedBy(url: "https://scalars.graphql.org/chillicream/uuid.html")
+
+"The purpose of the `cost` directive is to define a `weight` for GraphQL types, fields, and arguments. Static analysis can use these weights when calculating the overall cost of a query or response."
+directive @cost(
+  "The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc."
+  weight: String!
+) on
+  | SCALAR
+  | OBJECT
+  | FIELD_DEFINITION
+  | ARGUMENT_DEFINITION
+  | ENUM
+  | INPUT_FIELD_DEFINITION
+
+"The purpose of the `@listSize` directive is to either inform the static analysis about the size of returned lists (if that information is statically available), or to point the analysis to where to find that information."
+directive @listSize(
+  "The `assumedSize` argument can be used to statically define the maximum length of a list returned by a field."
+  assumedSize: Int
+  "The `slicingArguments` argument can be used to define which of the field's arguments with numeric type are slicing arguments, so that their value determines the size of the list returned by that field. It may specify a list of multiple slicing arguments."
+  slicingArguments: [String!]
+  "The `slicingArgumentDefaultValue` argument can be used to define a default value for a slicing argument, which is used if the argument is not present in a query."
+  slicingArgumentDefaultValue: Int
+  "The `sizedFields` argument can be used to define that the value of the `assumedSize` argument or of a slicing argument does not affect the size of a list returned by a field itself, but that of a list returned by one of its sub-fields."
+  sizedFields: [String!]
+  "The `requireOneSlicingArgument` argument can be used to inform the static analysis that it should expect that exactly one of the defined slicing arguments is present in a query. If that is not the case (i.e., if none or multiple slicing arguments are present), the static analysis may throw an error."
+  requireOneSlicingArgument: Boolean = true
+) on FIELD_DEFINITION

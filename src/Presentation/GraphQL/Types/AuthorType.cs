@@ -1,22 +1,17 @@
 namespace CleanGraphQLApi.Presentation.GraphQL.Types;
 
 using Application.Authors.Entities;
-using global::GraphQL.Types;
+using Application.Reviews.Entities;
+using HotChocolate.Types;
 
-public sealed class AuthorType : ObjectGraphType<Author>
+[ObjectType<Author>]
+public static partial class AuthorType
 {
-    public AuthorType()
+    static partial void Configure(IObjectTypeDescriptor<Author> descriptor)
     {
-        this.Name = nameof(Author);
-        this.Description = "An author in the collection";
-
-        _ = this.Field(m => m.Id).Description("Identifier of the author");
-        _ = this.Field(m => m.FirstName).Description("First name of the movie reviewer");
-        _ = this.Field(m => m.LastName).Description("Last name of the movie reviewer");
-        _ = this.Field(
-            name: "Reviews",
-            description: "This authors reviews",
-            type: typeof(ListGraphType<ReviewType>),
-            resolve: m => m.Source?.Reviews);
+        _ = descriptor.Field(a => a.Id);
+        _ = descriptor.Field(a => a.FirstName).Type<NonNullType<StringType>>();
+        _ = descriptor.Field(a => a.LastName).Type<NonNullType<StringType>>();
+        _ = descriptor.Field(a => a.Reviews).Type<ListType<NonNullType<ObjectType<Review>>>>();
     }
 }

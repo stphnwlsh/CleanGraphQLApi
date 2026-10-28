@@ -8,9 +8,6 @@ public partial class GraphData
     [JsonPropertyName("data")]
     public Data Data { get; set; }
 
-    [JsonPropertyName("extensions")]
-    public Extensions Extensions { get; set; }
-
     [JsonPropertyName("errors")]
     public List<ErrorMessage> Errors { get; set; }
 }

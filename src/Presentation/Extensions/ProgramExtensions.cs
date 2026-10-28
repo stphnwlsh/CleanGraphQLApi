@@ -3,17 +3,12 @@ namespace CleanGraphQLApi.Presentation.Extensions;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Application;
-using global::GraphQL;
-using global::GraphQL.MicrosoftDI;
-using global::GraphQL.Server;
-using global::GraphQL.SystemTextJson;
-using global::GraphQL.Types;
-using GraphQL;
+using Application.Common.Paging;
+using ChilliCream.Nitro.App;
 using GraphQL.Errors;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Presentation;
 using Serilog;
 
 [ExcludeFromCodeCoverage]
@@ -36,13 +31,19 @@ public static class ProgramExtensions
 
         #region GraphQL
 
-        _ = builder.Services.AddGraphQL(b => b
-            .AddSystemTextJson()
-            .AddErrorInfoProvider(new ApplicationErrorInfoProvider())
-            .AddSchema<MovieReviewSchema>()
-            .AddGraphTypes(typeof(MovieReviewSchema).Assembly));
-
-        _ = builder.Services.AddHttpContextAccessor();
+        _ = builder.Services
+            .AddGraphQLServer()
+            .AddPresentationTypes()
+            .AddErrorFilter<ApplicationErrorFilter>()
+            .AddMaxExecutionDepthRule(15)
+            .ModifyServerOptions(options => options.Tool.ServeMode = ServeMode.Embedded)
+            .ModifyPagingOptions(options =>
+            {
+                options.DefaultPageSize = Paging.DefaultLimit;
+                options.MaxPageSize = Paging.MaxLimit;
+                options.IncludeTotalCount = true;
+                options.AllowBackwardPagination = false;
+            });
 
         #endregion GraphQL
 
@@ -51,7 +52,6 @@ public static class ProgramExtensions
         _ = builder.Services.AddMediator(options => options.ServiceLifetime = ServiceLifetime.Scoped);
         _ = builder.Services.AddInfrastructure();
         _ = builder.Services.AddApplication();
-        _ = builder.Services.AddPresentation();
 
         #endregion Project Dependencies
 
@@ -68,8 +68,7 @@ public static class ProgramExtensions
 
         #region GraphQL
 
-        _ = app.UseGraphQL<ISchema>();
-        _ = app.UseGraphQLPlayground();
+        _ = app.MapGraphQL();
 
         #endregion GraphQL
 

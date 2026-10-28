@@ -8,7 +8,7 @@
 [![License](https://img.shields.io/github/license/stphnwlsh/CleanGraphQLApi?label=License&style=for-the-badge)](LICENSE.md)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/stphnwlsh?label=Sponsor&logo=githubsponsors&logoColor=white&color=ea4aaa&style=for-the-badge)](https://github.com/sponsors/stphnwlsh)
 
-A `dotnet new` template for a GraphQL API built with a streamlined version of Clean Architecture and [GraphQL for .NET](https://github.com/graphql-dotnet/graphql-dotnet).
+A `dotnet new` template for a GraphQL API built with a streamlined version of Clean Architecture and [Hot Chocolate](https://chillicream.com/docs/hotchocolate).
 
 It's one of five templates that share the same Application and Infrastructure layers and differ only in how they present them. See [Related templates](#related-templates).
 
@@ -49,7 +49,7 @@ dotnet new cleangraphqlapi --name {YOUR_SOLUTION_NAMESPACE} --authorName "{YOUR_
 docker compose up -d
 ```
 
-Then open the GraphQL Playground at <http://localhost:8080/ui/playground>. See [docs/RUN.md](docs/RUN.md) for every way to run it.
+Then open Nitro, the GraphQL IDE, at <http://localhost:8080/graphql>. See [docs/RUN.md](docs/RUN.md) for every way to run it.
 
 The `Dockerfile` has stages for testing, publishing and running, so you can build just the part you need. You can also stamp a version into the assembly.
 
@@ -67,13 +67,15 @@ The one deliberate break from Clean Architecture is that the Presentation projec
 
 ### Project structure
 
-1. **Presentation** - Exposes the Application layer as a GraphQL schema. Queries and mutations send commands and queries through Mediator, Application errors become GraphQL errors, and a GraphQL Playground is included for exploring the schema.
+1. **Presentation** - Exposes the Application layer as a GraphQL schema. Queries and mutations send commands and queries through Mediator, Application errors become GraphQL errors, and Nitro is included for exploring the schema.
 1. **Application** - Owns the domain and business logic. Commands and queries are validated and handled here, and each domain type has its own repository interface. This layer doesn't care what fulfils those contracts, as long as something does.
 1. **Infrastructure** - Owns the data. It implements the repository interfaces to fetch, create, update and remove data, and maps its own data models onto the Application entities so persistence details don't leak upwards.
 
 ## Features
 
-- GraphQL using [GraphQL for .NET](https://github.com/graphql-dotnet/graphql-dotnet) with a [GraphQL Playground](https://github.com/graphql-dotnet/server) UI
+- GraphQL using [Hot Chocolate](https://chillicream.com/docs/hotchocolate) with the [Nitro](https://chillicream.com/docs/nitro) IDE served from `/graphql`
+- Schema descriptions generated from the XML documentation comments on the Application models and resolvers
+- Search with Relay-style cursor paging (`first`, `after`, `pageInfo`, `totalCount`) backed by the shared Application search queries
 - Logging using [Serilog](https://github.com/serilog/serilog), with [Seq](https://datalust.co/seq) when running in Docker
 - Mediator pattern using [Mediator](https://github.com/martinothamar/Mediator)
 - Validation using [FluentValidation](https://github.com/FluentValidation/FluentValidation) in an Application pipeline behaviour
@@ -100,7 +102,7 @@ All five templates share the same Application and Infrastructure layers, tests, 
 
 This template wouldn't exist without these resources. If you're on your own learning adventure, they're well worth a read.
 
-- [GraphQL.NET - Docs](https://graphql-dotnet.github.io/docs/getting-started/introduction)
+- [Hot Chocolate - Docs](https://chillicream.com/docs/hotchocolate)
 - [Fiyaz Hasan - GraphQL Series](https://fiyazhasan.me/tag/graphql/)
 - [İlker Aytı - Dotnet Template](https://github.com/iayti/Matech.Sample.Template)
 - [Andrew Lock - Reducing log verbosity with Serilog RequestLogging](https://andrewlock.net/using-serilog-aspnetcore-in-asp-net-core-3-reducing-log-verbosity/)

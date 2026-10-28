@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Authors>Stephen Walsh</Authors>
     <Copyright>Stephen Walsh @ 2021</Copyright>
+    <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <VersionPrefix>1.0.0.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
@@ -10,15 +11,16 @@
     <GenerateAssemblyInformationalVersionAttribute>true</GenerateAssemblyInformationalVersionAttribute>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <NoWarn>$(NoWarn);1591S,3903,CS8602,CS8618</NoWarn>
+    <NoWarn>$(NoWarn);1573;1591;S3903;CS8602;CS8618</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'CleanGraphQLApi' " />
   <ItemGroup>
-    <PackageReference Include="GraphQL.MicrosoftDI" Version="8.8.5" />
-    <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="8.3.3" />
-    <PackageReference Include="GraphQL.Server.Ui.Playground" Version="8.3.3" />
-    <PackageReference Include="GraphQL.SystemTextJson" Version="8.8.5" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="16.7.3" />
+    <PackageReference Include="HotChocolate.Types.Analyzers" Version="16.7.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Mediator.SourceGenerator" Version="3.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
