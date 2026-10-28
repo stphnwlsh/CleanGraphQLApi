@@ -79,7 +79,7 @@ public static class ProgramExtensions
         #region Project Dependencies
 
         _ = builder.Services.AddMediator(options => options.ServiceLifetime = ServiceLifetime.Scoped);
-        _ = builder.Services.AddInfrastructure();
+        _ = builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("MovieReviews"));
         _ = builder.Services.AddApplication();
 
         #endregion Project Dependencies
@@ -89,6 +89,12 @@ public static class ProgramExtensions
 
     public static WebApplication ConfigureApplication(this WebApplication app)
     {
+        #region Database
+
+        _ = app.Services.InitialiseInfrastructure();
+
+        #endregion Database
+
         #region Logging
 
         _ = app.UseSerilogRequestLogging();

@@ -20,7 +20,7 @@ public class AuthenticationTests : IDisposable
     private static readonly SymmetricSecurityKey SigningKey = new(Encoding.UTF8.GetBytes("a-test-signing-key-that-is-long-enough-for-hs256"));
 
     private readonly GraphQLApplication application = new(
-        settings: new Dictionary<string, string>
+        settings: new Dictionary<string, string?>
         {
             ["Authentication:Authority"] = Authority,
             ["Authentication:Audience"] = Audience
@@ -33,9 +33,9 @@ public class AuthenticationTests : IDisposable
         }));
 
     [Theory]
-    [InlineData("{movies{id}}")]
-    [InlineData("{authors{id}}")]
-    [InlineData("{reviews{id}}")]
+    [InlineData("{movies{items{id}}}")]
+    [InlineData("{authors{items{id}}}")]
+    [InlineData("{reviews{items{id}}}")]
     public async Task Query_WithoutToken_ShouldReturn_NotAuthenticated(string query)
     {
         // Arrange
@@ -45,7 +45,7 @@ public class AuthenticationTests : IDisposable
         var result = await Send(client, query);
 
         // Assert
-        result.Data.ShouldBeNull();
+        new object?[] { result.Data?.Movies, result.Data?.Authors, result.Data?.Reviews }.ShouldAllBe(field => field == null);
         result.Errors.ShouldNotBeEmpty();
         result.Errors[0].Extensions.Code.ShouldBe("AUTH_NOT_AUTHENTICATED");
     }
@@ -72,7 +72,7 @@ public class AuthenticationTests : IDisposable
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CreateToken("https://someone-else.example.com"));
 
         // Act
-        var result = await Send(client, "{movies{id}}");
+        var result = await Send(client, "{movies{items{id}}}");
 
         // Assert
         result.Errors.ShouldNotBeEmpty();
@@ -87,11 +87,11 @@ public class AuthenticationTests : IDisposable
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CreateToken(Audience));
 
         // Act
-        var result = await Send(client, "{movies{id}}");
+        var result = await Send(client, "{movies{items{id}}}");
 
         // Assert
         result.Errors.ShouldBeNull();
-        result.Data.Movies.ShouldNotBeEmpty();
+        result.Data.Movies.Items.ShouldNotBeEmpty();
     }
 
     [Fact]

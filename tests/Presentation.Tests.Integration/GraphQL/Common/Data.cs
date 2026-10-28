@@ -6,37 +6,28 @@ using Reviews.Query;
 public partial class Data
 {
     [JsonPropertyName("author")]
-    public Authors.Author Author { get; set; }
+    public Authors.Author Author { get; set; } = null!;
 
     [JsonPropertyName("authors")]
-    public Authors.Author[] Authors { get; set; }
+    public CollectionSegment<Authors.Author> Authors { get; set; } = null!;
 
     [JsonPropertyName("movie")]
-    public Movies.Movie Movie { get; set; }
+    public Movies.Movie Movie { get; set; } = null!;
 
     [JsonPropertyName("movies")]
-    public Movies.Movie[] Movies { get; set; }
+    public CollectionSegment<Movies.Movie> Movies { get; set; } = null!;
 
     [JsonPropertyName("review")]
-    public Review Review { get; set; }
+    public Review Review { get; set; } = null!;
 
     [JsonPropertyName("reviews")]
-    public Review[] Reviews { get; set; }
-
-    [JsonPropertyName("searchAuthors")]
-    public Connection<Authors.Author> SearchAuthors { get; set; }
-
-    [JsonPropertyName("searchMovies")]
-    public Connection<Movies.Movie> SearchMovies { get; set; }
-
-    [JsonPropertyName("searchReviews")]
-    public Connection<Review> SearchReviews { get; set; }
+    public CollectionSegment<Review> Reviews { get; set; } = null!;
 
     [JsonPropertyName("version")]
-    public Versions.Version Version { get; set; }
+    public Versions.Version Version { get; set; } = null!;
 
     [JsonPropertyName("createReview")]
-    public Review CreateReview { get; set; }
+    public Review CreateReview { get; set; } = null!;
 
     [JsonPropertyName("deleteReview")]
     public bool? DeleteReview { get; set; }

@@ -12,10 +12,10 @@ public partial class Review
     public int Stars { get; set; }
 
     [JsonPropertyName("author")]
-    public Author Author { get; set; }
+    public Author Author { get; set; } = null!;
 
     [JsonPropertyName("movie")]
-    public Movie Movie { get; set; }
+    public Movie Movie { get; set; } = null!;
 }
 
 public partial class Author
@@ -24,10 +24,10 @@ public partial class Author
     public Guid Id { get; set; }
 
     [JsonPropertyName("firstName")]
-    public string FirstName { get; set; }
+    public string FirstName { get; set; } = null!;
 
     [JsonPropertyName("lastName")]
-    public string LastName { get; set; }
+    public string LastName { get; set; } = null!;
 }
 
 public partial class Movie
@@ -36,5 +36,5 @@ public partial class Movie
     public Guid Id { get; set; }
 
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = null!;
 }

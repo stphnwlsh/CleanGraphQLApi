@@ -6,8 +6,8 @@ using System.Text.Json.Serialization;
 public partial class GraphData
 {
     [JsonPropertyName("data")]
-    public Data Data { get; set; }
+    public Data Data { get; set; } = null!;
 
     [JsonPropertyName("errors")]
-    public List<ErrorMessage> Errors { get; set; }
+    public List<ErrorMessage>? Errors { get; set; }
 }

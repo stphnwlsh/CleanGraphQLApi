@@ -13,15 +13,6 @@ using Movies = Application.Movies.Queries;
 public static partial class MovieQueries
 {
     /// <summary>
-    /// Gets every movie, with the reviews written about it.
-    /// </summary>
-    [Authorize]
-    public static async Task<List<Movie>> GetMovies(ISender sender, CancellationToken cancellationToken)
-    {
-        return await sender.Send(new Movies.GetMovies.GetMoviesQuery(), cancellationToken);
-    }
-
-    /// <summary>
     /// Gets a movie by its unique identifier.
     /// </summary>
     /// <param name="id">The unique identifier of the movie.</param>
@@ -32,25 +23,27 @@ public static partial class MovieQueries
     }
 
     /// <summary>
-    /// Finds movies whose title contains a search term, one page at a time.
+    /// Lists movies ordered by title, one page at a time, optionally only those whose title contains a search term.
     /// </summary>
-    /// <param name="query">The words to look for, ignoring case. Leave empty to list every movie.</param>
-    [UsePaging(ConnectionName = "Movies")]
+    /// <param name="query">The words to look for in the title, ignoring case. Leave empty to list every movie.</param>
+    /// <param name="skip">The number of movies to skip, 0 for the first page.</param>
+    /// <param name="take">The largest number of movies to return, from 1 to 50.</param>
+    [UseOffsetPaging(CollectionSegmentName = "Movies")]
     [Authorize]
-    public static async Task<Connection<Movie>> SearchMovies(
+    public static async Task<CollectionSegment<Movie>> GetMovies(
         string? query,
-        int? first,
-        string? after,
+        int? skip,
+        int? take,
         ISender sender,
         CancellationToken cancellationToken)
     {
-        var page = await sender.Send(new Movies.SearchMovies.SearchMoviesQuery
+        var page = await sender.Send(new Movies.GetMovies.GetMoviesQuery
         {
             Query = query,
-            Limit = first ?? Paging.DefaultLimit,
-            Cursor = after
+            Offset = skip ?? 0,
+            Limit = take ?? Paging.DefaultLimit
         }, cancellationToken);
 
-        return page.ToConnection(after);
+        return page.ToCollectionSegment();
     }
 }

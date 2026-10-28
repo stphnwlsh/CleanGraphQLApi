@@ -26,17 +26,15 @@ public static partial class ReviewMutations
     }
 
     /// <summary>
-    /// Updates the author, movie and star rating of a review. Returns true when the review was updated.
+    /// Updates the star rating of a review. Returns true when the review was updated.
     /// </summary>
-    /// <param name="input">The review to update.</param>
+    /// <param name="input">The review and its new star rating.</param>
     [Authorize]
     public static async Task<bool?> UpdateReview(UpdateReviewInput input, ISender sender, CancellationToken cancellationToken)
     {
         return await sender.Send(new Commands.UpdateReview.UpdateReviewCommand
         {
             Id = input.Id,
-            AuthorId = input.AuthorId,
-            MovieId = input.MovieId,
             Stars = input.Stars
         }, cancellationToken);
     }

@@ -5,8 +5,8 @@ using System.Text.Json.Serialization;
 public partial class Version
 {
     [JsonPropertyName("fileVersion")]
-    public string FileVersion { get; set; }
+    public string FileVersion { get; set; } = null!;
 
     [JsonPropertyName("informationalVersion")]
-    public string InformationalVersion { get; set; }
+    public string InformationalVersion { get; set; } = null!;
 }

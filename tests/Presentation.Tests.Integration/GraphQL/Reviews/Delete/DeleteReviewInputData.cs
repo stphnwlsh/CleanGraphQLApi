@@ -6,10 +6,10 @@ using System.Text.Json.Serialization;
 public partial class DeleteReviewInputData
 {
     [JsonPropertyName("query")]
-    public string Query { get; set; }
+    public string Query { get; set; } = null!;
 
     [JsonPropertyName("variables")]
-    public Variables Variables { get; set; }
+    public Variables Variables { get; set; } = null!;
 }
 
 public partial class Variables
