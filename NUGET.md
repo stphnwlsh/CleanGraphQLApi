@@ -13,7 +13,7 @@ dotnet new install CleanGraphQLApi.Template
 ## Usage
 
 ``` bash
-dotnet new cleangraphqlapi --name {YOUR_SOLUTION_NAMESPACE} --author "{YOUR_NAME}"
+dotnet new cleangraphqlapi --name {YOUR_SOLUTION_NAMESPACE} --authorName "{YOUR_NAME}"
 ```
 
 ## Documentation

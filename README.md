@@ -40,7 +40,7 @@ dotnet new install CleanGraphQLApi.Template
 ### Create a solution
 
 ``` bash
-dotnet new cleangraphqlapi --name {YOUR_SOLUTION_NAMESPACE} --author "{YOUR_NAME}"
+dotnet new cleangraphqlapi --name {YOUR_SOLUTION_NAMESPACE} --authorName "{YOUR_NAME}"
 ```
 
 ## Running the project
@@ -55,12 +55,6 @@ The `Dockerfile` has stages for testing, publishing and running, so you can buil
 
 ``` bash
 docker build . --target run --tag cleangraphqlapi:latest --build-arg VERSION_PREFIX={VERSION_NUMBER} --build-arg VERSION_SUFFIX={PRERELEASE_NAME}
-```
-
-Every push to `main` publishes an image to Docker Hub.
-
-``` bash
-docker pull stphnwlsh/cleangraphqlapi
 ```
 
 ## Architecture
@@ -87,7 +81,7 @@ The one deliberate break from Clean Architecture is that the Presentation projec
 - Object mapping using [Mapperly](https://mapperly.riok.app)
 - In-memory data using [Entity Framework Core](https://learn.microsoft.com/ef/core/providers/in-memory/) seeded with [Bogus](https://github.com/bchavez/Bogus)
 - Testing using [xUnit](https://xunit.net), [Shouldly](https://github.com/shouldly/shouldly) and [NSubstitute](https://github.com/nsubstitute/NSubstitute), with coverage from [Coverlet](https://github.com/coverlet-coverage/coverlet)
-- CI with GitHub Actions: build and test, 95% coverage gate, [Trivy](https://trivy.dev) container scan, [CodeQL](https://codeql.github.com) static analysis, then Docker Hub and NuGet publishing from `main` using [trusted publishing](https://learn.microsoft.com/nuget/nuget-org/trusted-publishing)
+- CI with GitHub Actions: build and test, 95% coverage gate, [Trivy](https://trivy.dev) container scan, [CodeQL](https://codeql.github.com) static analysis, then NuGet publishing and a GitHub release from `main` using [trusted publishing](https://learn.microsoft.com/nuget/nuget-org/trusted-publishing)
 - Monthly grouped dependency updates using [Dependabot](https://docs.github.com/code-security/dependabot)
 
 ## Related templates
