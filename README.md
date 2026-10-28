@@ -85,7 +85,7 @@ The one deliberate break from Clean Architecture is that the Presentation projec
 
 - GraphQL using [Hot Chocolate](https://chillicream.com/docs/hotchocolate) with the [Nitro](https://chillicream.com/docs/nitro) IDE served from `/graphql`
 - Schema descriptions generated from the XML documentation comments on the Application models and resolvers
-- Offset paging and search on the `movies`, `authors` and `reviews` queries (`skip`, `take`, `pageInfo`, `totalCount`), such as `{ movies(query: "star", skip: 0, take: 10) { totalCount items { title } } }`
+- Relay-style cursor paging and search on the `movies`, `authors` and `reviews` queries (`first`, `after`, `pageInfo`, `totalCount`), with each cursor holding the offset the shared Application queries page by
 - Optional JWT bearer authentication on the queries and mutations, turned on by setting an authority
 - Logging using [Serilog](https://github.com/serilog/serilog), with [Seq](https://datalust.co/seq) when running in Docker
 - Mediator pattern using [Mediator](https://github.com/martinothamar/Mediator)

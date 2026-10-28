@@ -33,9 +33,9 @@ public class AuthenticationTests : IDisposable
         }));
 
     [Theory]
-    [InlineData("{movies{items{id}}}")]
-    [InlineData("{authors{items{id}}}")]
-    [InlineData("{reviews{items{id}}}")]
+    [InlineData("{movies{nodes{id}}}")]
+    [InlineData("{authors{nodes{id}}}")]
+    [InlineData("{reviews{nodes{id}}}")]
     public async Task Query_WithoutToken_ShouldReturn_NotAuthenticated(string query)
     {
         // Arrange
@@ -72,7 +72,7 @@ public class AuthenticationTests : IDisposable
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CreateToken("https://someone-else.example.com"));
 
         // Act
-        var result = await Send(client, "{movies{items{id}}}");
+        var result = await Send(client, "{movies{nodes{id}}}");
 
         // Assert
         result.Errors.ShouldNotBeEmpty();
@@ -87,11 +87,11 @@ public class AuthenticationTests : IDisposable
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", CreateToken(Audience));
 
         // Act
-        var result = await Send(client, "{movies{items{id}}}");
+        var result = await Send(client, "{movies{nodes{id}}}");
 
         // Assert
         result.Errors.ShouldBeNull();
-        result.Data.Movies.Items.ShouldNotBeEmpty();
+        result.Data.Movies.Nodes.ShouldNotBeEmpty();
     }
 
     [Fact]

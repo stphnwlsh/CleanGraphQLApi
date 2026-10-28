@@ -26,24 +26,22 @@ public static partial class AuthorQueries
     /// Lists authors ordered by last name then first name, one page at a time, optionally only those whose name contains a search term.
     /// </summary>
     /// <param name="query">The words to look for in the name, ignoring case. Leave empty to list every author.</param>
-    /// <param name="skip">The number of authors to skip, 0 for the first page.</param>
-    /// <param name="take">The largest number of authors to return, from 1 to 50.</param>
-    [UseOffsetPaging(CollectionSegmentName = "Authors")]
+    [UsePaging(ConnectionName = "Authors")]
     [Authorize]
-    public static async Task<CollectionSegment<Author>> GetAuthors(
+    public static async Task<Connection<Author>> GetAuthors(
         string? query,
-        int? skip,
-        int? take,
+        int? first,
+        string? after,
         ISender sender,
         CancellationToken cancellationToken)
     {
         var page = await sender.Send(new Authors.GetAuthors.GetAuthorsQuery
         {
             Query = query,
-            Offset = skip ?? 0,
-            Limit = take ?? Paging.DefaultLimit
+            Offset = after.ToOffset(),
+            Limit = first ?? Paging.DefaultLimit
         }, cancellationToken);
 
-        return page.ToCollectionSegment();
+        return page.ToConnection();
     }
 }

@@ -27,15 +27,13 @@ public static partial class ReviewQueries
     /// </summary>
     /// <param name="movieId">Only return reviews of this movie. Leave empty for every movie.</param>
     /// <param name="authorId">Only return reviews by this author. Leave empty for every author.</param>
-    /// <param name="skip">The number of reviews to skip, 0 for the first page.</param>
-    /// <param name="take">The largest number of reviews to return, from 1 to 50.</param>
-    [UseOffsetPaging(CollectionSegmentName = "Reviews")]
+    [UsePaging(ConnectionName = "Reviews")]
     [Authorize]
-    public static async Task<CollectionSegment<Review>> GetReviews(
+    public static async Task<Connection<Review>> GetReviews(
         Guid? movieId,
         Guid? authorId,
-        int? skip,
-        int? take,
+        int? first,
+        string? after,
         ISender sender,
         CancellationToken cancellationToken)
     {
@@ -43,10 +41,10 @@ public static partial class ReviewQueries
         {
             MovieId = movieId,
             AuthorId = authorId,
-            Offset = skip ?? 0,
-            Limit = take ?? Paging.DefaultLimit
+            Offset = after.ToOffset(),
+            Limit = first ?? Paging.DefaultLimit
         }, cancellationToken);
 
-        return page.ToCollectionSegment();
+        return page.ToConnection();
     }
 }

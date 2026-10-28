@@ -9,19 +9,19 @@ public partial class Data
     public Authors.Author Author { get; set; } = null!;
 
     [JsonPropertyName("authors")]
-    public CollectionSegment<Authors.Author> Authors { get; set; } = null!;
+    public Connection<Authors.Author> Authors { get; set; } = null!;
 
     [JsonPropertyName("movie")]
     public Movies.Movie Movie { get; set; } = null!;
 
     [JsonPropertyName("movies")]
-    public CollectionSegment<Movies.Movie> Movies { get; set; } = null!;
+    public Connection<Movies.Movie> Movies { get; set; } = null!;
 
     [JsonPropertyName("review")]
     public Review Review { get; set; } = null!;
 
     [JsonPropertyName("reviews")]
-    public CollectionSegment<Review> Reviews { get; set; } = null!;
+    public Connection<Review> Reviews { get; set; } = null!;
 
     [JsonPropertyName("version")]
     public Versions.Version Version { get; set; } = null!;

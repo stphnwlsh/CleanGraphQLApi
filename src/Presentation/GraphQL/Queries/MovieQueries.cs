@@ -26,24 +26,22 @@ public static partial class MovieQueries
     /// Lists movies ordered by title, one page at a time, optionally only those whose title contains a search term.
     /// </summary>
     /// <param name="query">The words to look for in the title, ignoring case. Leave empty to list every movie.</param>
-    /// <param name="skip">The number of movies to skip, 0 for the first page.</param>
-    /// <param name="take">The largest number of movies to return, from 1 to 50.</param>
-    [UseOffsetPaging(CollectionSegmentName = "Movies")]
+    [UsePaging(ConnectionName = "Movies")]
     [Authorize]
-    public static async Task<CollectionSegment<Movie>> GetMovies(
+    public static async Task<Connection<Movie>> GetMovies(
         string? query,
-        int? skip,
-        int? take,
+        int? first,
+        string? after,
         ISender sender,
         CancellationToken cancellationToken)
     {
         var page = await sender.Send(new Movies.GetMovies.GetMoviesQuery
         {
             Query = query,
-            Offset = skip ?? 0,
-            Limit = take ?? Paging.DefaultLimit
+            Offset = after.ToOffset(),
+            Limit = first ?? Paging.DefaultLimit
         }, cancellationToken);
 
-        return page.ToCollectionSegment();
+        return page.ToConnection();
     }
 }

@@ -11,16 +11,16 @@ type Query {
   authors(
     "The words to look for in the name, ignoring case. Leave empty to list every author."
     query: String
-    "The number of authors to skip, 0 for the first page."
-    skip: Int
-    "The largest number of authors to return, from 1 to 50."
-    take: Int
-  ): AuthorsCollectionSegment
+    "Returns the first _n_ elements from the list."
+    first: Int
+    "Returns the elements in the list that come after the specified cursor."
+    after: String
+  ): AuthorsConnection
     @listSize(
       assumedSize: 50
-      slicingArguments: ["take"]
+      slicingArguments: ["first"]
       slicingArgumentDefaultValue: 10
-      sizedFields: ["items"]
+      sizedFields: ["edges", "nodes"]
       requireOneSlicingArgument: false
     )
     @cost(weight: "10")
@@ -31,16 +31,16 @@ type Query {
   movies(
     "The words to look for in the title, ignoring case. Leave empty to list every movie."
     query: String
-    "The number of movies to skip, 0 for the first page."
-    skip: Int
-    "The largest number of movies to return, from 1 to 50."
-    take: Int
-  ): MoviesCollectionSegment
+    "Returns the first _n_ elements from the list."
+    first: Int
+    "Returns the elements in the list that come after the specified cursor."
+    after: String
+  ): MoviesConnection
     @listSize(
       assumedSize: 50
-      slicingArguments: ["take"]
+      slicingArguments: ["first"]
       slicingArgumentDefaultValue: 10
-      sizedFields: ["items"]
+      sizedFields: ["edges", "nodes"]
       requireOneSlicingArgument: false
     )
     @cost(weight: "10")
@@ -53,16 +53,16 @@ type Query {
     movieId: UUID
     "Only return reviews by this author. Leave empty for every author."
     authorId: UUID
-    "The number of reviews to skip, 0 for the first page."
-    skip: Int
-    "The largest number of reviews to return, from 1 to 50."
-    take: Int
-  ): ReviewsCollectionSegment
+    "Returns the first _n_ elements from the list."
+    first: Int
+    "Returns the elements in the list that come after the specified cursor."
+    after: String
+  ): ReviewsConnection
     @listSize(
       assumedSize: 50
-      slicingArguments: ["take"]
+      slicingArguments: ["first"]
       slicingArgumentDefaultValue: 10
-      sizedFields: ["items"]
+      sizedFields: ["edges", "nodes"]
       requireOneSlicingArgument: false
     )
     @cost(weight: "10")
@@ -94,21 +94,24 @@ type Author {
   reviews: [Review!]
 }
 
-"A segment of a collection."
-type AuthorsCollectionSegment {
+"A connection to a list of items."
+type AuthorsConnection {
   "Information to aid in pagination."
-  pageInfo: CollectionSegmentInfo!
-  "A flattened list of the items."
-  items: [Author!]
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [AuthorsEdge!]
+  "A flattened list of the nodes."
+  nodes: [Author!]
+  "Identifies the total count of items in the connection."
   totalCount: Int! @cost(weight: "10")
 }
 
-"Information about the offset pagination."
-type CollectionSegmentInfo {
-  "Indicates whether more items exist following the set defined by the clients arguments."
-  hasNextPage: Boolean!
-  "Indicates whether more items exist prior the set defined by the clients arguments."
-  hasPreviousPage: Boolean!
+"An edge in a connection."
+type AuthorsEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Author!
 }
 
 "A movie that can be reviewed."
@@ -121,13 +124,36 @@ type Movie {
   reviews: [Review!]
 }
 
-"A segment of a collection."
-type MoviesCollectionSegment {
+"A connection to a list of items."
+type MoviesConnection {
   "Information to aid in pagination."
-  pageInfo: CollectionSegmentInfo!
-  "A flattened list of the items."
-  items: [Movie!]
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [MoviesEdge!]
+  "A flattened list of the nodes."
+  nodes: [Movie!]
+  "Identifies the total count of items in the connection."
   totalCount: Int! @cost(weight: "10")
+}
+
+"An edge in a connection."
+type MoviesEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Movie!
+}
+
+"Information about pagination in a connection."
+type PageInfo {
+  "Indicates whether more edges exist following the set defined by the clients arguments."
+  hasNextPage: Boolean!
+  "Indicates whether more edges exist prior the set defined by the clients arguments."
+  hasPreviousPage: Boolean!
+  "When paginating backwards, the cursor to continue."
+  startCursor: String
+  "When paginating forwards, the cursor to continue."
+  endCursor: String
 }
 
 "A star rating an author has given a movie."
@@ -160,13 +186,24 @@ type ReviewedMovie {
   title: String!
 }
 
-"A segment of a collection."
-type ReviewsCollectionSegment {
+"A connection to a list of items."
+type ReviewsConnection {
   "Information to aid in pagination."
-  pageInfo: CollectionSegmentInfo!
-  "A flattened list of the items."
-  items: [Review!]
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [ReviewsEdge!]
+  "A flattened list of the nodes."
+  nodes: [Review!]
+  "Identifies the total count of items in the connection."
   totalCount: Int! @cost(weight: "10")
+}
+
+"An edge in a connection."
+type ReviewsEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Review!
 }
 
 "The version details of the running application."
