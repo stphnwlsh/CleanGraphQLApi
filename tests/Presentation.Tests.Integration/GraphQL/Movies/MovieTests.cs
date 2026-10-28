@@ -257,4 +257,26 @@ public class MovieTests
         result.Errors.Count.ShouldBe(1);
         result.Errors[0].Extensions.Code.ShouldBe("HC0051");
     }
+
+    [Fact]
+    public async Task SearchMovies_ShouldReturn_EmptyPage_WhenNothingMatches()
+    {
+        // Arrange
+        using var client = Application.CreateClient();
+
+        // Act
+        using var response = await client.GetAsync("/graphql?query={searchMovies(query:\"zzzz-no-such-movie\"){totalCount,pageInfo{hasNextPage,hasPreviousPage,startCursor,endCursor},nodes{id}}}");
+        var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
+
+        // Assert
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+        var page = result.Data.SearchMovies;
+        page.TotalCount.ShouldBe(0);
+        page.Nodes.ShouldBeEmpty();
+        page.PageInfo.HasNextPage.ShouldBeFalse();
+        page.PageInfo.HasPreviousPage.ShouldBeFalse();
+        page.PageInfo.StartCursor.ShouldBeNull();
+        page.PageInfo.EndCursor.ShouldBeNull();
+    }
 }
