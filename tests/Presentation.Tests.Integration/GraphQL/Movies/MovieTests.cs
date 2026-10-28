@@ -216,14 +216,17 @@ public class MovieTests
         }
     }
 
-    [Fact]
-    public async Task Movies_ShouldReturn_ValidationError_ForInvalidCursor()
+    [Theory]
+    [InlineData("not-a-cursor")]
+    [InlineData("cGFnZTo1")]
+    [InlineData("b2Zmc2V0OmFiYw==")]
+    public async Task Movies_ShouldReturn_ValidationError_ForInvalidCursor(string cursor)
     {
         // Arrange
         using var client = Application.CreateClient();
 
         // Act
-        using var response = await client.GetAsync("/graphql?query={movies(after:\"not-a-cursor\"){totalCount}}");
+        using var response = await client.GetAsync($"/graphql?query={{movies(after:\"{Uri.EscapeDataString(cursor)}\"){{totalCount}}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
