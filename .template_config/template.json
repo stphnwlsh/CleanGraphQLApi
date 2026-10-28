@@ -3,14 +3,15 @@
   "author": "Stephen Walsh",
   "classifications": [
     "Clean Architecture",
-    "Clean",
-    "GraphQL",
+    "Web",
     "API",
+    "GraphQL",
     "Dotnet",
     "Docker"
   ],
   "identity": "CleanGraphQLApi.Template",
   "name": "Clean GraphQL API Template",
+  "description": "A dotnet new template for a GraphQL API using GraphQL for .NET, built with a streamlined Clean Architecture on .NET 10.",
   "shortName": "cleangraphqlapi",
   "tags": {
     "language": "C#",
