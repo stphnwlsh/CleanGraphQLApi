@@ -3,6 +3,7 @@ namespace CleanGraphQLApi.Presentation.GraphQL.Queries;
 using Application.Common.Paging;
 using Application.Reviews.Entities;
 using Extensions;
+using HotChocolate.Authorization;
 using HotChocolate.Types;
 using HotChocolate.Types.Pagination;
 using Mediator;
@@ -14,6 +15,7 @@ public static partial class ReviewQueries
     /// <summary>
     /// Gets every review, with its movie and author.
     /// </summary>
+    [Authorize]
     public static async Task<List<Review>> GetReviews(ISender sender, CancellationToken cancellationToken)
     {
         return await sender.Send(new Reviews.GetReviews.GetReviewsQuery(), cancellationToken);
@@ -23,6 +25,7 @@ public static partial class ReviewQueries
     /// Gets a review by its unique identifier.
     /// </summary>
     /// <param name="id">The unique identifier of the review.</param>
+    [Authorize]
     public static async Task<Review?> GetReview(Guid id, ISender sender, CancellationToken cancellationToken)
     {
         return await sender.Send(new Reviews.GetReviewById.GetReviewByIdQuery { Id = id }, cancellationToken);
@@ -34,6 +37,7 @@ public static partial class ReviewQueries
     /// <param name="movieId">Only return reviews of this movie. Leave empty for every movie.</param>
     /// <param name="authorId">Only return reviews by this author. Leave empty for every author.</param>
     [UsePaging(ConnectionName = "Reviews")]
+    [Authorize]
     public static async Task<Connection<Review>> SearchReviews(
         Guid? movieId,
         Guid? authorId,
