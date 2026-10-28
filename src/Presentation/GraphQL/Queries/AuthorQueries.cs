@@ -3,6 +3,7 @@ namespace CleanGraphQLApi.Presentation.GraphQL.Queries;
 using Application.Authors.Entities;
 using Application.Common.Paging;
 using Extensions;
+using HotChocolate.Authorization;
 using HotChocolate.Types;
 using HotChocolate.Types.Pagination;
 using Mediator;
@@ -14,6 +15,7 @@ public static partial class AuthorQueries
     /// <summary>
     /// Gets every author, with the reviews they have written.
     /// </summary>
+    [Authorize]
     public static async Task<List<Author>> GetAuthors(ISender sender, CancellationToken cancellationToken)
     {
         return await sender.Send(new Authors.GetAuthors.GetAuthorsQuery(), cancellationToken);
@@ -23,6 +25,7 @@ public static partial class AuthorQueries
     /// Gets an author by their unique identifier.
     /// </summary>
     /// <param name="id">The unique identifier of the author.</param>
+    [Authorize]
     public static async Task<Author?> GetAuthor(Guid id, ISender sender, CancellationToken cancellationToken)
     {
         return await sender.Send(new Authors.GetAuthorById.GetAuthorByIdQuery { Id = id }, cancellationToken);
@@ -33,6 +36,7 @@ public static partial class AuthorQueries
     /// </summary>
     /// <param name="query">The words to look for, ignoring case. Leave empty to list every author.</param>
     [UsePaging(ConnectionName = "Authors")]
+    [Authorize]
     public static async Task<Connection<Author>> SearchAuthors(
         string? query,
         int? first,

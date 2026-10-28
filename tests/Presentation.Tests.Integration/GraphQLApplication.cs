@@ -1,20 +1,28 @@
 namespace CleanGraphQLApi.Presentation.Tests.Integration;
 
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-internal class GraphQLApplication : WebApplicationFactory<Program>
+internal sealed class GraphQLApplication(
+    string environment = "local",
+    Dictionary<string, string> settings = null,
+    Action<IServiceCollection> configureServices = null) : WebApplicationFactory<Program>
 {
-    private readonly string environment;
-
-    public GraphQLApplication(string environment = "local")
-    {
-        this.environment = environment;
-    }
-
     protected override IHost CreateHost(IHostBuilder builder)
     {
-        _ = builder.UseEnvironment(this.environment);
+        _ = builder.UseEnvironment(environment);
+
+        if (settings is not null)
+        {
+            _ = builder.ConfigureHostConfiguration(configuration => configuration.AddInMemoryCollection(settings));
+        }
+
+        if (configureServices is not null)
+        {
+            _ = builder.ConfigureServices(configureServices);
+        }
 
         return base.CreateHost(builder);
     }

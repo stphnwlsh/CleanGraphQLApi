@@ -43,6 +43,16 @@ dotnet new install CleanGraphQLApi.Template
 dotnet new cleangraphqlapi --name {YOUR_SOLUTION_NAMESPACE} --authorName "{YOUR_NAME}"
 ```
 
+### Protect the API with bearer tokens (optional)
+
+The API runs without authentication unless you give it an authorization server. Pass one when you create the solution, or set `Authentication:Authority` and `Authentication:Audience` in `appsettings.json` later.
+
+``` bash
+dotnet new cleangraphqlapi --name {YOUR_SOLUTION_NAMESPACE} --authority https://{YOUR_AUTHORIZATION_SERVER} --audience https://{YOUR_API_URL}
+```
+
+With an authority set, the movie, author and review queries and the review mutations need a JWT bearer token issued by that server for the audience, and return an `AUTH_NOT_AUTHENTICATED` error without one. The `version` query, the schema and Nitro stay open. In Nitro, add the token under the connection's authentication settings.
+
 ## Running the project
 
 ``` bash
@@ -76,6 +86,7 @@ The one deliberate break from Clean Architecture is that the Presentation projec
 - GraphQL using [Hot Chocolate](https://chillicream.com/docs/hotchocolate) with the [Nitro](https://chillicream.com/docs/nitro) IDE served from `/graphql`
 - Schema descriptions generated from the XML documentation comments on the Application models and resolvers
 - Search with Relay-style cursor paging (`first`, `after`, `pageInfo`, `totalCount`) backed by the shared Application search queries
+- Optional JWT bearer authentication on the queries and mutations, turned on by setting an authority
 - Logging using [Serilog](https://github.com/serilog/serilog), with [Seq](https://datalust.co/seq) when running in Docker
 - Mediator pattern using [Mediator](https://github.com/martinothamar/Mediator)
 - Validation using [FluentValidation](https://github.com/FluentValidation/FluentValidation) in an Application pipeline behaviour

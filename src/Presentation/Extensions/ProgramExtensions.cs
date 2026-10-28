@@ -4,9 +4,12 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Application;
 using Application.Common.Paging;
+using Authentication;
 using ChilliCream.Nitro.App;
 using GraphQL.Errors;
 using Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -29,11 +32,37 @@ public static class ProgramExtensions
 
         #endregion Logging
 
+        #region Authentication
+
+        var authentication = AuthenticationSettings.FromConfiguration(builder.Configuration);
+
+        if (authentication.Enabled)
+        {
+            _ = builder.Services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = authentication.Authority;
+                    options.Audience = authentication.Audience;
+                    options.MapInboundClaims = false;
+                });
+            _ = builder.Services.AddAuthorization();
+        }
+        else
+        {
+            // Fields always ask for authorization, so without an authority every request is let through.
+            _ = builder.Services.AddAuthorizationBuilder()
+                .SetDefaultPolicy(new AuthorizationPolicyBuilder().RequireAssertion(_ => true).Build());
+        }
+
+        #endregion Authentication
+
         #region GraphQL
 
         _ = builder.Services
             .AddGraphQLServer()
             .AddPresentationTypes()
+            .AddAuthorization()
             .AddErrorFilter<ApplicationErrorFilter>()
             .AddMaxExecutionDepthRule(15)
             .ModifyServerOptions(options => options.Tool.ServeMode = ServeMode.Embedded)
@@ -65,6 +94,17 @@ public static class ProgramExtensions
         _ = app.UseSerilogRequestLogging();
 
         #endregion Logging
+
+        #region Authentication
+
+        if (AuthenticationSettings.FromConfiguration(app.Configuration).Enabled)
+        {
+            _ = app.UseAuthentication();
+        }
+
+        _ = app.UseAuthorization();
+
+        #endregion Authentication
 
         #region GraphQL
 

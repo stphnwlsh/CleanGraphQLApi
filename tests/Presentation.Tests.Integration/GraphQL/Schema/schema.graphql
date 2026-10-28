@@ -242,6 +242,16 @@ input UpdateReviewInput {
   stars: Int!
 }
 
+"Defines when a policy shall be executed."
+enum ApplyPolicy {
+  "Before the resolver was executed."
+  BEFORE_RESOLVER
+  "After the resolver was executed."
+  AFTER_RESOLVER
+  "The policy is applied in the validation step before the execution."
+  VALIDATION
+}
+
 "The `UUID` scalar type represents a Universally Unique Identifier (UUID) as defined by RFC 9562."
 scalar UUID
   @specifiedBy(url: "https://scalars.graphql.org/chillicream/uuid.html")
