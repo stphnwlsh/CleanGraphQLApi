@@ -26,6 +26,7 @@ public static partial class MovieSummaryType
         IReviewsByMovieIdDataLoader reviews,
         CancellationToken cancellationToken)
     {
-        return await reviews.LoadAsync(movie.Id, cancellationToken) ?? [];
+        // The DataLoader returns a list for every id, empty when there are no reviews, so a missing entry is a bug.
+        return await reviews.LoadRequiredAsync(movie.Id, cancellationToken);
     }
 }

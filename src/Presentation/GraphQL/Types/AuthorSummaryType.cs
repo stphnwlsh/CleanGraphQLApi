@@ -27,6 +27,7 @@ public static partial class AuthorSummaryType
         IReviewsByAuthorIdDataLoader reviews,
         CancellationToken cancellationToken)
     {
-        return await reviews.LoadAsync(author.Id, cancellationToken) ?? [];
+        // The DataLoader returns a list for every id, empty when there are no reviews, so a missing entry is a bug.
+        return await reviews.LoadRequiredAsync(author.Id, cancellationToken);
     }
 }
