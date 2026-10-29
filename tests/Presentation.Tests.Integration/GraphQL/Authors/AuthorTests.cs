@@ -18,7 +18,7 @@ public class AuthorTests
         using var client = Application.CreateClient();
 
         // Act
-        using var response = await client.GetAsync("/graphql?query={authors(first:50){nodes{id,firstName,lastName,reviews{id,stars,movie{id,title}}}}}");
+        using var response = await client.GetAsync("/graphql?query={authors(first:50){nodes{id,firstName,lastName,reviewCount,averageStars,reviews{id,stars,movie{id,title}}}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
@@ -38,6 +38,8 @@ public class AuthorTests
             author.FirstName.ShouldNotBeNullOrWhiteSpace();
             _ = author.LastName.ShouldBeOfType<string>();
             author.LastName.ShouldNotBeNullOrWhiteSpace();
+            author.Reviews.Length.ShouldBe(author.ReviewCount);
+            (author.AverageStars is null).ShouldBe(author.ReviewCount == 0);
 
             foreach (var review in author.Reviews)
             {

@@ -101,7 +101,7 @@ type AuthorsConnection {
   "A list of edges."
   edges: [AuthorsEdge!]
   "A flattened list of the nodes."
-  nodes: [Author!]
+  nodes: [AuthorSummary!]
   "Identifies the total count of items in the connection."
   totalCount: Int! @cost(weight: "10")
 }
@@ -111,7 +111,23 @@ type AuthorsEdge {
   "A cursor for use in pagination."
   cursor: String!
   "The item at the end of the edge."
-  node: Author!
+  node: AuthorSummary!
+}
+
+"An author in a list, with how many reviews they have written and their average star rating. Their reviews are loaded for the whole page at once."
+type AuthorSummary {
+  "The reviews the author has written. They're loaded for the whole page in one query."
+  reviews: [Review!]! @cost(weight: "10")
+  "The unique identifier of the author."
+  id: UUID!
+  "The author's first name."
+  firstName: String!
+  "The author's last name."
+  lastName: String!
+  "The number of reviews the author has written."
+  reviewCount: Int!
+  "The average star rating the author gives to one decimal place, or null when they have no reviews."
+  averageStars: Float
 }
 
 "A movie that can be reviewed."
@@ -131,7 +147,7 @@ type MoviesConnection {
   "A list of edges."
   edges: [MoviesEdge!]
   "A flattened list of the nodes."
-  nodes: [Movie!]
+  nodes: [MovieSummary!]
   "Identifies the total count of items in the connection."
   totalCount: Int! @cost(weight: "10")
 }
@@ -141,7 +157,21 @@ type MoviesEdge {
   "A cursor for use in pagination."
   cursor: String!
   "The item at the end of the edge."
-  node: Movie!
+  node: MovieSummary!
+}
+
+"A movie in a list, with how many reviews it has and their average star rating. Its reviews are loaded for the whole page at once."
+type MovieSummary {
+  "The reviews written about the movie. They're loaded for the whole page in one query."
+  reviews: [Review!]! @cost(weight: "10")
+  "The unique identifier of the movie."
+  id: UUID!
+  "The title of the movie."
+  title: String!
+  "The number of reviews written about the movie."
+  reviewCount: Int!
+  "The average star rating to one decimal place, or null when the movie has no reviews."
+  averageStars: Float
 }
 
 "Information about pagination in a connection."

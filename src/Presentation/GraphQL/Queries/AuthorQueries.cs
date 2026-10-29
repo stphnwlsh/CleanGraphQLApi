@@ -28,7 +28,7 @@ public static partial class AuthorQueries
     /// <param name="query">The words to look for in the name, ignoring case. Leave empty to list every author.</param>
     [UsePaging(ConnectionName = "Authors")]
     [Authorize]
-    public static async Task<Connection<Author>> GetAuthors(
+    public static async Task<Connection<AuthorSummary>> GetAuthors(
         string? query,
         int? first,
         string? after,

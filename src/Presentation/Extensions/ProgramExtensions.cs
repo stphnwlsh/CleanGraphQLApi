@@ -11,7 +11,10 @@ using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 
 [ExcludeFromCodeCoverage]
@@ -81,6 +84,7 @@ public static class ProgramExtensions
         _ = builder.Services.AddMediator(options => options.ServiceLifetime = ServiceLifetime.Scoped);
         _ = builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("MovieReviews"));
         _ = builder.Services.AddApplication();
+        _ = builder.Services.AddHealthChecks().AddInfrastructureHealthChecks("ready");
 
         #endregion Project Dependencies
 
@@ -91,9 +95,21 @@ public static class ProgramExtensions
     {
         #region Database
 
-        _ = app.Services.InitialiseInfrastructure();
+        _ = app.Services.InitialiseInfrastructure(app.Configuration.GetValue<bool>("Database:SeedSampleData"));
 
         #endregion Database
+
+        #region Security
+
+        // HSTS tells browsers to only use HTTPS from then on, so it's left off for local runs.
+        if (!app.Environment.IsDevelopment() && !app.Environment.IsEnvironment("local"))
+        {
+            _ = app.UseHsts();
+        }
+
+        _ = app.UseHttpsRedirection();
+
+        #endregion Security
 
         #region Logging
 
@@ -112,23 +128,19 @@ public static class ProgramExtensions
 
         #endregion Authentication
 
+        #region Health
+
+        // Liveness runs no checks, so it only fails when the process can't answer. Readiness checks the database.
+        _ = app.MapHealthChecks("/health/live", new HealthCheckOptions { Predicate = _ => false }).AllowAnonymous();
+        _ = app.MapHealthChecks("/health/ready", new HealthCheckOptions { Predicate = check => check.Tags.Contains("ready") }).AllowAnonymous();
+
+        #endregion Health
+
         #region GraphQL
 
         _ = app.MapGraphQL();
 
         #endregion GraphQL
-
-        #region Security
-
-        _ = app.UseHsts();
-
-        #endregion Security
-
-        #region API Configuration
-
-        _ = app.UseHttpsRedirection();
-
-        #endregion API Configuration
 
         return app;
     }

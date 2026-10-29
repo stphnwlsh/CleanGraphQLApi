@@ -17,7 +17,7 @@ public class MovieTests
         using var client = Application.CreateClient();
 
         // Act
-        using var response = await client.GetAsync("/graphql?query={movies(first:50){nodes{id,title,reviews{id,stars,author{id,firstName,lastName}}}}}");
+        using var response = await client.GetAsync("/graphql?query={movies(first:50){nodes{id,title,reviewCount,averageStars,reviews{id,stars,author{id,firstName,lastName}}}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
@@ -35,6 +35,8 @@ public class MovieTests
             _ = movie.Id.ShouldBeOfType<Guid>();
             _ = movie.Title.ShouldBeOfType<string>();
             movie.Title.ShouldNotBeNullOrWhiteSpace();
+            movie.Reviews.Length.ShouldBe(movie.ReviewCount);
+            (movie.AverageStars is null).ShouldBe(movie.ReviewCount == 0);
 
             foreach (var review in movie.Reviews)
             {

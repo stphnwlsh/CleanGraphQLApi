@@ -28,7 +28,7 @@ public static partial class MovieQueries
     /// <param name="query">The words to look for in the title, ignoring case. Leave empty to list every movie.</param>
     [UsePaging(ConnectionName = "Movies")]
     [Authorize]
-    public static async Task<Connection<Movie>> GetMovies(
+    public static async Task<Connection<MovieSummary>> GetMovies(
         string? query,
         int? first,
         string? after,

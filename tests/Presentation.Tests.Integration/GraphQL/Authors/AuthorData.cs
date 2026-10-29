@@ -14,6 +14,12 @@ public partial class Author
     [JsonPropertyName("lastName")]
     public string LastName { get; set; } = null!;
 
+    [JsonPropertyName("reviewCount")]
+    public int ReviewCount { get; set; }
+
+    [JsonPropertyName("averageStars")]
+    public double? AverageStars { get; set; }
+
     [JsonPropertyName("reviews")]
     public Review[] Reviews { get; set; } = [];
 }

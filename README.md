@@ -86,16 +86,20 @@ The one deliberate break from Clean Architecture is that the Presentation projec
 - GraphQL using [Hot Chocolate](https://chillicream.com/docs/hotchocolate) with the [Nitro](https://chillicream.com/docs/nitro) IDE served from `/graphql`
 - Schema descriptions generated from the XML documentation comments on the Application models and resolvers
 - Relay-style cursor paging and search on the `movies`, `authors` and `reviews` queries (`first`, `after`, `pageInfo`, `totalCount`), with each cursor holding the offset the shared Application queries page by
+- List items carry a review count and average stars worked out by the database, and their `reviews` field is loaded for the whole page at once by a [DataLoader](https://chillicream.com/docs/hotchocolate/fetching-data/dataloader), so a page of 50 movies with reviews takes three queries, not 52
 - Optional JWT bearer authentication on the queries and mutations, turned on by setting an authority
 - Logging using [Serilog](https://github.com/serilog/serilog), with [Seq](https://datalust.co/seq) when running in Docker
 - Mediator pattern using [Mediator](https://github.com/martinothamar/Mediator)
 - Validation using [FluentValidation](https://github.com/FluentValidation/FluentValidation) in an Application pipeline behaviour
 - GraphQL errors mapped from Application exceptions, with validation failures and not-found codes in the error extensions
 - Object mapping using [Mapperly](https://mapperly.riok.app)
-- Data stored in [SQLite](https://learn.microsoft.com/ef/core/providers/sqlite/) using [Entity Framework Core](https://learn.microsoft.com/ef/core) migrations, seeded with [Bogus](https://github.com/bchavez/Bogus). Tests use a throwaway in-memory SQLite database, so they never touch a real one
+- Data stored in [SQLite](https://learn.microsoft.com/ef/core/providers/sqlite/) using [Entity Framework Core](https://learn.microsoft.com/ef/core) migrations, seeded with [Bogus](https://github.com/bchavez/Bogus) only when `Database:SeedSampleData` is on. Each test uses its own throwaway in-memory SQLite database, so tests never touch a real one or each other's data
 - Testing using [xUnit](https://xunit.net), [Shouldly](https://github.com/shouldly/shouldly) and [NSubstitute](https://github.com/nsubstitute/NSubstitute), with coverage from [Coverlet](https://github.com/coverlet-coverage/coverlet)
-- CI with GitHub Actions: build and test, 95% coverage gate, [Trivy](https://trivy.dev) container scan, [CodeQL](https://codeql.github.com) static analysis, then NuGet publishing and a GitHub release from `main` using [trusted publishing](https://learn.microsoft.com/nuget/nuget-org/trusted-publishing)
-- Monthly grouped dependency updates using [Dependabot](https://docs.github.com/code-security/dependabot)
+- Build rules in `Directory.Build.props`: code style and the recommended analyzers are checked on every build, warnings fail it, and package versions live in one place with [Central Package Management](https://learn.microsoft.com/nuget/consume-packages/central-package-management)
+- CI with GitHub Actions: build and test, a `dotnet format` check, 95% coverage gate, [Trivy](https://trivy.dev) container scan, [CodeQL](https://codeql.github.com) static analysis, then NuGet publishing and a GitHub release from `main` using [trusted publishing](https://learn.microsoft.com/nuget/nuget-org/trusted-publishing)
+- Health checks at `/health/live` and `/health/ready`, using [ASP.NET Core health checks](https://learn.microsoft.com/aspnet/core/host-and-deploy/health-checks)
+- Monthly grouped dependency updates using [Dependabot](https://docs.github.com/code-security/dependabot), including the pinned Seq image
+- A Docker image that runs as a non-root user with a health check
 
 ## Related templates
 

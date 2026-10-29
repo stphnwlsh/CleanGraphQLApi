@@ -11,6 +11,12 @@ public partial class Movie
     [JsonPropertyName("title")]
     public string Title { get; set; } = null!;
 
+    [JsonPropertyName("reviewCount")]
+    public int ReviewCount { get; set; }
+
+    [JsonPropertyName("averageStars")]
+    public double? AverageStars { get; set; }
+
     [JsonPropertyName("reviews")]
     public Review[] Reviews { get; set; } = [];
 }
