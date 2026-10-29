@@ -18,7 +18,7 @@ public class AuthorTests
         using var client = Application.CreateClient();
 
         // Act
-        using var response = await client.GetAsync("/graphql?query={authors{id,firstName,lastName,reviews{id,stars,movie{id,title}}}}");
+        using var response = await client.GetAsync("/graphql?query={authors(first:50){nodes{id,firstName,lastName,reviewCount,averageStars,reviews{id,stars,movie{id,title}}}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
@@ -27,10 +27,10 @@ public class AuthorTests
         _ = result.ShouldNotBeNull();
         _ = result.Data.ShouldNotBeNull();
 
-        result.Data.Authors.ShouldNotBeEmpty();
-        result.Data.Authors.Length.ShouldBe(15);
+        result.Data.Authors.Nodes.ShouldNotBeEmpty();
+        result.Data.Authors.Nodes.Length.ShouldBe(15);
 
-        foreach (var author in result.Data.Authors)
+        foreach (var author in result.Data.Authors.Nodes)
         {
             _ = author.ShouldNotBeNull();
             _ = author.Id.ShouldBeOfType<Guid>();
@@ -38,6 +38,8 @@ public class AuthorTests
             author.FirstName.ShouldNotBeNullOrWhiteSpace();
             _ = author.LastName.ShouldBeOfType<string>();
             author.LastName.ShouldNotBeNullOrWhiteSpace();
+            author.Reviews.Length.ShouldBe(author.ReviewCount);
+            (author.AverageStars is null).ShouldBe(author.ReviewCount == 0);
 
             foreach (var review in author.Reviews)
             {
@@ -57,9 +59,9 @@ public class AuthorTests
     {
         // Arrange
         using var client = Application.CreateClient();
-        using var setupResponse = await client.GetAsync("/graphql?query={authors{id}}");
+        using var setupResponse = await client.GetAsync("/graphql?query={authors(first:50){nodes{id}}}");
         var setupResult = (await setupResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>();
-        var authorId = setupResult.Data.Authors[0].Id;
+        var authorId = setupResult.Data.Authors.Nodes[0].Id;
 
         // Act
         using var response = await client.GetAsync($"/graphql?query={{author(id:\"{authorId}\"){{id,firstName,lastName,reviews{{id,stars,movie{{id,title}}}}}}}}");
@@ -133,13 +135,13 @@ public class AuthorTests
     }
 
     [Fact]
-    public async Task SearchAuthors_ShouldReturn_FirstPage()
+    public async Task Authors_ShouldReturn_FirstPage()
     {
         // Arrange
         using var client = Application.CreateClient();
 
         // Act
-        using var response = await client.GetAsync("/graphql?query={searchAuthors{totalCount,pageInfo{hasNextPage,hasPreviousPage},nodes{id,firstName,lastName}}}");
+        using var response = await client.GetAsync("/graphql?query={authors{totalCount,pageInfo{hasNextPage,hasPreviousPage},nodes{id,firstName,lastName}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
@@ -148,7 +150,7 @@ public class AuthorTests
         _ = result.ShouldNotBeNull();
         result.Errors.ShouldBeNull();
 
-        var page = result.Data.SearchAuthors;
+        var page = result.Data.Authors;
         page.TotalCount.ShouldBe(15);
         page.Nodes.Length.ShouldBe(10);
         page.PageInfo.HasNextPage.ShouldBeTrue();
@@ -156,21 +158,21 @@ public class AuthorTests
     }
 
     [Fact]
-    public async Task SearchAuthors_ShouldFilter_ByQuery()
+    public async Task Authors_ShouldFilter_ByQuery()
     {
         // Arrange
         using var client = Application.CreateClient();
-        using var setupResponse = await client.GetAsync("/graphql?query={authors{lastName}}");
-        var term = (await setupResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Authors[0].LastName.ToLowerInvariant();
+        using var setupResponse = await client.GetAsync("/graphql?query={authors(first:50){nodes{lastName}}}");
+        var term = (await setupResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Authors.Nodes[0].LastName.ToLowerInvariant();
 
         // Act
-        using var response = await client.GetAsync($"/graphql?query={{searchAuthors(query:\"{term}\",first:50){{totalCount,nodes{{firstName,lastName}}}}}}");
+        using var response = await client.GetAsync($"/graphql?query={{authors(query:\"{term}\",first:50){{totalCount,nodes{{firstName,lastName}}}}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var page = result.Data.SearchAuthors;
+        var page = result.Data.Authors;
         page.TotalCount.ShouldBeGreaterThan(0);
 
         foreach (var author in page.Nodes)

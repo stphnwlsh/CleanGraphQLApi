@@ -17,7 +17,7 @@ public class MovieTests
         using var client = Application.CreateClient();
 
         // Act
-        using var response = await client.GetAsync("/graphql?query={movies{id,title,reviews{id,stars,author{id,firstName,lastName}}}}");
+        using var response = await client.GetAsync("/graphql?query={movies(first:50){nodes{id,title,reviewCount,averageStars,reviews{id,stars,author{id,firstName,lastName}}}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
@@ -26,15 +26,17 @@ public class MovieTests
         _ = result.ShouldNotBeNull();
         _ = result.Data.ShouldNotBeNull();
 
-        result.Data.Movies.ShouldNotBeEmpty();
-        result.Data.Movies.Length.ShouldBe(50);
+        result.Data.Movies.Nodes.ShouldNotBeEmpty();
+        result.Data.Movies.Nodes.Length.ShouldBe(50);
 
-        foreach (var movie in result.Data.Movies)
+        foreach (var movie in result.Data.Movies.Nodes)
         {
             _ = movie.ShouldNotBeNull();
             _ = movie.Id.ShouldBeOfType<Guid>();
             _ = movie.Title.ShouldBeOfType<string>();
             movie.Title.ShouldNotBeNullOrWhiteSpace();
+            movie.Reviews.Length.ShouldBe(movie.ReviewCount);
+            (movie.AverageStars is null).ShouldBe(movie.ReviewCount == 0);
 
             foreach (var review in movie.Reviews)
             {
@@ -56,9 +58,9 @@ public class MovieTests
     {
         // Arrange
         using var client = Application.CreateClient();
-        using var setupResponse = await client.GetAsync("/graphql?query={movies{id,reviews{id}}}");
+        using var setupResponse = await client.GetAsync("/graphql?query={movies(first:50){nodes{id,reviews{id}}}}");
         var setupResult = (await setupResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>();
-        var movieId = setupResult.Data.Movies.First(m => m.Reviews.Any()).Id;
+        var movieId = setupResult.Data.Movies.Nodes.First(m => m.Reviews.Length > 0).Id;
 
         // Act
         using var response = await client.GetAsync($"/graphql?query={{movie(id:\"{movieId}\"){{id,title,reviews{{id,stars,author{{id,firstName,lastName}}}}}}}}");
@@ -113,13 +115,13 @@ public class MovieTests
     }
 
     [Fact]
-    public async Task SearchMovies_ShouldReturn_FirstPage()
+    public async Task Movies_ShouldReturn_FirstPage()
     {
         // Arrange
         using var client = Application.CreateClient();
 
         // Act
-        using var response = await client.GetAsync("/graphql?query={searchMovies(first:5){totalCount,pageInfo{hasNextPage,hasPreviousPage,startCursor,endCursor},edges{cursor,node{id,title}}}}");
+        using var response = await client.GetAsync("/graphql?query={movies(first:5){totalCount,pageInfo{hasNextPage,hasPreviousPage,startCursor,endCursor},edges{cursor,node{id,title}}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
@@ -128,7 +130,7 @@ public class MovieTests
         _ = result.ShouldNotBeNull();
         result.Errors.ShouldBeNull();
 
-        var page = result.Data.SearchMovies;
+        var page = result.Data.Movies;
         _ = page.ShouldNotBeNull();
         page.TotalCount.ShouldBe(50);
         page.Edges.Length.ShouldBe(5);
@@ -146,15 +148,15 @@ public class MovieTests
     }
 
     [Fact]
-    public async Task SearchMovies_ShouldReturn_NextPage()
+    public async Task Movies_ShouldReturn_NextPage()
     {
         // Arrange
         using var client = Application.CreateClient();
-        using var firstResponse = await client.GetAsync("/graphql?query={searchMovies(first:5){pageInfo{endCursor},nodes{id}}}");
-        var firstPage = (await firstResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.SearchMovies;
+        using var firstResponse = await client.GetAsync("/graphql?query={movies(first:5){pageInfo{endCursor},nodes{id}}}");
+        var firstPage = (await firstResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Movies;
 
         // Act
-        using var response = await client.GetAsync($"/graphql?query={{searchMovies(first:5,after:\"{firstPage.PageInfo.EndCursor}\"){{totalCount,pageInfo{{hasNextPage,hasPreviousPage}},nodes{{id}}}}}}");
+        using var response = await client.GetAsync($"/graphql?query={{movies(first:5,after:\"{firstPage.PageInfo.EndCursor}\"){{totalCount,pageInfo{{hasNextPage,hasPreviousPage}},nodes{{id}}}}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
@@ -163,7 +165,7 @@ public class MovieTests
         _ = result.ShouldNotBeNull();
         result.Errors.ShouldBeNull();
 
-        var page = result.Data.SearchMovies;
+        var page = result.Data.Movies;
         page.TotalCount.ShouldBe(50);
         page.Nodes.Length.ShouldBe(5);
         page.PageInfo.HasNextPage.ShouldBeTrue();
@@ -172,41 +174,41 @@ public class MovieTests
     }
 
     [Fact]
-    public async Task SearchMovies_ShouldReturn_LastPage()
+    public async Task Movies_ShouldReturn_LastPage()
     {
         // Arrange
         using var client = Application.CreateClient();
-        using var firstResponse = await client.GetAsync("/graphql?query={searchMovies(first:45){pageInfo{endCursor}}}");
-        var firstPage = (await firstResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.SearchMovies;
+        using var firstResponse = await client.GetAsync("/graphql?query={movies(first:45){pageInfo{endCursor}}}");
+        var firstPage = (await firstResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Movies;
 
         // Act
-        using var response = await client.GetAsync($"/graphql?query={{searchMovies(first:10,after:\"{firstPage.PageInfo.EndCursor}\"){{totalCount,pageInfo{{hasNextPage}},nodes{{id}}}}}}");
+        using var response = await client.GetAsync($"/graphql?query={{movies(first:10,after:\"{firstPage.PageInfo.EndCursor}\"){{totalCount,pageInfo{{hasNextPage}},nodes{{id}}}}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var page = result.Data.SearchMovies;
+        var page = result.Data.Movies;
         page.Nodes.Length.ShouldBe(5);
         page.PageInfo.HasNextPage.ShouldBeFalse();
     }
 
     [Fact]
-    public async Task SearchMovies_ShouldFilter_ByQuery()
+    public async Task Movies_ShouldFilter_ByQuery()
     {
         // Arrange
         using var client = Application.CreateClient();
-        using var setupResponse = await client.GetAsync("/graphql?query={movies{title}}");
-        var term = (await setupResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Movies[0].Title.Split(' ')[0].ToUpperInvariant();
+        using var setupResponse = await client.GetAsync("/graphql?query={movies(first:50){nodes{title}}}");
+        var term = (await setupResponse.Content.ReadAsStringAsync()).Deserialize<GraphData>().Data.Movies.Nodes[0].Title.Split(' ')[0].ToUpperInvariant();
 
         // Act
-        using var response = await client.GetAsync($"/graphql?query={{searchMovies(query:\"{term}\",first:50){{totalCount,nodes{{title}}}}}}");
+        using var response = await client.GetAsync($"/graphql?query={{movies(query:\"{term}\",first:50){{totalCount,nodes{{title}}}}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var page = result.Data.SearchMovies;
+        var page = result.Data.Movies;
         page.TotalCount.ShouldBeGreaterThan(0);
         page.Nodes.Length.ShouldBe(page.TotalCount);
 
@@ -216,62 +218,65 @@ public class MovieTests
         }
     }
 
-    [Fact]
-    public async Task SearchMovies_ShouldReturn_ValidationError_ForInvalidCursor()
+    [Theory]
+    [InlineData("not-a-cursor")]
+    [InlineData("cGFnZTo1")]
+    [InlineData("b2Zmc2V0OmFiYw==")]
+    public async Task Movies_ShouldReturn_ValidationError_ForInvalidCursor(string cursor)
     {
         // Arrange
         using var client = Application.CreateClient();
 
         // Act
-        using var response = await client.GetAsync("/graphql?query={searchMovies(after:\"not-a-cursor\"){totalCount}}");
+        using var response = await client.GetAsync($"/graphql?query={{movies(after:\"{Uri.EscapeDataString(cursor)}\"){{totalCount}}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         _ = result.ShouldNotBeNull();
-        result.Data.SearchMovies.ShouldBeNull();
+        result.Data.Movies.ShouldBeNull();
 
         result.Errors.Count.ShouldBe(1);
         result.Errors[0].Message.ShouldBe("One or more validation errors occurred.");
         result.Errors[0].Extensions.Code.ShouldBe("VALIDATION");
-        result.Errors[0].Extensions.Errors["Cursor"].ShouldBe(["The cursor is not valid. Use the nextCursor from a previous page, or leave it empty for the first page."]);
+        result.Errors[0].Extensions.Errors["After"].ShouldBe(["The cursor is not valid. Use the endCursor from a previous page, or leave it empty for the first page."]);
     }
 
     [Fact]
-    public async Task SearchMovies_ShouldReturn_Error_WhenPageIsTooLarge()
+    public async Task Movies_ShouldReturn_Error_WhenPageIsTooLarge()
     {
         // Arrange
         using var client = Application.CreateClient();
 
         // Act
-        using var response = await client.GetAsync("/graphql?query={searchMovies(first:51){totalCount}}");
+        using var response = await client.GetAsync("/graphql?query={movies(first:51){totalCount}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
         _ = result.ShouldNotBeNull();
-        result.Data.SearchMovies.ShouldBeNull();
+        result.Data.Movies.ShouldBeNull();
 
         result.Errors.Count.ShouldBe(1);
         result.Errors[0].Extensions.Code.ShouldBe("HC0051");
     }
 
     [Fact]
-    public async Task SearchMovies_ShouldReturn_EmptyPage_WhenNothingMatches()
+    public async Task Movies_ShouldReturn_EmptyPage_WhenNothingMatches()
     {
         // Arrange
         using var client = Application.CreateClient();
 
         // Act
-        using var response = await client.GetAsync("/graphql?query={searchMovies(query:\"zzzz-no-such-movie\"){totalCount,pageInfo{hasNextPage,hasPreviousPage,startCursor,endCursor},nodes{id}}}");
+        using var response = await client.GetAsync("/graphql?query={movies(query:\"zzzz-no-such-movie\"){totalCount,pageInfo{hasNextPage,hasPreviousPage,startCursor,endCursor},nodes{id}}}");
         var result = (await response.Content.ReadAsStringAsync()).Deserialize<GraphData>();
 
         // Assert
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var page = result.Data.SearchMovies;
+        var page = result.Data.Movies;
         page.TotalCount.ShouldBe(0);
         page.Nodes.ShouldBeEmpty();
         page.PageInfo.HasNextPage.ShouldBeFalse();

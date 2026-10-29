@@ -4,14 +4,12 @@ schema {
 }
 
 type Query {
-  "Gets every author, with the reviews they have written."
-  authors: [Author!]! @cost(weight: "10")
   "Gets an author by their unique identifier."
   author("The unique identifier of the author." id: UUID!): Author
     @cost(weight: "10")
-  "Finds authors whose first or last name contains a search term, one page at a time."
-  searchAuthors(
-    "The words to look for, ignoring case. Leave empty to list every author."
+  "Lists authors ordered by last name then first name, one page at a time, optionally only those whose name contains a search term."
+  authors(
+    "The words to look for in the name, ignoring case. Leave empty to list every author."
     query: String
     "Returns the first _n_ elements from the list."
     first: Int
@@ -26,14 +24,12 @@ type Query {
       requireOneSlicingArgument: false
     )
     @cost(weight: "10")
-  "Gets every movie, with the reviews written about it."
-  movies: [Movie!]! @cost(weight: "10")
   "Gets a movie by its unique identifier."
   movie("The unique identifier of the movie." id: UUID!): Movie
     @cost(weight: "10")
-  "Finds movies whose title contains a search term, one page at a time."
-  searchMovies(
-    "The words to look for, ignoring case. Leave empty to list every movie."
+  "Lists movies ordered by title, one page at a time, optionally only those whose title contains a search term."
+  movies(
+    "The words to look for in the title, ignoring case. Leave empty to list every movie."
     query: String
     "Returns the first _n_ elements from the list."
     first: Int
@@ -48,13 +44,11 @@ type Query {
       requireOneSlicingArgument: false
     )
     @cost(weight: "10")
-  "Gets every review, with its movie and author."
-  reviews: [Review!]! @cost(weight: "10")
   "Gets a review by its unique identifier."
   review("The unique identifier of the review." id: UUID!): Review
     @cost(weight: "10")
-  "Finds reviews, optionally only those for one movie or by one author, one page at a time."
-  searchReviews(
+  "Lists reviews ordered by movie then author, one page at a time, optionally only those of one movie, by one author, or both."
+  reviews(
     "Only return reviews of this movie. Leave empty for every movie."
     movieId: UUID
     "Only return reviews by this author. Leave empty for every author."
@@ -80,8 +74,8 @@ type Mutation {
   "Creates a review of a movie and returns it."
   createReview("The review to create." input: CreateReviewInput!): Review
     @cost(weight: "10")
-  "Updates the author, movie and star rating of a review. Returns true when the review was updated."
-  updateReview("The review to update." input: UpdateReviewInput!): Boolean
+  "Updates the star rating of a review. Returns true when the review was updated."
+  updateReview("The review and its new star rating." input: UpdateReviewInput!): Boolean
     @cost(weight: "10")
   "Deletes a review. Returns true when the review was deleted."
   deleteReview("The unique identifier of the review." id: UUID!): Boolean
@@ -107,7 +101,7 @@ type AuthorsConnection {
   "A list of edges."
   edges: [AuthorsEdge!]
   "A flattened list of the nodes."
-  nodes: [Author!]
+  nodes: [AuthorSummary!]
   "Identifies the total count of items in the connection."
   totalCount: Int! @cost(weight: "10")
 }
@@ -117,7 +111,23 @@ type AuthorsEdge {
   "A cursor for use in pagination."
   cursor: String!
   "The item at the end of the edge."
-  node: Author!
+  node: AuthorSummary!
+}
+
+"An author in a list, with how many reviews they have written and their average star rating. Their reviews are loaded for the whole page at once."
+type AuthorSummary {
+  "The reviews the author has written. They're loaded for the whole page in one query."
+  reviews: [Review!]! @cost(weight: "10")
+  "The unique identifier of the author."
+  id: UUID!
+  "The author's first name."
+  firstName: String!
+  "The author's last name."
+  lastName: String!
+  "The number of reviews the author has written."
+  reviewCount: Int!
+  "The average star rating the author gives to one decimal place, or null when they have no reviews."
+  averageStars: Float
 }
 
 "A movie that can be reviewed."
@@ -137,7 +147,7 @@ type MoviesConnection {
   "A list of edges."
   edges: [MoviesEdge!]
   "A flattened list of the nodes."
-  nodes: [Movie!]
+  nodes: [MovieSummary!]
   "Identifies the total count of items in the connection."
   totalCount: Int! @cost(weight: "10")
 }
@@ -147,7 +157,21 @@ type MoviesEdge {
   "A cursor for use in pagination."
   cursor: String!
   "The item at the end of the edge."
-  node: Movie!
+  node: MovieSummary!
+}
+
+"A movie in a list, with how many reviews it has and their average star rating. Its reviews are loaded for the whole page at once."
+type MovieSummary {
+  "The reviews written about the movie. They're loaded for the whole page in one query."
+  reviews: [Review!]! @cost(weight: "10")
+  "The unique identifier of the movie."
+  id: UUID!
+  "The title of the movie."
+  title: String!
+  "The number of reviews written about the movie."
+  reviewCount: Int!
+  "The average star rating to one decimal place, or null when the movie has no reviews."
+  averageStars: Float
 }
 
 "Information about pagination in a connection."
@@ -215,9 +239,9 @@ type ReviewsEdge {
 "The version details of the running application."
 type Version {
   "The assembly file version."
-  fileVersion: String
+  fileVersion: String!
   "The informational version, which can include a pre-release label or commit hash."
-  informationalVersion: String
+  informationalVersion: String!
 }
 
 "A review of a movie to create."
@@ -230,14 +254,10 @@ input CreateReviewInput {
   stars: Int!
 }
 
-"A review of a movie to update."
+"The new star rating of a review. The author and the movie of a review can't change."
 input UpdateReviewInput {
   "The unique identifier of the review."
   id: UUID!
-  "The unique identifier of the author who wrote the review."
-  authorId: UUID!
-  "The unique identifier of the movie being reviewed."
-  movieId: UUID!
   "The star rating, from 1 to 5."
   stars: Int!
 }

@@ -13,15 +13,6 @@ using Reviews = Application.Reviews.Queries;
 public static partial class ReviewQueries
 {
     /// <summary>
-    /// Gets every review, with its movie and author.
-    /// </summary>
-    [Authorize]
-    public static async Task<List<Review>> GetReviews(ISender sender, CancellationToken cancellationToken)
-    {
-        return await sender.Send(new Reviews.GetReviews.GetReviewsQuery(), cancellationToken);
-    }
-
-    /// <summary>
     /// Gets a review by its unique identifier.
     /// </summary>
     /// <param name="id">The unique identifier of the review.</param>
@@ -32,13 +23,13 @@ public static partial class ReviewQueries
     }
 
     /// <summary>
-    /// Finds reviews, optionally only those for one movie or by one author, one page at a time.
+    /// Lists reviews ordered by movie then author, one page at a time, optionally only those of one movie, by one author, or both.
     /// </summary>
     /// <param name="movieId">Only return reviews of this movie. Leave empty for every movie.</param>
     /// <param name="authorId">Only return reviews by this author. Leave empty for every author.</param>
     [UsePaging(ConnectionName = "Reviews")]
     [Authorize]
-    public static async Task<Connection<Review>> SearchReviews(
+    public static async Task<Connection<Review>> GetReviews(
         Guid? movieId,
         Guid? authorId,
         int? first,
@@ -46,14 +37,14 @@ public static partial class ReviewQueries
         ISender sender,
         CancellationToken cancellationToken)
     {
-        var page = await sender.Send(new Reviews.SearchReviews.SearchReviewsQuery
+        var page = await sender.Send(new Reviews.GetReviews.GetReviewsQuery
         {
             MovieId = movieId,
             AuthorId = authorId,
-            Limit = first ?? Paging.DefaultLimit,
-            Cursor = after
+            Offset = after.ToOffset(),
+            Limit = first ?? Paging.DefaultLimit
         }, cancellationToken);
 
-        return page.ToConnection(after);
+        return page.ToConnection();
     }
 }

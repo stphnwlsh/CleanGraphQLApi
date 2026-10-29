@@ -16,9 +16,9 @@ public static class Serializer
         }
     };
 
-    public static T? Deserialize<T>(this string input)
+    public static T Deserialize<T>(this string input)
     {
-        return JsonSerializer.Deserialize<T>(input, Options);
+        return JsonSerializer.Deserialize<T>(input, Options)!;
     }
 
     public static StringContent ToStringContent(this object input)

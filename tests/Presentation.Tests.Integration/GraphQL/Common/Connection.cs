@@ -8,22 +8,22 @@ public partial class Connection<T>
     public int TotalCount { get; set; }
 
     [JsonPropertyName("pageInfo")]
-    public PageInfo PageInfo { get; set; }
+    public PageInfo PageInfo { get; set; } = null!;
 
     [JsonPropertyName("edges")]
-    public Edge<T>[] Edges { get; set; }
+    public Edge<T>[] Edges { get; set; } = [];
 
     [JsonPropertyName("nodes")]
-    public T[] Nodes { get; set; }
+    public T[] Nodes { get; set; } = [];
 }
 
 public partial class Edge<T>
 {
     [JsonPropertyName("cursor")]
-    public string Cursor { get; set; }
+    public string Cursor { get; set; } = null!;
 
     [JsonPropertyName("node")]
-    public T Node { get; set; }
+    public T Node { get; set; } = default!;
 }
 
 public partial class PageInfo
@@ -35,8 +35,8 @@ public partial class PageInfo
     public bool HasPreviousPage { get; set; }
 
     [JsonPropertyName("startCursor")]
-    public string StartCursor { get; set; }
+    public string? StartCursor { get; set; }
 
     [JsonPropertyName("endCursor")]
-    public string EndCursor { get; set; }
+    public string? EndCursor { get; set; }
 }
