@@ -2,7 +2,6 @@
 
 [![Build Pipeline](https://img.shields.io/github/actions/workflow/status/stphnwlsh/CleanGraphQLApi/build-pipeline.yml?branch=main&label=Build%20Pipeline&logo=github&style=for-the-badge)](https://github.com/stphnwlsh/CleanGraphQLApi/actions/workflows/build-pipeline.yml)
 [![Code Coverage](https://img.shields.io/codecov/c/github/stphnwlsh/CleanGraphQLApi?label=Code%20Coverage&logo=codecov&logoColor=white&style=for-the-badge)](https://codecov.io/gh/stphnwlsh/CleanGraphQLApi)
-[![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/stphnwlsh/CleanGraphQLApi?label=OpenSSF%20Scorecard&style=for-the-badge)](https://scorecard.dev/viewer/?uri=github.com/stphnwlsh/CleanGraphQLApi)
 [![NuGet](https://img.shields.io/nuget/v/CleanGraphQLApi.Template?label=NuGet&logo=nuget&logoColor=white&style=for-the-badge)](https://www.nuget.org/packages/CleanGraphQLApi.Template)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/CleanGraphQLApi.Template?label=Downloads&logo=nuget&logoColor=white&style=for-the-badge)](https://www.nuget.org/packages/CleanGraphQLApi.Template)
 [![License](https://img.shields.io/github/license/stphnwlsh/CleanGraphQLApi?label=License&style=for-the-badge)](LICENSE.md)
